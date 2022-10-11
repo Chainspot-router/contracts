@@ -1,0 +1,22 @@
+{
+  "name": "chainspot_router",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "GotFly",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "*",
+    "@openzeppelin/contracts": "*",
+    "dotenv": "*",
+    "ethers": "*",
+    "hardhat": "*",
+    "ts-node": "*",
+    "typescript": "*",
+    "solidity-coverage": "*",
+    "ganache-cli": "*"
+  }
+}

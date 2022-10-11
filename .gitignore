@@ -1,0 +1,13 @@
+node_modules
+.env
+.idea
+.deps
+coverage
+coverage.json
+typechain
+typechain-types
+scripts/abis
+
+#Hardhat files
+cache
+artifacts
