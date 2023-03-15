@@ -1,25 +1,19 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
+import "./interfaces/IERC20.sol";
+
 contract TestBridgeContract {
 
-    function testFunction(address tokenAddress) public payable {
-        if (tokenAddress == address(0)) {
+    function testFunction(IERC20 _token) public payable {
+        if (address(_token) == address(0)) {
             return;
         }
 
         address selfAddress = address(this);
         address fromAddress = msg.sender;
 
-        (bool success, bytes memory result) = tokenAddress.call(
-            abi.encodeWithSignature("allowance(address,address)", fromAddress, selfAddress)
-        );
-        require(success, "Allowance request failed");
-        uint allowAmount = abi.decode(result, (uint));
-
-        (success, ) = tokenAddress.call(
-            abi.encodeWithSignature("transferFrom(address,address,uint256)", fromAddress, selfAddress, allowAmount)
-        );
-        require(success, "TransferFrom request failed");
+        uint allowAmount = _token.allowance(fromAddress, selfAddress);
+        require(_token.transferFrom(fromAddress, selfAddress, allowAmount), "TransferFrom request failed");
     }
 }

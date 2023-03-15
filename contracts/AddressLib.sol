@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-library Utils {
+library AddressLib {
     
     /**
      * Is address - contract

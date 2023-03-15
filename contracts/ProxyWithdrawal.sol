@@ -2,13 +2,10 @@
 pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./Utils.sol";
+import "./interfaces/IERC20.sol";
 
 abstract contract ProxyWithdrawal is Ownable {
     
-    event BalanceEvent(uint amount, address tokenAddress);
-    event TransferEvent(address to, uint amount, address tokenAddress);
-
     /**
      * Return coins balance
      */
@@ -19,49 +16,23 @@ abstract contract ProxyWithdrawal is Ownable {
     /**
      * Return tokens balance
      */
-    function getTokenBalance(address tokenAddress) public returns(uint) {
-        (bool success, bytes memory result) = tokenAddress.call(
-            abi.encodeWithSignature("balanceOf(address)", address(this))
-        );
-        require(success, "Withdrawal: balanceOf request failed");
-
-        uint amount = abi.decode(result, (uint));
-        emit BalanceEvent(amount, tokenAddress);
-
-        return amount;
+    function getTokenBalance(IERC20 _token) public view returns(uint) {
+        return _token.balanceOf(address(this));
     }
 
     /**
      * Transfer coins
      */
-    function transfer(address payable to, uint amount) external onlyOwner {
-        require(!Utils.isContract(to), "Withdrawal: target address is contract");
-
-        require(getBalance() >= amount, "Withdrawal: balance not enough");
-        to.transfer(amount);
-
-        emit TransferEvent(to, amount, address(0));
+    function transferCoins(address payable _to, uint _amount) external onlyOwner {
+        require(getBalance() >= _amount, "Withdrawal: balance not enough");
+        _to.transfer(_amount);
     }
 
     /**
      * Transfer tokens
      */
-    function transferToken(address to, uint amount, address tokenAddress) external onlyOwner {
-        require(!Utils.isContract(to), "Withdrawal: target address is contract");
-
-        uint _balance = getTokenBalance(tokenAddress);
-        require(_balance >= amount, "Withdrawal: not enough tokens");
-
-        (bool success, ) = tokenAddress.call(
-            abi.encodeWithSignature("approve(address,uint256)", to, amount)
-        );
-        require(success, "Withdrawal: approve request failed");
-
-        (success, ) = tokenAddress.call(
-            abi.encodeWithSignature("transfer(address,uint256)", to, amount)
-        );
-        require(success, "Withdrawal: transfer request failed");
-
-        emit TransferEvent(to, amount, tokenAddress);
+    function transferTokens(address _to, uint _amount, IERC20 _token) external onlyOwner {
+        require(getTokenBalance(_token) >= _amount, "Withdrawal: not enough tokens");
+        require(_token.transfer(_to, _amount), "Withdrawal: transfer request failed");
     }
 }

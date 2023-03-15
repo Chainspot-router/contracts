@@ -2,7 +2,6 @@
 pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./Utils.sol";
 
 abstract contract ProxyFee is Ownable {
 

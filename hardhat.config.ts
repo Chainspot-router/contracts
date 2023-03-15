@@ -22,45 +22,70 @@ const config = {
     },
     mainnet: {
       url: process.env.NETWORK_HOST_ETHEREUM,
-      accounts: [process.env.OWNER_PK_ETHEREUM],
+      accounts: [process.env.OWNER_PK_CHAINSPOT],
       chainId: 1
     },
     polygon: {
       url: process.env.NETWORK_HOST_POLYGON,
-      accounts: [process.env.OWNER_PK_POLYGON],
+      accounts: [process.env.OWNER_PK_CHAINSPOT],
       chainId: 137
     },
     bsc: {
       url: process.env.NETWORK_HOST_BSC,
-      accounts: [process.env.OWNER_PK_BSC],
+      accounts: [process.env.OWNER_PK_CHAINSPOT],
       chainId: 56
     },
     avalanche: {
       url: process.env.NETWORK_HOST_AVALANCHE,
-      accounts: [process.env.OWNER_PK_AVALANCHE],
+      accounts: [process.env.OWNER_PK_CHAINSPOT],
       chainId: 43114
       // https://subnets.avax.network/c/c-chain-mainnet/rpc
     },
     optimisticEthereum: {
       url: process.env.NETWORK_HOST_OPTIMISM,
-      accounts: [process.env.OWNER_PK_OPTIMISM],
+      accounts: [process.env.OWNER_PK_CHAINSPOT],
       chainId: 10
     },
     arbitrumOne: {
       url: process.env.NETWORK_HOST_ARBITRUM,
-      accounts: [process.env.OWNER_PK_ARBITRUM],
+      accounts: [process.env.OWNER_PK_CHAINSPOT],
       chainId: 42161
     },
     opera: {
       url: process.env.NETWORK_HOST_FANTOM,
-      accounts: [process.env.OWNER_PK_FANTOM],
+      accounts: [process.env.OWNER_PK_CHAINSPOT],
       chainId: 250
     },
     moonbeam: {
       url: process.env.NETWORK_HOST_MOON,
-      accounts: [process.env.OWNER_PK_MOON],
+      accounts: [process.env.OWNER_PK_CHAINSPOT],
       chainId: 1284
-    }
+    },
+    celo: {
+      url: process.env.NETWORK_HOST_CELO,
+      accounts: [process.env.OWNER_PK_CHAINSPOT],
+      chainId: 42220
+    },
+    aurora: {
+      url: process.env.NETWORK_HOST_AURORA,
+      accounts: [process.env.OWNER_PK_CHAINSPOT],
+      chainId: 1313161554
+    },
+    boba: {
+      url: process.env.NETWORK_HOST_BOBA,
+      accounts: [process.env.OWNER_PK_CHAINSPOT],
+      chainId: 288
+    },
+    gnosis: {
+      url: process.env.NETWORK_HOST_GNOSIS,
+      accounts: [process.env.OWNER_PK_CHAINSPOT],
+      chainId: 100
+    },
+    telos: {
+      url: process.env.NETWORK_HOST_TELOS,
+      accounts: [process.env.OWNER_PK_CHAINSPOT],
+      chainId: 40
+    },
   },
   etherscan: {
     apiKey: {

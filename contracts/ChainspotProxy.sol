@@ -3,93 +3,93 @@ pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./ProxyWithdrawal.sol";
-import "./Utils.sol";
+import "./AddressLib.sol";
 import "./ProxyFee.sol";
+import "./interfaces/IERC20.sol";
 
 contract ChainspotProxy is Ownable, ProxyWithdrawal, ProxyFee {
 
-    event ProxyCoinsEvent(address to, uint amount, uint routerAmount, uint systemFee);
-    event ProxyTokensEvent(address tokenAddress, uint amount, uint routerAmount, uint systemFee, address approveTo, address callDataTo);
+    using AddressLib for address;
 
-    /**
-     * Receive
-     */
+    struct Client {
+        bool exists;
+    }
+
+    mapping(address => Client) public clients;
+
     receive() external payable {}
+
+    function addClient(address _clientAddress) public onlyOwner {
+        clients[_clientAddress].exists = true;
+    }
+
+    function addClients(address[] memory _clientAddresses) public onlyOwner {
+        for (uint i = 0; i < _clientAddresses.length; i++) {
+            addClient(_clientAddresses[i]);
+        }
+    }
+
+    function removeClient(address _clientAddress) public onlyOwner {
+        delete clients[_clientAddress];
+    }
 
     /**
      * Meta proxy
      */
-    function metaProxy(address tokenAddress, address approveTo, address callDataTo, bytes memory data) external payable {
-        require(Utils.isContract(callDataTo), "Proxy: call to non-contract");
+    function metaProxy(IERC20 _token, address _approveTo, address _callDataTo, bytes memory _data) external payable {
+        require(_callDataTo.isContract(), "ChainspotProxy: call to non-contract");
+        require(clients[_callDataTo].exists, "ChainspotProxy: wrong client address");
 
-        if (tokenAddress == address(0)) {
-            proxyCoins(callDataTo, data);
+        if (address(_token) == address(0)) {
+            proxyCoins(_callDataTo, _data);
         } else {
-            proxyTokens(tokenAddress, approveTo, callDataTo, data);
+            proxyTokens(_token, _approveTo, _callDataTo, _data);
         }
     }
 
     /**
      * Proxy coins
      */
-    function proxyCoins(address to, bytes memory data) internal {
+    function proxyCoins(address _to, bytes memory _data) internal {
         uint amount = msg.value;
-        require(amount > 0, "Proxy: amount is to small");
+        require(amount > 0, "ChainspotProxy: amount is to small");
 
         uint resultAmount = calcAmount(amount);
-        require(resultAmount > 0, "Proxy: resultAmount is to small");
+        require(resultAmount > 0, "ChainspotProxy: resultAmount is to small");
 
         bool success = true;
         uint feeAmount = calcFee(amount);
         if (feeAmount > 0) {
-            (success, ) = payable(owner()).call{value: feeAmount}("");
-            require(success, "Proxy: fee not sended");
+            (success, ) = owner().call{value: feeAmount}("");
+            require(success, "ChainspotProxy: fee not sended");
         }
 
-        (success, ) = to.call{value: resultAmount}(data);
-        require(success, "Proxy: transfer not sended");
-
-        emit ProxyCoinsEvent(to, amount, resultAmount, feeAmount);
+        (success, ) = _to.call{value: resultAmount}(_data);
+        require(success, "ChainspotProxy: transfer not sended");
     }
 
     /**
      * Proxy tokens
      */
-    function proxyTokens(address tokenAddress, address approveTo, address callDataTo, bytes memory data) internal {
+    function proxyTokens(IERC20 _token, address _approveTo, address _callDataTo, bytes memory _data) internal {
         address selfAddress = address(this);
         address fromAddress = msg.sender;
 
-        (bool success, bytes memory result) = tokenAddress.call(
-            abi.encodeWithSignature("allowance(address,address)", fromAddress, selfAddress)
-        );
-        require(success, "Proxy: allowance request failed");
-        uint amount = abi.decode(result, (uint));
-        require(amount > 0, "Proxy: amount is to small");
+        uint amount = _token.allowance(fromAddress, selfAddress);
+        require(amount > 0, "ChainspotProxy: amount is to small");
 
         uint routerAmount = calcAmount(amount);
-        require(routerAmount > 0, "Proxy: routerAmount is to small");
-
-        (success, ) = tokenAddress.call(
-            abi.encodeWithSignature("transferFrom(address,address,uint256)", fromAddress, selfAddress, amount)
-        );
-        require(success, "Proxy: transferFrom request failed");
+        require(routerAmount > 0, "ChainspotProxy: routerAmount is to small");
+        require(_token.transferFrom(fromAddress, selfAddress, amount), "ChainspotProxy: transferFrom request failed");
 
         uint feeAmount = calcFee(amount);
         if (feeAmount > 0) {
-            (success, ) = tokenAddress.call(
-                abi.encodeWithSignature("transfer(address,uint256)", owner(), feeAmount)
-            );
-            require(success, "Proxy: fee transfer request failed");
+            require(_token.transfer(owner(), feeAmount), "ChainspotProxy: fee transfer request failed");
         }
 
-        (success, ) = tokenAddress.call(
-            abi.encodeWithSignature("approve(address,uint256)", approveTo, routerAmount)
-        );
-        require(success, "Proxy: approve request failed");
+        require(_token.approve(_approveTo, routerAmount), "ChainspotProxy: approve request failed");
 
-        (success, ) = callDataTo.call(data);
-        require(success, "Proxy: call data request failed");
-
-        emit ProxyTokensEvent(tokenAddress, amount, routerAmount, feeAmount, approveTo, callDataTo);
+        (bool success, ) = _callDataTo.call(_data);
+        require(success, "ChainspotProxy: call data request failed");
     }
 }
