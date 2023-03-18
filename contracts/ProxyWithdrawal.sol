@@ -2,37 +2,48 @@
 pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./interfaces/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 abstract contract ProxyWithdrawal is Ownable {
-    
-    /**
-     * Return coins balance
-     */
+
+    using Address for address;
+
+    /// Transfer event
+    /// @param _to address  Destination address
+    /// @param _amount uint  Transfer amount
+    /// @param _tokenAddress address  Transfer token address (address(0) - native coins)
+    event TransferEvent(address _to, uint _amount, address _tokenAddress);
+
+    /// Return coni balance
+    /// @return uint
     function getBalance() public view returns(uint) {
         return address(this).balance;
     }
 
-    /**
-     * Return tokens balance
-     */
+    /// Return token balance
+    /// @return uint
     function getTokenBalance(IERC20 _token) public view returns(uint) {
         return _token.balanceOf(address(this));
     }
 
-    /**
-     * Transfer coins
-     */
-    function transferCoins(address payable _to, uint _amount) external onlyOwner {
+    /// Transfer coins (only for owner)
+    /// @param _to address  Destination address
+    /// @param _amount uint  Transfer amount
+    function transferCoins(address _to, uint _amount) external onlyOwner {
+        require(!_to.isContract(), "Withdrawal: target address is contract");
         require(getBalance() >= _amount, "Withdrawal: balance not enough");
-        _to.transfer(_amount);
+        (bool successFee, ) = _to.call{value: _amount}("");
+        require(successFee, "Withdrawal: transfer failed");
+        emit TransferEvent(_to, _amount, address(0));
     }
 
-    /**
-     * Transfer tokens
-     */
-    function transferTokens(address _to, uint _amount, IERC20 _token) external onlyOwner {
+    /// Transfer tokens (only for owner)
+    /// @param _token IERC20  Token address
+    /// @param _to address  Destination address
+    /// @param _amount uint  Transfer amount
+    function transferTokens(IERC20 _token, address _to, uint _amount) external onlyOwner {
         require(getTokenBalance(_token) >= _amount, "Withdrawal: not enough tokens");
         require(_token.transfer(_to, _amount), "Withdrawal: transfer request failed");
+        emit TransferEvent(_to, _amount, address(_token));
     }
 }

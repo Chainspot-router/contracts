@@ -2,8 +2,10 @@ const hre = require("hardhat");
 
 async function main() {
     const [owner] = await ethers.getSigners();
+    const feeBase = 1000;
+    const feeMul = 1;
     const Proxy = await ethers.getContractFactory("ChainspotProxy");
-    const proxy = await Proxy.deploy();
+    const proxy = await Proxy.deploy(feeBase, feeMul);
     await proxy.deployed();
 
     console.log('\nContract deployed successfully');
