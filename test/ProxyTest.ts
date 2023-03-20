@@ -87,8 +87,6 @@ describe("Proxy test", function () {
 
         const proxyAsUser1 = ChainspotProxy__factory.connect(proxy.address, user1);
 
-        await expect(proxyAsUser1.metaProxy(zeroAddress, bridge.address, user2.address, data, {value: value}))
-            .to.be.rejectedWith("ChainspotProxy: call to non-contract");
         await expect(proxyAsUser1.metaProxy(zeroAddress, bridge.address, bridge.address, data, {value: 0}))
             .to.be.rejectedWith("ChainspotProxy: wrong client address");
         await expect(proxy.addClients([bridge.address])).to.not.rejected;
@@ -147,6 +145,8 @@ describe("Proxy test", function () {
             .encodeFunctionData("testFunction", [zeroAddress]);
 
         const proxyAsOwnerProxy = ChainspotProxy__factory.connect(proxy.address, owner);
+        await expect(proxyAsOwnerProxy.setFeeParams(10, 2))
+            .to.be.rejectedWith("Fee: fee must be less than maximum");
         await expect(proxyAsOwnerProxy.setFeeParams(feeBase, 0))
             .to.be.rejectedWith("Fee: _feeMul must be valid");
         await expect(proxyAsOwnerProxy.setFeeParams(feeBase, feeMulNew)).to.not.rejected;
@@ -154,8 +154,6 @@ describe("Proxy test", function () {
 
         const proxyAsUser1 = ChainspotProxy__factory.connect(proxy.address, user1);
 
-        await expect(proxyAsUser1.metaProxy(zeroAddress, bridge.address, user2.address, data, {value: value}))
-            .to.be.rejectedWith("ChainspotProxy: call to non-contract");
         await expect(proxyAsUser1.metaProxy(zeroAddress, bridge.address, bridge.address, data, {value: 0}))
             .to.be.rejectedWith("ChainspotProxy: wrong client address");
         await expect(proxy.addClients([bridge.address])).to.not.rejected;
@@ -179,6 +177,8 @@ describe("Proxy test", function () {
             .encodeFunctionData("testFunction", [zeroAddress]);
 
         const proxyAsOwnerProxy = ChainspotProxy__factory.connect(proxy.address, owner);
+        await expect(proxyAsOwnerProxy.setFeeParams(10, 2))
+            .to.be.rejectedWith("Fee: fee must be less than maximum");
         await expect(proxyAsOwnerProxy.setFeeParams(0, feeMul))
             .to.be.rejectedWith("Fee: _feeBase must be valid");
         await expect(proxyAsOwnerProxy.setFeeParams(feeBaseNew, feeMul)).to.not.rejected;
@@ -186,8 +186,6 @@ describe("Proxy test", function () {
 
         const proxyAsUser1 = ChainspotProxy__factory.connect(proxy.address, user1);
 
-        await expect(proxyAsUser1.metaProxy(zeroAddress, bridge.address, user2.address, data, {value: value}))
-            .to.be.rejectedWith("ChainspotProxy: call to non-contract");
         await expect(proxyAsUser1.metaProxy(zeroAddress, bridge.address, bridge.address, data, {value: 0}))
             .to.be.rejectedWith("ChainspotProxy: wrong client address");
         await expect(proxy.addClients([bridge.address])).to.not.rejected;

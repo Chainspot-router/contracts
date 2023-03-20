@@ -34,6 +34,7 @@ contract ChainspotProxy is Ownable, ReentrancyGuard, ProxyWithdrawal, ProxyFee {
     /// Add trusted client (only for owner)
     /// @param _clientAddress address  Client address
     function addClient(address _clientAddress) public onlyOwner {
+        require(_clientAddress.isContract(), "ChainspotProxy: address is non-contract");
         clients[_clientAddress].exists = true;
     }
 
@@ -57,7 +58,6 @@ contract ChainspotProxy is Ownable, ReentrancyGuard, ProxyWithdrawal, ProxyFee {
     /// @param _callDataTo address  Calldata address
     /// @param _data bytes  Calldata
     function metaProxy(IERC20 _token, address _approveTo, address _callDataTo, bytes calldata _data) external payable nonReentrant {
-        require(_callDataTo.isContract(), "ChainspotProxy: call to non-contract");
         require(clients[_callDataTo].exists, "ChainspotProxy: wrong client address");
 
         if (address(_token) == address(0)) {
@@ -116,9 +116,10 @@ contract ChainspotProxy is Ownable, ReentrancyGuard, ProxyWithdrawal, ProxyFee {
         require(_token.approve(_approveTo, routerAmount), "ChainspotProxy: approve request failed");
 
         (bool success, ) = _callDataTo.call(_data);
-        if (!success) {
+        require(success, "ChainspotProxy: call data request failed");
+
+        if (_token.allowance(selfAddress, _approveTo) > 0) {
             require(_token.approve(_approveTo, 0), "ChainspotProxy: refert approve request failed");
-            require(false, "ChainspotProxy: call data request failed");
         }
     }
 }
