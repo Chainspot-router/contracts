@@ -1,11 +1,21 @@
-import "@nomicfoundation/hardhat-toolbox";
-import './tasks/accounts_task';
+// import "@nomicfoundation/hardhat-toolbox";
+// import './tasks/accounts_task';
+import "hardhat-celo";
+import "hardhat-sourcify";
 
 require('dotenv').config();
-require("@nomicfoundation/hardhat-chai-matchers");
+// require("@nomicfoundation/hardhat-chai-matchers");
 
 const config = {
-  solidity: "0.8.17",
+  solidity: {
+    version: "0.8.17",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 1000,
+      }
+    },
+  },
   defaultNetwork: "localhost",
   networks: {
     // hardhat: {
@@ -96,7 +106,11 @@ const config = {
       optimisticEthereum: process.env.OPTIMISMSCAN_API_KEY,
       arbitrumOne: process.env.ARBIRTUMSCAN_API_KEY,
       opera: process.env.FANTOMSCAN_API_KEY,
-      moonbeam: process.env.MOONSCAN_API_KEY
+      moonbeam: process.env.MOONSCAN_API_KEY,
+      aurora: process.env.AURORA_API_KEY,
+      boba: process.env.BOBA_API_KEY,
+      celo: process.env.CELO_API_KEY,
+      gnosis: process.env.GNOSIS_API_KEY,
     },
     customChains: [
       {
@@ -106,9 +120,20 @@ const config = {
           apiURL: "https://api.avascan.info/v2/network/mainnet/evm/43114/etherscan",
           browserURL: "https://avascan.info/blockchain/c"
         }
-      }
+      },
+      {
+        network: "boba",
+        chainId: 288,
+        urls: {
+          apiURL: "https://api.bobascan.com/api",
+          browserURL: "https://bobascan.com"
+        }
+      },
     ],
   }
 };
+
+// Verify scanner: npx hardhat verify --network gnosis 0xe5AE6c3Fd6484069008879eB1eeBd88039aCCE32 1000 1
+// Verify sourcify: npx hardhat sourcifySubmit --contract-name "ChainspotProxy" --source-name "contracts/ChainspotProxy.sol" --address 0xe5AE6c3Fd6484069008879eB1eeBd88039aCCE32 --chain-id 1313161554
 
 export default config;
