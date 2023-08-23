@@ -54,35 +54,38 @@ contract ChainspotProxy is Ownable, ReentrancyGuard, ProxyWithdrawal, ProxyFee {
 
     /// Meta proxy - transfer transaction initiation
     /// @param _token IERC20  Token address (address(0) - native coins)
+    /// @param _amount uint  Amount to proxy
     /// @param _approveTo address  Approve to address
     /// @param _callDataTo address  Calldata address
     /// @param _data bytes  Calldata
-    function metaProxy(IERC20 _token, address _approveTo, address _callDataTo, bytes calldata _data) external payable nonReentrant {
+    function metaProxy(IERC20 _token, uint _amount, address _approveTo, address _callDataTo, bytes calldata _data) external payable nonReentrant {
         require(clients[_callDataTo].exists, "ChainspotProxy: wrong client address");
+        require(_amount > 0, "ChainspotProxy: zero amount to proxy");
 
         if (address(_token) == address(0)) {
-            proxyCoins(_callDataTo, _data);
+            proxyCoins(_callDataTo, _amount, _data);
         } else {
-            proxyTokens(_token, _approveTo, _callDataTo, _data);
+            proxyTokens(_token, _amount, _approveTo, _callDataTo, _data);
         }
     }
 
     /// Proxy coins
     /// @param _to address  Calldata address
+    /// @param _amount uint  Amount to proxy
     /// @param _data bytes  Calldata
-    function proxyCoins(address _to, bytes calldata _data) internal {
+    function proxyCoins(address _to, uint _amount, bytes calldata _data) internal {
         uint amount = msg.value;
-        require(amount > 0, "ChainspotProxy: amount is too small");
+        require(amount > 0, "ChainspotProxy: zero amount");
+        require(amount >= _amount, "ChainspotProxy: amount is too small");
 
-        uint feeAmount = calcFee(amount);
+        uint feeAmount = calcFee(_amount);
         if (feeAmount > 0) {
             (bool successFee, ) = owner().call{value: feeAmount}("");
             require(successFee, "ChainspotProxy: fee not sent");
         }
 
-        uint routerAmount = amount.sub(feeAmount);
+        uint routerAmount = _amount.sub(feeAmount);
         require(routerAmount > 0, "ChainspotProxy: routerAmount is too small");
-
 
         (bool success, ) = _to.call{value: routerAmount}(_data);
         require(success, "ChainspotProxy: transfer not sent");
@@ -90,10 +93,11 @@ contract ChainspotProxy is Ownable, ReentrancyGuard, ProxyWithdrawal, ProxyFee {
 
     /// Proxy tokens
     /// @param _token IERC20  Token address
+    /// @param _amount uint  Amount to proxy
     /// @param _approveTo address  Approve to address
     /// @param _callDataTo address  Calldata address
     /// @param _data bytes  Calldata
-    function proxyTokens(IERC20 _token, address _approveTo, address _callDataTo, bytes calldata _data) internal {
+    function proxyTokens(IERC20 _token, uint _amount, address _approveTo, address _callDataTo, bytes calldata _data) internal {
         if (msg.value > 0) {
             (bool successTV, ) = msg.sender.call{value: msg.value}("");
             require(successTV, "ChainspotProxy: accidentally value not sent");
@@ -103,13 +107,15 @@ contract ChainspotProxy is Ownable, ReentrancyGuard, ProxyWithdrawal, ProxyFee {
         address fromAddress = msg.sender;
 
         uint amount = _token.allowance(fromAddress, selfAddress);
-        require(amount > 0, "ChainspotProxy: amount is too small");
-        uint feeAmount = calcFee(amount);
+        require(amount > 0, "ChainspotProxy: zero amount");
+        require(amount >= _amount, "ChainspotProxy: amount is too small");
+
+        uint feeAmount = calcFee(_amount);
         if (feeAmount > 0) {
             require(_token.transferFrom(fromAddress, owner(), feeAmount), "ChainspotProxy: fee transfer request failed");
         }
 
-        uint routerAmount = amount.sub(feeAmount);
+        uint routerAmount = _amount.sub(feeAmount);
         require(routerAmount > 0, "ChainspotProxy: routerAmount is too small");
         require(_token.transferFrom(fromAddress, selfAddress, routerAmount), "ChainspotProxy: transferFrom request failed");
 
