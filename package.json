@@ -13,10 +13,11 @@
     "@openzeppelin/contracts": "*",
     "dotenv": "*",
     "ethers": "*",
+    "ganache-cli": "*",
     "hardhat": "*",
+    "hardhat-celo": "*",
     "ts-node": "*",
     "typescript": "*",
-    "solidity-coverage": "*",
-    "ganache-cli": "*"
+    "hardhat-sourcify": "*"
   }
 }
