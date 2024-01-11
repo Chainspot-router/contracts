@@ -1,27 +1,27 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
-import { ChainspotProxy__factory } from "../typechain-types";
-import { TestTokenChainspot__factory } from "../typechain-types";
+const { BigInt } = require("ethers");
 
 describe("Proxy test", function () {
     async function deployContractsFixture() {
+        const Token = await ethers.getContractFactory("TestTokenChainspot");
+        const Bridge = await ethers.getContractFactory("TestBridgeContract");
+        const Proxy = await ethers.getContractFactory("ChainspotProxy");
+
         const zeroAddress: string = '0x0000000000000000000000000000000000000000';
         const feeBase: number = 1000;
         const feeMul: number = 1;
         const [ owner, user1, user2 ] = await ethers.getSigners();
 
-        const Token = await ethers.getContractFactory("TestTokenChainspot", owner);
         const token = await Token.deploy();
-        await token.deployed();
+        await token.waitForDeployment();
 
-        const Bridge = await ethers.getContractFactory("TestBridgeContract", owner);
         const bridge = await Bridge.deploy();
-        await bridge.deployed();
+        await bridge.waitForDeployment();
 
-        const Proxy = await ethers.getContractFactory("ChainspotProxy", owner);
         const proxy = await Proxy.deploy(feeBase, feeMul);
-        await proxy.deployed();
+        await proxy.waitForDeployment();
 
         return { Token, token, Bridge, bridge, Proxy, proxy, owner, user1, user2, zeroAddress, feeBase, feeMul };
     }
@@ -34,19 +34,17 @@ describe("Proxy test", function () {
     it("Should withdraw coins", async function() {
         const { Token, token, Bridge, bridge, Proxy, proxy, owner, user1, user2, zeroAddress, feeBase, feeMul } = await loadFixture(deployContractsFixture);
         const value = 1000;
-        await expect(user1.sendTransaction({to: proxy.address, value: value})).to.changeEtherBalances(
-            [user1, proxy.address],
+        await expect(user1.sendTransaction({to: await proxy.getAddress(), value: value})).to.changeEtherBalances(
+            [user1, await proxy.getAddress()],
             [-value, value]
         );
+        console.log(owner.address);
 
-        const proxyAsUser1 = ChainspotProxy__factory.connect(proxy.address, user1);
-        await expect(proxyAsUser1.transferCoins(user2.address, value))
-            .to.be.rejectedWith("Ownable: caller is not the owner");
+        await expect(proxy.connect(user1).transferCoins(user2.address, value)).to.be.rejected;
 
-        const proxyAsOwner = ChainspotProxy__factory.connect(proxy.address, owner);
-        const txTransfer = proxyAsOwner.transferCoins(user2.address, value);
+        const txTransfer = proxy.transferCoins(user2.address, value);
         await expect(() => txTransfer).to.changeEtherBalances(
-            [proxy.address, user2],
+            [await proxy.getAddress(), user2],
             [-value, value]
         );
     });
@@ -55,25 +53,20 @@ describe("Proxy test", function () {
         const { Token, token, Bridge, bridge, Proxy, proxy, owner, user1, user2, zeroAddress, feeBase, feeMul } = await loadFixture(deployContractsFixture);
         const value = 1000;
 
-        const proxyAsOwner = ChainspotProxy__factory.connect(proxy.address, owner);
-
-        const tokenAsOwnerToken = TestTokenChainspot__factory.connect(token.address, owner);
-        const txTransferTokens = await tokenAsOwnerToken.transfer(proxy.address, value);
+        const txTransferTokens = await token.transfer(await proxy.getAddress(), value);
         await txTransferTokens.wait();
 
-        const proxyBalanceTokenBefore = await tokenAsOwnerToken.balanceOf(proxy.address);
+        const proxyBalanceTokenBefore = await token.balanceOf(await proxy.getAddress());
         expect(proxyBalanceTokenBefore).to.eq(value);
-        await proxyAsOwner.getTokenBalance(token.address);
+        await proxy.getTokenBalance(await token.getAddress());
 
-        const proxyAsUser1 = ChainspotProxy__factory.connect(proxy.address, user1);
-        await expect(proxyAsUser1.transferTokens(token.address, user2.address, value))
-            .to.be.rejectedWith("Ownable: caller is not the owner");
+        await expect(proxy.connect(user1).transferTokens(await token.getAddress(), user2.address, value)).to.be.rejected;
 
-        const txTransfer = await proxyAsOwner.transferTokens(token.address, user2.address, value);
+        const txTransfer = await proxy.transferTokens(await token.getAddress(), user2.address, value);
         await txTransfer.wait();
-        const proxyBalanceAfter = await tokenAsOwnerToken.balanceOf(proxy.address);
+        const proxyBalanceAfter = await token.balanceOf(await proxy.getAddress());
         expect(proxyBalanceAfter).to.eq(0);
-        const userBalanceAfter = await tokenAsOwnerToken.balanceOf(user2.address);
+        const userBalanceAfter = await token.balanceOf(user2.address);
         expect(userBalanceAfter).to.eq(value);
     });
 
@@ -82,67 +75,61 @@ describe("Proxy test", function () {
         const bridgeValue = 1000;
         const feeValue = 1;
         const value = bridgeValue + feeValue; //100.1%
-        const data = (new ethers.utils.Interface(["function testFunction(address tokenAddress)"]))
+        const data = (new ethers.Interface(["function testFunction(address tokenAddress)"]))
             .encodeFunctionData("testFunction", [zeroAddress]);
 
-        const proxyAsUser1 = ChainspotProxy__factory.connect(proxy.address, user1);
-
-        await expect(proxyAsUser1.metaProxy(zeroAddress, value, bridge.address, bridge.address, data, {value: 0}))
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), data, {value: 0}))
             .to.be.rejectedWith("ChainspotProxy: wrong client address");
-        await expect(proxy.addClients([bridge.address])).to.not.rejected;
-        await expect(proxyAsUser1.metaProxy(zeroAddress, 0, bridge.address, bridge.address, data, {value: 0}))
+        await expect(proxy.addClients([await bridge.getAddress()])).to.not.rejected;
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, 0, await bridge.getAddress(), await bridge.getAddress(), data, {value: 0}))
             .to.be.rejectedWith("ChainspotProxy: zero amount to proxy");
-        await expect(proxyAsUser1.metaProxy(zeroAddress, value, bridge.address, bridge.address, data, {value: 0}))
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), data, {value: 0}))
             .to.be.rejectedWith("ChainspotProxy: zero amount");
-        await expect(proxyAsUser1.metaProxy(zeroAddress, value, bridge.address, bridge.address, data, {value: bridgeValue}))
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), data, {value: bridgeValue}))
             .to.be.rejectedWith("ChainspotProxy: amount is too small");
 
-        const tx = await proxyAsUser1.metaProxy(zeroAddress, value, bridge.address, bridge.address, data, {value: value});
+        const tx = await proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), data, {value: value});
         await expect(() => tx).to.changeEtherBalances(
-            [user1, owner, bridge.address],
+            [user1, owner, await bridge.getAddress()],
             [-value, feeValue, bridgeValue]
         );
     });
 
     it("Should proxy tokens", async function () {
         const { Token, token, Bridge, bridge, Proxy, proxy, owner, user1, user2, zeroAddress, feeBase, feeMul } = await loadFixture(deployContractsFixture);
-        const bridgeValue = 10000;
-        const feeValue = 10;
+        const bridgeValue = 10000n;
+        const feeValue = 10n;
         const value = bridgeValue + feeValue; //100.1%
-        const data = (new ethers.utils.Interface(["function testFunction(address tokenAddress)"]))
-            .encodeFunctionData("testFunction", [token.address]);
+        const data = (new ethers.Interface(["function testFunction(address tokenAddress)"]))
+            .encodeFunctionData("testFunction", [await token.getAddress()]);
 
-        const tokenAsOwnerToken = TestTokenChainspot__factory.connect(token.address, owner);
-        const startOwnerTokenBalance = await tokenAsOwnerToken.balanceOf(owner.address);
-        const txTransfer = await tokenAsOwnerToken.transfer(user1.address, value);
+        const startOwnerTokenBalance = await token.balanceOf(owner.address);
+        const txTransfer = await token.transfer(user1.address, value);
         await txTransfer.wait();
-        expect(await tokenAsOwnerToken.balanceOf(user1.address)).to.eq(value);
+        expect(await token.balanceOf(user1.address)).to.eq(value);
 
-        const proxyAsUser1 = ChainspotProxy__factory.connect(proxy.address, user1);
-
-        const tokenAsUser1 = TestTokenChainspot__factory.connect(token.address, user1);
-        const txApproveZero = await tokenAsUser1.approve(proxy.address, 0);
+        const txApproveZero = await token.connect(user1).approve(await proxy.getAddress(), 0);
         await txApproveZero.wait();
-        await expect(proxyAsUser1.metaProxy(token.address, value, bridge.address, bridge.address, data))
+        await expect(proxy.connect(user1).metaProxy(await token.getAddress(), value, await bridge.getAddress(), await bridge.getAddress(), data))
             .to.be.rejectedWith("ChainspotProxy: wrong client address");
-        await expect(proxy.addClients([bridge.address])).to.not.rejected;
-        await expect(proxyAsUser1.metaProxy(token.address, 0, bridge.address, bridge.address, data))
+        await expect(proxy.addClients([await bridge.getAddress()])).to.not.rejected;
+        await expect(proxy.connect(user1).metaProxy(await token.getAddress(), 0, await bridge.getAddress(), await bridge.getAddress(), data))
             .to.be.rejectedWith("ChainspotProxy: zero amount to proxy");
-        await expect(proxyAsUser1.metaProxy(token.address, value, bridge.address, bridge.address, data))
+        await expect(proxy.connect(user1).metaProxy(await token.getAddress(), value, await bridge.getAddress(), await bridge.getAddress(), data))
             .to.be.rejectedWith("ChainspotProxy: zero amount");
 
-        await expect(tokenAsUser1.approve(proxy.address, bridgeValue)).to.not.rejected;
-        await expect(proxyAsUser1.metaProxy(token.address, value, bridge.address, bridge.address, data))
+        await expect(token.connect(user1).approve(await proxy.getAddress(), bridgeValue)).to.not.rejected;
+        await expect(proxy.connect(user1).metaProxy(await token.getAddress(), value, await bridge.getAddress(), await bridge.getAddress(), data))
             .to.be.rejectedWith("ChainspotProxy: amount is too small");
 
-        await expect(tokenAsUser1.approve(proxy.address, value)).to.not.rejected;
-        const tx = await proxyAsUser1.metaProxy(token.address, value, bridge.address, bridge.address, data);
+        await expect(token.connect(user1).approve(await proxy.getAddress(), value)).to.not.rejected;
+        const tx = await proxy.connect(user1).metaProxy(await token.getAddress(), value, await bridge.getAddress(), await bridge.getAddress(), data);
         await tx.wait();
 
-        expect(await tokenAsOwnerToken.balanceOf(user1.address)).to.eq(0);
-        expect(await tokenAsOwnerToken.balanceOf(bridge.address)).to.eq(bridgeValue);
-        expect(await tokenAsOwnerToken.balanceOf(owner.address)).to.eq(startOwnerTokenBalance.sub(bridgeValue));
-        expect(await tokenAsOwnerToken.balanceOf(proxy.address)).to.eq(0);
+        expect(await token.balanceOf(user1.address)).to.eq(0);
+        expect(await token.balanceOf(await bridge.getAddress())).to.eq(bridgeValue);
+        expect(await token.balanceOf(owner.address)).to.eq(startOwnerTokenBalance - bridgeValue);
+        expect(await token.balanceOf(await proxy.getAddress())).to.eq(0);
     });
 
     it("Should proxy coins with changed mul fee", async function () {
@@ -151,28 +138,25 @@ describe("Proxy test", function () {
         const feeValue = 2;
         const feeMulNew = 2;
         const value = bridgeValue + feeValue; //100.2%
-        const data = (new ethers.utils.Interface(["function testFunction(address tokenAddress)"]))
+        const data = (new ethers.Interface(["function testFunction(address tokenAddress)"]))
             .encodeFunctionData("testFunction", [zeroAddress]);
 
-        const proxyAsOwnerProxy = ChainspotProxy__factory.connect(proxy.address, owner);
-        await expect(proxyAsOwnerProxy.setFeeParams(10, 2))
+        await expect(proxy.setFeeParams(10, 2))
             .to.be.rejectedWith("Fee: fee must be less than maximum");
-        await expect(proxyAsOwnerProxy.setFeeParams(feeBase, 0))
+        await expect(proxy.setFeeParams(feeBase, 0))
             .to.be.rejectedWith("Fee: _feeMul must be valid");
-        await expect(proxyAsOwnerProxy.setFeeParams(feeBase, feeMulNew)).to.not.rejected;
-        expect(await proxyAsOwnerProxy.feeMul()).to.eq(feeMulNew);
+        await expect(proxy.setFeeParams(feeBase, feeMulNew)).to.not.rejected;
+        expect(await proxy.feeMul()).to.eq(feeMulNew);
 
-        const proxyAsUser1 = ChainspotProxy__factory.connect(proxy.address, user1);
-
-        await expect(proxyAsUser1.metaProxy(zeroAddress, value, bridge.address, bridge.address, data, {value: 0}))
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), data, {value: 0}))
             .to.be.rejectedWith("ChainspotProxy: wrong client address");
-        await expect(proxy.addClients([bridge.address])).to.not.rejected;
-        await expect(proxyAsUser1.metaProxy(zeroAddress, value, bridge.address, bridge.address, data, {value: 0}))
+        await expect(proxy.addClients([await bridge.getAddress()])).to.not.rejected;
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), data, {value: 0}))
             .to.be.rejectedWith("ChainspotProxy: zero amount");
 
-        const tx = await proxyAsUser1.metaProxy(zeroAddress, value, bridge.address, bridge.address, data, {value: value});
+        const tx = await proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), data, {value: value});
         await expect(() => tx).to.changeEtherBalances(
-            [user1, owner, bridge.address],
+            [user1, owner, await bridge.getAddress()],
             [-value, feeValue, bridgeValue]
         );
     });
@@ -183,28 +167,25 @@ describe("Proxy test", function () {
         const feeValue = 1;
         const feeBaseNew = 100;
         const value = bridgeValue + feeValue; //101%
-        const data = (new ethers.utils.Interface(["function testFunction(address tokenAddress)"]))
+        const data = (new ethers.Interface(["function testFunction(address tokenAddress)"]))
             .encodeFunctionData("testFunction", [zeroAddress]);
 
-        const proxyAsOwnerProxy = ChainspotProxy__factory.connect(proxy.address, owner);
-        await expect(proxyAsOwnerProxy.setFeeParams(10, 2))
+        await expect(proxy.setFeeParams(10, 2))
             .to.be.rejectedWith("Fee: fee must be less than maximum");
-        await expect(proxyAsOwnerProxy.setFeeParams(0, feeMul))
+        await expect(proxy.setFeeParams(0, feeMul))
             .to.be.rejectedWith("Fee: _feeBase must be valid");
-        await expect(proxyAsOwnerProxy.setFeeParams(feeBaseNew, feeMul)).to.not.rejected;
-        expect(await proxyAsOwnerProxy.feeBase()).to.eq(feeBaseNew);
+        await expect(proxy.setFeeParams(feeBaseNew, feeMul)).to.not.rejected;
+        expect(await proxy.feeBase()).to.eq(feeBaseNew);
 
-        const proxyAsUser1 = ChainspotProxy__factory.connect(proxy.address, user1);
-
-        await expect(proxyAsUser1.metaProxy(zeroAddress, value, bridge.address, bridge.address, data, {value: 0}))
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), data, {value: 0}))
             .to.be.rejectedWith("ChainspotProxy: wrong client address");
-        await expect(proxy.addClients([bridge.address])).to.not.rejected;
-        await expect(proxyAsUser1.metaProxy(zeroAddress, value, bridge.address, bridge.address, data, {value: 0}))
+        await expect(proxy.addClients([await bridge.getAddress()])).to.not.rejected;
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), data, {value: 0}))
             .to.be.rejectedWith("ChainspotProxy: zero amount");
 
-        const tx = await proxyAsUser1.metaProxy(zeroAddress, value, bridge.address, bridge.address, data, {value: value});
+        const tx = await proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), data, {value: value});
         await expect(() => tx).to.changeEtherBalances(
-            [user1, owner, bridge.address],
+            [user1, owner, await bridge.getAddress()],
             [-value, feeValue, bridgeValue]
         );
     });

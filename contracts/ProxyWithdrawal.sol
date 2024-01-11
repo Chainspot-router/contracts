@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.23;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import {AddressLib} from "./utils/AddressLib.sol";
 
 abstract contract ProxyWithdrawal is Ownable {
 
-    using Address for address;
+    using AddressLib for address;
 
     /// Transfer event
     /// @param _to address  Destination address

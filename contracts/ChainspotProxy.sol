@@ -1,17 +1,18 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.23;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-import "./ProxyWithdrawal.sol";
-import "./ProxyFee.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import {ProxyWithdrawal} from "./ProxyWithdrawal.sol";
+import {ProxyFee} from "./ProxyFee.sol";
+import {AddressLib} from "./utils/AddressLib.sol";
+import {SafeMath} from "./utils/SafeMath.sol";
 
 /// Chainspot proxy contract
-contract ChainspotProxy is Ownable, ReentrancyGuard, ProxyWithdrawal, ProxyFee {
+contract ChainspotProxy is ReentrancyGuard, ProxyWithdrawal, ProxyFee {
 
-    using Address for address;
+    using AddressLib for address;
     using SafeERC20 for IERC20;
     using SafeMath for uint;
 
@@ -24,7 +25,7 @@ contract ChainspotProxy is Ownable, ReentrancyGuard, ProxyWithdrawal, ProxyFee {
     /// Constructor
     /// @param _feeBase uint  Fee base param
     /// @param _feeMul uint  Fee multiply param
-    constructor(uint _feeBase, uint _feeMul) {
+    constructor(uint _feeBase, uint _feeMul) Ownable(msg.sender) {
         setFeeParams(_feeBase, _feeMul);
     }
 

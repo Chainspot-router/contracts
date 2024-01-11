@@ -1,14 +1,13 @@
-// import "@nomicfoundation/hardhat-toolbox";
-// import './tasks/accounts_task';
-import "hardhat-celo";
-import "hardhat-sourcify";
+import "@nomicfoundation/hardhat-toolbox";
+import "@openzeppelin/hardhat-upgrades";
 
 require('dotenv').config();
-// require("@nomicfoundation/hardhat-chai-matchers");
+
+import './tasks/accounts_task';
 
 const config = {
   solidity: {
-    version: "0.8.17",
+    version: "0.8.23",
     settings: {
       optimizer: {
         enabled: true,
