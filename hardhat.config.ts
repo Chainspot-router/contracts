@@ -4,6 +4,7 @@ import "@openzeppelin/hardhat-upgrades";
 require('dotenv').config();
 
 import './tasks/accounts_task';
+import './tasks/deploy_nft_task';
 
 const config = {
   solidity: {
@@ -16,6 +17,9 @@ const config = {
     },
   },
   defaultNetwork: "localhost",
+  gasReporter: {
+    enabled: true,
+  },
   networks: {
     // hardhat: {
     //   chainId: 1

@@ -1,7 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
-const { BigInt } = require("ethers");
 
 describe("Proxy test", function () {
     async function deployContractsFixture() {
@@ -38,7 +37,6 @@ describe("Proxy test", function () {
             [user1, await proxy.getAddress()],
             [-value, value]
         );
-        console.log(owner.address);
 
         await expect(proxy.connect(user1).transferCoins(user2.address, value)).to.be.rejected;
 
