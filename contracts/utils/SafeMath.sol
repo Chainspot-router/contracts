@@ -9,7 +9,7 @@ library SafeMath {
     /// @return uint
     function add(uint _a, uint _b) internal pure returns(uint) {
         unchecked {
-            uint256 c = _a + _b;
+            uint c = _a + _b;
             if (c < _a) return 0;
             return c;
         }
@@ -33,7 +33,7 @@ library SafeMath {
     function mul(uint _a, uint _b) internal pure returns(uint) {
         unchecked {
             if (_a == 0) return 0;
-            uint256 c = _a * _b;
+            uint c = _a * _b;
             if (c / _a != _b) return 0;
             return c;
         }

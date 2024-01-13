@@ -11,8 +11,9 @@ import {AddressLib} from "./utils/AddressLib.sol";
 import {SafeMath} from "./utils/SafeMath.sol";
 import {ILoyaltyNFTClaimer} from "./interfaces/ILoyaltyNFTClaimer.sol";
 import {ILoyaltyReferral} from "./interfaces/ILoyaltyReferral.sol";
+import {ILoyaltyEnv} from "./interfaces/ILoyaltyEnv.sol";
 
-contract ChainspotProxy is UUPSUpgradeable, ReentrancyGuardUpgradeable, ProxyWithdrawal, ProxyFee {
+contract ChainspotProxy is ILoyaltyEnv, UUPSUpgradeable, ReentrancyGuardUpgradeable, ProxyWithdrawal, ProxyFee {
 
     using AddressLib for address;
     using SafeERC20 for IERC20;
@@ -86,6 +87,7 @@ contract ChainspotProxy is UUPSUpgradeable, ReentrancyGuardUpgradeable, ProxyWit
     /// @param _callDataTo address  Calldata address
     /// @param _data bytes  Calldata
     function metaProxy(IERC20 _token, uint _amount, address _approveTo, address _callDataTo, bytes calldata _data) external payable nonReentrant {
+        require(msg.value >= calcBaseFee(), "ChainspotProxy: value not enough");
         require(clients[_callDataTo].exists, "ChainspotProxy: wrong client address");
         require(_amount > 0, "ChainspotProxy: zero amount to proxy");
 
@@ -105,9 +107,11 @@ contract ChainspotProxy is UUPSUpgradeable, ReentrancyGuardUpgradeable, ProxyWit
         require(amount > 0, "ChainspotProxy: zero amount");
         require(amount >= _amount, "ChainspotProxy: amount is too small");
 
-        uint feeAmount = calcFee(_amount);
-        if (feeAmount > 0) {
-            (bool successFee, ) = owner().call{value: feeAmount}("");
+        uint totalFeeAmount = calcBaseFee();
+        uint feeAmount = calcAdditionalFee(_amount);
+        totalFeeAmount = totalFeeAmount.add(feeAmount);
+        if (totalFeeAmount > 0) {
+            (bool successFee, ) = owner().call{value: totalFeeAmount}("");
             require(successFee, "ChainspotProxy: fee not sent");
         }
 
@@ -127,16 +131,17 @@ contract ChainspotProxy is UUPSUpgradeable, ReentrancyGuardUpgradeable, ProxyWit
     function proxyTokens(IERC20 _token, uint _amount, address _approveTo, address _callDataTo, bytes calldata _data) internal {
         address fromAddress = msg.sender;
         address selfAddress = address(this);
-        if (msg.value > 0) {
-            (bool successTV, ) = fromAddress.call{value: msg.value}("");
-            require(successTV, "ChainspotProxy: accidentally value not sent");
+        uint baseFeeAmount = calcBaseFee();
+        if (baseFeeAmount > 0) {
+            (bool successTV, ) = fromAddress.call{value: baseFeeAmount}("");
+            require(successTV, "ChainspotProxy: base fee not sent");
         }
 
         uint amount = _token.allowance(fromAddress, selfAddress);
         require(amount > 0, "ChainspotProxy: zero amount");
         require(amount >= _amount, "ChainspotProxy: amount is too small");
 
-        uint feeAmount = calcFee(_amount);
+        uint feeAmount = calcAdditionalFee(_amount);
         if (feeAmount > 0) {
             require(_token.transferFrom(fromAddress, owner(), feeAmount), "ChainspotProxy: fee transfer request failed");
         }
@@ -147,7 +152,7 @@ contract ChainspotProxy is UUPSUpgradeable, ReentrancyGuardUpgradeable, ProxyWit
 
         require(_token.approve(_approveTo, routerAmount), "ChainspotProxy: approve request failed");
 
-        (bool success, ) = _callDataTo.call(_data);
+        (bool success, ) = _callDataTo.call{value: msg.value.sub(baseFeeAmount)}(_data);
         require(success, "ChainspotProxy: call data request failed");
 
         if (_token.allowance(selfAddress, _approveTo) > 0) {

@@ -1,10 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
-interface ILoyaltyNFTClaimer {
+import {ILoyaltyEnv} from "./ILoyaltyEnv.sol";
 
-    /// Return level NFT address
+interface ILoyaltyNFTClaimer is ILoyaltyEnv {
+
+    /// Return NFT level data
     /// @param _level uint8  Level
-    /// @return address  Level NFT
-    function getLevelNFTAddress(uint8 _level) external returns(address);
+    /// @return LoyaltyLevel  NFT level data
+    function getNFTLevelData(uint8 _level) external view returns(LoyaltyLevel memory);
 }

@@ -5,22 +5,17 @@ import {ReentrancyGuardUpgradeable} from "@openzeppelin/contracts-upgradeable/ut
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import {ILoyaltyNFTClaimer} from "./interfaces/ILoyaltyNFTClaimer.sol";
 import {IERC721} from "./interfaces/IERC721.sol";
+import {ILoyaltyEnv} from "./interfaces/ILoyaltyEnv.sol";
 import {ProxyWithdrawal} from "./ProxyWithdrawal.sol";
 
-contract LoyaltyNFTClaimer is ILoyaltyNFTClaimer, ProxyWithdrawal, UUPSUpgradeable, ReentrancyGuardUpgradeable {
+contract LoyaltyNFTClaimer is ILoyaltyEnv, ILoyaltyNFTClaimer, ProxyWithdrawal, UUPSUpgradeable, ReentrancyGuardUpgradeable {
 
-    event SetLevelNFTEvent(uint8 _level, uint8 _prevLevel, address _nftAddress, bool _needsAllPrevNFTs);
+    event SetLevelNFTEvent(uint8 _level, uint8 _prevLevel, address _nftAddress, uint _refProfit, uint _cashback);
     event AddClaimRequestEvent(address _targetAddress, uint8 _level, uint _tokenId);
     event ConfirmClaimRequestSuccessEvent(address _targetAddress, uint8 _level);
     event ConfirmClaimRequestErrorEvent(address _targetAddress, uint8 _level, bytes _reason);
     event SetMinClaimRequestValueEvent(uint _amount);
 
-    struct Level {
-        bool exists;
-        address nftAddress;
-        uint8 prevLevel;
-        bool needsAllPrevLvlNFTs;
-    }
     struct ClaimRequest {
         bool exists;
         bool claimed;
@@ -29,7 +24,7 @@ contract LoyaltyNFTClaimer is ILoyaltyNFTClaimer, ProxyWithdrawal, UUPSUpgradeab
     }
 
     uint public minClaimRequestValue;
-    mapping(uint8 => Level) public levels;
+    mapping(uint8 => LoyaltyLevel) public levels;
     mapping(address => mapping(uint8 => ClaimRequest)) public requests;
 
     /// Initializing function for upgradeable contracts (constructor)
@@ -50,10 +45,11 @@ contract LoyaltyNFTClaimer is ILoyaltyNFTClaimer, ProxyWithdrawal, UUPSUpgradeab
     /// @param _levels uint8[]  Loyalty levels
     /// @param _prevLevels uint8[]  Previous loyalty levels
     /// @param _nftAddresses address[]  Level NFTs
-    /// @param _needsAllPrevNFTsFlags bool[]  Needs all previous levels NFTs flags
-    function setLevelNFTs(uint8[] calldata _levels, uint8[] calldata _prevLevels, address[] calldata _nftAddresses, bool[] calldata _needsAllPrevNFTsFlags) public onlyOwner {
+    /// @param _refProfits uint[]  Referral profits in percent
+    /// @param _cashbacks uint[]  Cachbacks in cents
+    function setLevelNFTs(uint8[] calldata _levels, uint8[] calldata _prevLevels, address[] calldata _nftAddresses, uint[] calldata _refProfits, uint[] calldata _cashbacks) public onlyOwner {
         for (uint i = 0; i < _levels.length; i++) {
-            setLevelNFT(_levels[i], _prevLevels[i], _nftAddresses[i], _needsAllPrevNFTsFlags[i]);
+            setLevelNFT(_levels[i], _prevLevels[i], _nftAddresses[i], _refProfits[i], _cashbacks[i]);
         }
     }
 
@@ -61,14 +57,16 @@ contract LoyaltyNFTClaimer is ILoyaltyNFTClaimer, ProxyWithdrawal, UUPSUpgradeab
     /// @param _level uint8  Loyalty level
     /// @param _prevLevel uint8  Previous loyalty level
     /// @param _nftAddress address  Level NFT
-    /// @param _needsAllPrevNFTs bool  Needs all previous levels NFTs
-    function setLevelNFT(uint8 _level, uint8 _prevLevel, address _nftAddress, bool _needsAllPrevNFTs) public onlyOwner {
+    /// @param _refProfit uint  Referral profit in percent
+    /// @param _cashback uint  Cachback in cents
+    function setLevelNFT(uint8 _level, uint8 _prevLevel, address _nftAddress, uint _refProfit, uint _cashback) public onlyOwner {
         levels[_level].exists = true;
         levels[_level].nftAddress = _nftAddress;
         levels[_level].prevLevel = levels[_prevLevel].exists ? _prevLevel : 0;
-        levels[_level].needsAllPrevLvlNFTs = _needsAllPrevNFTs;
+        levels[_level].refProfitInPercent = _refProfit;
+        levels[_level].cashbackInCent = _cashback;
 
-        emit SetLevelNFTEvent(_level, _prevLevel, _nftAddress, _needsAllPrevNFTs);
+        emit SetLevelNFTEvent(_level, _prevLevel, _nftAddress, _refProfit, _cashback);
     }
 
     /// Set min claim request value
@@ -79,16 +77,16 @@ contract LoyaltyNFTClaimer is ILoyaltyNFTClaimer, ProxyWithdrawal, UUPSUpgradeab
         emit SetMinClaimRequestValueEvent(_amount);
     }
 
-    /// Return level NFT address
+    /// Return NFT level data
     /// @param _level uint8  Level
-    /// @return address  Level NFT address
-    function getLevelNFTAddress(uint8 _level) external view returns(address) {
-        return levels[_level].nftAddress;
+    /// @return LoyaltyLevel  NFT level data
+    function getNFTLevelData(uint8 _level) external view returns(LoyaltyLevel memory) {
+        return levels[_level];
     }
 
     /// Add claim request
     /// @param _level uint8  Claimed level
-    /// @param _tokenId uint  NFT token ID that user want to burn to claiming new level NFT
+    /// @param _tokenId uint  NFT token ID that user want to burn to claiming new level NFT (0 - token is not required)
     function addClaimRequest(uint8 _level, uint _tokenId) external payable {
         require(msg.value >= minClaimRequestValue, "LoyaltyNFTClaimer: invalid value");
         require(levels[_level].exists, "LoyaltyNFTClaimer: level not exists");
@@ -98,9 +96,7 @@ contract LoyaltyNFTClaimer is ILoyaltyNFTClaimer, ProxyWithdrawal, UUPSUpgradeab
         );
         require(!requests[msg.sender][_level].claimed, "LoyaltyNFTClaimer: NFT claimed already");
 
-        if (levels[_level].needsAllPrevLvlNFTs) {
-            // TODO: finish claiming TOPNFT logic
-        } else if (levels[_level].prevLevel != 0) {
+        if (levels[_level].prevLevel != 0) {
             IERC721 prevLevelNft = IERC721(levels[levels[_level].prevLevel].nftAddress);
             require(prevLevelNft.ownerOf(_tokenId) == msg.sender, "LoyaltyNFTClaimer: wrong NFT owner");
             require(prevLevelNft.getApproved(_tokenId) == address(this), "LoyaltyNFTClaimer: NFT not approved");
@@ -128,7 +124,7 @@ contract LoyaltyNFTClaimer is ILoyaltyNFTClaimer, ProxyWithdrawal, UUPSUpgradeab
 
         if (levels[_level].prevLevel != 0) {
             IERC721 prevLevelNft = IERC721(levels[levels[_level].prevLevel].nftAddress);
-            if (prevLevelNft.ownerOf(requests[_sender][_level].prevTokenId) != msg.sender) {
+            if (prevLevelNft.ownerOf(requests[_sender][_level].prevTokenId) != _sender) {
                 failClaimRequest(_sender, _level, abi.encode("LoyaltyNFTClaimer: wrong NFT owner"));
                 return;
             }
@@ -136,7 +132,7 @@ contract LoyaltyNFTClaimer is ILoyaltyNFTClaimer, ProxyWithdrawal, UUPSUpgradeab
                 failClaimRequest(_sender, _level, abi.encode("LoyaltyNFTClaimer: NFT not approved"));
                 return;
             }
-            try prevLevelNft.transferFrom(msg.sender, address(this), requests[_sender][_level].prevTokenId) {
+            try prevLevelNft.transferFrom(_sender, address(this), requests[_sender][_level].prevTokenId) {
             } catch (bytes memory reason) {
                 failClaimRequest(_sender, _level, reason);
                 return;
@@ -161,5 +157,13 @@ contract LoyaltyNFTClaimer is ILoyaltyNFTClaimer, ProxyWithdrawal, UUPSUpgradeab
     function failClaimRequest(address _sender, uint8 _level, bytes memory _reason) private {
         requests[_sender][_level].rejected = true;
         emit ConfirmClaimRequestErrorEvent(_sender, _level, _reason);
+    }
+
+    /// Manual claim NFT by owner
+    /// @param _level uint8  Level
+    /// @param _targetAddress address  Target address
+    function claimNftManual(uint8 _level, address _targetAddress) external onlyOwner {
+        require(levels[_level].exists, "LoyaltyNFTClaimer: level not exists");
+        IERC721(levels[_level].nftAddress).safeMint(_targetAddress);
     }
 }

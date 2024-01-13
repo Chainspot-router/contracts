@@ -8,6 +8,7 @@ import './tasks/nft_deploy_task';
 import './tasks/proxy_deploy_task';
 import './tasks/claimer_deploy_task';
 import './tasks/referral_deploy_task';
+import './tasks/proxy_updaterate_task';
 
 const config = {
   solidity: {

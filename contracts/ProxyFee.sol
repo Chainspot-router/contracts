@@ -11,6 +11,9 @@ abstract contract ProxyFee is OwnableUpgradeable {
     uint public feeBase;
     uint public feeMul; // example: feeBase + feeSum = 1001 or 100.1%
     uint public maxFeePercent; // Maximum but not current fee, just for validation
+    uint public baseFeeInUsd; // Base fee in USD (must be uint!)
+    // TODO: convert it to struct
+    uint public rate; // Native coins for $1
 
     /// Update fee params event
     /// @param _feeBase uint  Base fee amount
@@ -20,6 +23,7 @@ abstract contract ProxyFee is OwnableUpgradeable {
     /// Initializing function for upgradeable contracts (constructor)
     function __ProxyFee_init() initializer public {
         maxFeePercent = 10;
+        baseFeeInUsd = 2;
     }
 
     /// Set system fee (only for owner)
@@ -39,10 +43,29 @@ abstract contract ProxyFee is OwnableUpgradeable {
         emit UpdateFeeParams(_feeBase, _feeMul);
     }
 
-    /// Calculate fee by amount
+    /// Return native coins rate (coins for $1)
+    /// @return uint
+    function getRate() external view returns(uint) {
+        return rate;
+    }
+
+    /// Update rate (without event emitting for maximum gas economy)
+    /// @param _rate uint  Native coins rate (coins for $1)
+    function updateRate(uint _rate) external onlyOwner {
+        rate = _rate;
+    }
+
+    /// Calculate base fee (in native coins)
+    /// @return uint  Calculated base fee
+    function calcBaseFee() internal view returns(uint) {
+        return baseFeeInUsd * rate;
+    }
+
+    /// Calculate additional fee by amount
     /// @param _amount uint  Amount
     /// @return uint  Calculated fee
-    function calcFee(uint _amount) internal view returns(uint) {
+    function calcAdditionalFee(uint _amount) internal view returns(uint) {
+        //TODO: update this logic
         return calcFeeWithParams(_amount, feeBase, feeMul);
     }
 

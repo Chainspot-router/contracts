@@ -58,8 +58,8 @@ contract LoyaltyNFT is Initializable, ERC721Upgradeable, ERC721EnumerableUpgrade
     /// Safe mint (only for owner)
     /// @param _to address  Target address
     function safeMint(address _to) public onlyOwner {
-        uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
+        uint256 tokenId = _tokenIdCounter.current();
         _safeMint(_to, tokenId);
     }
 

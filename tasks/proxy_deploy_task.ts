@@ -27,8 +27,8 @@ async function deployBase(hre: any, isTestnet: any) {
 task("proxy:deploy", "Deploy proxy contract")
     .addPositionalParam("claimerAddress", "Loyalty claimer address", '0')
     .addPositionalParam("referralAddress", "Loyalty referral address", '0')
-    .addPositionalParam("feeBase", "FeeBase param for percent calculation", '1000')
-    .addPositionalParam("feeMul", "FeeMul param for percent calculation", '1')
+    .addPositionalParam("feeBase", "FeeBase param for percent calculation", '10000')
+    .addPositionalParam("feeMul", "FeeMul param for percent calculation", '2')
     .addPositionalParam("isTestnet", "Is testnet flag (1 - testnet, 0 - mainnet)", '0')
     .addPositionalParam("gasPrice", "Gas price (for some networks)", '0')
     .setAction(async (taskArgs, hre) => {

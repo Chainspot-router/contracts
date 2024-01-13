@@ -177,7 +177,7 @@ export const Chains = {
             title: "LOCAL",
             networkName: "localhost",
             contractAddresses: {
-                proxy: '0x59b670e9fA9D0A427751Af201D676719a970857b',
+                proxy: '0xc5a5C42992dECbae36851359345FE25997F5C42d',
                 claimer: '0x68B1D87F95878fE05B998F19b66F4baba5De1aed',
                 referral: '0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1',
             },
