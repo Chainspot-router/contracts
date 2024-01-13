@@ -4,7 +4,9 @@ import "@openzeppelin/hardhat-upgrades";
 require('dotenv').config();
 
 import './tasks/accounts_task';
-import './tasks/deploy_nft_task';
+import './tasks/nft_deploy_task';
+import './tasks/proxy_deploy_task';
+import './tasks/claimer_deploy_task';
 
 const config = {
   solidity: {
@@ -38,15 +40,35 @@ const config = {
       accounts: [process.env.OWNER_PK_CHAINSPOT],
       chainId: 1
     },
+    ethereumGoerli: {
+      url: process.env.NETWORK_HOST_ETHEREUM_GOERLI,
+      accounts: [process.env.OWNER_PK_CHAINSPOT_TEST],
+      chainId: 5
+    },
+    ethereumSepolia: {
+      url: process.env.NETWORK_HOST_ETHEREUM_SEPOLIA,
+      accounts: [process.env.OWNER_PK_CHAINSPOT_TEST],
+      chainId: 11155111
+    },
     polygon: {
       url: process.env.NETWORK_HOST_POLYGON,
       accounts: [process.env.OWNER_PK_CHAINSPOT],
       chainId: 137
     },
+    polygonMumbai: {
+      url: process.env.NETWORK_HOST_POLYGON_MUMBAI,
+      accounts: [process.env.OWNER_PK_CHAINSPOT_TEST],
+      chainId: 80001
+    },
     bsc: {
       url: process.env.NETWORK_HOST_BSC,
       accounts: [process.env.OWNER_PK_CHAINSPOT],
       chainId: 56
+    },
+    bscTestnet: {
+      url: process.env.NETWORK_HOST_BSC_TESTNET,
+      accounts: [process.env.OWNER_PK_CHAINSPOT_TEST],
+      chainId: 97
     },
     avalanche: {
       url: process.env.NETWORK_HOST_AVALANCHE,

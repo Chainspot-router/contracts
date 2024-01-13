@@ -19,7 +19,12 @@ describe("Proxy test", function () {
         const bridge = await Bridge.deploy();
         await bridge.waitForDeployment();
 
-        const proxy = await Proxy.deploy(feeBase, feeMul);
+        // const proxy = await Proxy.deploy(feeBase, feeMul);
+        // await proxy.waitForDeployment();
+        const proxy = await upgrades.deployProxy(Proxy, [feeBase, feeMul], {
+            initialize: 'initialize',
+            kind: 'uups',
+        });
         await proxy.waitForDeployment();
 
         return { Token, token, Bridge, bridge, Proxy, proxy, owner, user1, user2, zeroAddress, feeBase, feeMul };

@@ -1,20 +1,23 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import {ReentrancyGuardUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import {ProxyWithdrawal} from "./ProxyWithdrawal.sol";
 import {ProxyFee} from "./ProxyFee.sol";
 import {AddressLib} from "./utils/AddressLib.sol";
 import {SafeMath} from "./utils/SafeMath.sol";
 
-/// Chainspot proxy contract
-contract ChainspotProxy is ReentrancyGuard, ProxyWithdrawal, ProxyFee {
+contract ChainspotProxy is UUPSUpgradeable, ReentrancyGuardUpgradeable, ProxyWithdrawal, ProxyFee {
 
     using AddressLib for address;
     using SafeERC20 for IERC20;
     using SafeMath for uint;
+
+    event AddClientEvent(address _clientAddress);
+    event RemoveClientEvent(address _clientAddress);
 
     struct Client {
         bool exists;
@@ -22,21 +25,31 @@ contract ChainspotProxy is ReentrancyGuard, ProxyWithdrawal, ProxyFee {
 
     mapping(address => Client) public clients;
 
-    /// Constructor
+    /// Initializing function for upgradeable contracts (constructor)
     /// @param _feeBase uint  Fee base param
     /// @param _feeMul uint  Fee multiply param
-    constructor(uint _feeBase, uint _feeMul) Ownable(msg.sender) {
+    function initialize(uint _feeBase, uint _feeMul) initializer public {
+        __Ownable_init(msg.sender);
+        __ReentrancyGuard_init();
+        __UUPSUpgradeable_init();
+        __ProxyFee_init();
+
         setFeeParams(_feeBase, _feeMul);
     }
 
-    /// Just for tests
     receive() external payable {}
+    fallback() external payable {}
+
+    /// Upgrade implementation address for UUPS logic
+    /// @param _newImplementation address  New implementation address
+    function _authorizeUpgrade(address _newImplementation) internal onlyOwner override {}
 
     /// Add trusted client (only for owner)
     /// @param _clientAddress address  Client address
     function addClient(address _clientAddress) public onlyOwner {
         require(_clientAddress.isContract(), "ChainspotProxy: address is non-contract");
         clients[_clientAddress].exists = true;
+        emit AddClientEvent(_clientAddress);
     }
 
     /// Add multiple trusted clients (only for owner)
@@ -50,7 +63,9 @@ contract ChainspotProxy is ReentrancyGuard, ProxyWithdrawal, ProxyFee {
     /// Remove trusted client (only for owner)
     /// @param  _clientAddress address  Client address
     function removeClient(address _clientAddress) public onlyOwner {
+        require(clients[_clientAddress].exists, "ChainspotProxy: client not found");
         delete clients[_clientAddress];
+        emit RemoveClientEvent(_clientAddress);
     }
 
     /// Meta proxy - transfer transaction initiation
@@ -99,13 +114,12 @@ contract ChainspotProxy is ReentrancyGuard, ProxyWithdrawal, ProxyFee {
     /// @param _callDataTo address  Calldata address
     /// @param _data bytes  Calldata
     function proxyTokens(IERC20 _token, uint _amount, address _approveTo, address _callDataTo, bytes calldata _data) internal {
+        address fromAddress = msg.sender;
+        address selfAddress = address(this);
         if (msg.value > 0) {
-            (bool successTV, ) = msg.sender.call{value: msg.value}("");
+            (bool successTV, ) = fromAddress.call{value: msg.value}("");
             require(successTV, "ChainspotProxy: accidentally value not sent");
         }
-
-        address selfAddress = address(this);
-        address fromAddress = msg.sender;
 
         uint amount = _token.allowance(fromAddress, selfAddress);
         require(amount > 0, "ChainspotProxy: zero amount");
@@ -126,7 +140,7 @@ contract ChainspotProxy is ReentrancyGuard, ProxyWithdrawal, ProxyFee {
         require(success, "ChainspotProxy: call data request failed");
 
         if (_token.allowance(selfAddress, _approveTo) > 0) {
-            require(_token.approve(_approveTo, 0), "ChainspotProxy: refert approve request failed");
+            require(_token.approve(_approveTo, 0), "ChainspotProxy: revert approve request failed");
         }
     }
 }

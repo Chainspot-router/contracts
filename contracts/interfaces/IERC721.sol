@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 // OpenZeppelin Contracts (last updated v4.8.0) (token/ERC721/IERC721.sol)
-
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.23;
 
 import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 
@@ -142,4 +141,13 @@ interface IERC721 is IERC165 {
      * See {setApprovalForAll}
      */
     function isApprovedForAll(address owner, address operator) external view returns (bool);
+
+    /// Safe mint (only for owner)
+    /// @param _to address  Target address
+    function safeMint(address _to) external;
+
+    /// Tokens for address
+    /// @param _owner address  User address who holds NFTs
+    /// @return uint[]  Contains start block, end block, time range in days
+    function tokensOfOwner(address _owner) external view returns (uint[] memory);
 }

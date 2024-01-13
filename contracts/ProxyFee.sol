@@ -1,21 +1,26 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {SafeMath} from "./utils/SafeMath.sol";
 
-abstract contract ProxyFee is Ownable {
+abstract contract ProxyFee is OwnableUpgradeable {
 
     using SafeMath for uint;
 
     uint public feeBase;
     uint public feeMul; // example: feeBase + feeSum = 1001 or 100.1%
-    uint public maxFeePercent = 10; // Maximum but not current fee, just for validation
+    uint public maxFeePercent; // Maximum but not current fee, just for validation
 
     /// Update fee params event
     /// @param _feeBase uint  Base fee amount
     /// @param _feeMul uint  Multiply fee amount
     event UpdateFeeParams(uint _feeBase, uint _feeMul);
+
+    /// Initializing function for upgradeable contracts (constructor)
+    function __ProxyFee_init() initializer public {
+        maxFeePercent = 10;
+    }
 
     /// Set system fee (only for owner)
     /// @param _feeBase uint  Base fee
