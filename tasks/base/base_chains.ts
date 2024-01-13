@@ -8,6 +8,7 @@ export const Chains = {
             contractAddresses: {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -22,6 +23,7 @@ export const Chains = {
             contractAddresses: {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -36,6 +38,7 @@ export const Chains = {
             contractAddresses: {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -50,6 +53,7 @@ export const Chains = {
             contractAddresses: {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -64,6 +68,7 @@ export const Chains = {
             contractAddresses: {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -77,6 +82,7 @@ export const Chains = {
             contractAddresses: {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -90,6 +96,7 @@ export const Chains = {
             contractAddresses: {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -103,6 +110,7 @@ export const Chains = {
             contractAddresses: {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -115,6 +123,7 @@ export const Chains = {
             contractAddresses: {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -127,6 +136,7 @@ export const Chains = {
             contractAddresses: {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
             },
             trustAddresses: [
                 '0xcE8f24A58D85eD5c5A6824f7be1F8d4711A0eb4C', // Symbiosis
@@ -139,6 +149,7 @@ export const Chains = {
             contractAddresses: {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -151,6 +162,7 @@ export const Chains = {
             contractAddresses: {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
             },
             trustAddresses: [
                 '0xcE8f24A58D85eD5c5A6824f7be1F8d4711A0eb4C', // Symbiosis
@@ -165,8 +177,9 @@ export const Chains = {
             title: "LOCAL",
             networkName: "localhost",
             contractAddresses: {
-                proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
-                claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                proxy: '0x59b670e9fA9D0A427751Af201D676719a970857b',
+                claimer: '0x68B1D87F95878fE05B998F19b66F4baba5De1aed',
+                referral: '0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1',
             },
             trustAddresses: [],
         },
@@ -177,6 +190,7 @@ export const Chains = {
             contractAddresses: {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
             },
             trustAddresses: [],
         },
@@ -187,6 +201,7 @@ export const Chains = {
             contractAddresses: {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
             },
             trustAddresses: [],
         },
@@ -197,6 +212,7 @@ export const Chains = {
             contractAddresses: {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
             },
             trustAddresses: [],
         },

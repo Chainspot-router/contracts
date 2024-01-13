@@ -7,6 +7,7 @@ import './tasks/accounts_task';
 import './tasks/nft_deploy_task';
 import './tasks/proxy_deploy_task';
 import './tasks/claimer_deploy_task';
+import './tasks/referral_deploy_task';
 
 const config = {
   solidity: {

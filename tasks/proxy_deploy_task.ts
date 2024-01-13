@@ -25,6 +25,8 @@ async function deployBase(hre: any, isTestnet: any) {
 }
 
 task("proxy:deploy", "Deploy proxy contract")
+    .addPositionalParam("claimerAddress", "Loyalty claimer address", '0')
+    .addPositionalParam("referralAddress", "Loyalty referral address", '0')
     .addPositionalParam("feeBase", "FeeBase param for percent calculation", '1000')
     .addPositionalParam("feeMul", "FeeMul param for percent calculation", '1')
     .addPositionalParam("isTestnet", "Is testnet flag (1 - testnet, 0 - mainnet)", '0')
@@ -36,15 +38,22 @@ task("proxy:deploy", "Deploy proxy contract")
         const gasPrice = parseInt(taskArgs.gasPrice);
         console.log("Deploying proxy contract...");
 
-        const proxy = await upgrades.deployProxy(Proxy, [taskArgs.feeBase, taskArgs.feeMul], {
-            initialize: 'initialize',
-            kind: 'uups',
-        });
+        const proxy = await upgrades.deployProxy(
+            Proxy,
+            [
+                taskArgs.feeBase,
+                taskArgs.feeMul,
+                taskArgs.claimerAddress == '0' ? currentChain.contractAddresses.claimer : taskArgs.claimerAddress,
+                taskArgs.referralAddress == '0' ? currentChain.contractAddresses.referral : taskArgs.referralAddress,
+            ],
+            {initialize: 'initialize', kind: 'uups'}
+        );
         await proxy.waitForDeployment();
         gasLimit += await ethers.provider.estimateGas({
             data: (await (await ethers.getContractFactory("ChainspotProxy"))
                 .getDeployTransaction()).data
         });
+
 
         if (currentChain.trustAddresses.length > 0) {
             tx = await proxy.addClients(currentChain.trustAddresses, gasPrice > 0 ? {gasPrice: gasPrice} : {});

@@ -9,6 +9,8 @@ import {ProxyWithdrawal} from "./ProxyWithdrawal.sol";
 import {ProxyFee} from "./ProxyFee.sol";
 import {AddressLib} from "./utils/AddressLib.sol";
 import {SafeMath} from "./utils/SafeMath.sol";
+import {ILoyaltyNFTClaimer} from "./interfaces/ILoyaltyNFTClaimer.sol";
+import {ILoyaltyReferral} from "./interfaces/ILoyaltyReferral.sol";
 
 contract ChainspotProxy is UUPSUpgradeable, ReentrancyGuardUpgradeable, ProxyWithdrawal, ProxyFee {
 
@@ -18,23 +20,32 @@ contract ChainspotProxy is UUPSUpgradeable, ReentrancyGuardUpgradeable, ProxyWit
 
     event AddClientEvent(address _clientAddress);
     event RemoveClientEvent(address _clientAddress);
+    event SetClaimerEvent(address _claimerAddress);
+    event SetReferralEvent(address _referralAddress);
 
     struct Client {
         bool exists;
     }
 
     mapping(address => Client) public clients;
+    ILoyaltyNFTClaimer public claimer;
+    ILoyaltyReferral public referral;
 
     /// Initializing function for upgradeable contracts (constructor)
     /// @param _feeBase uint  Fee base param
     /// @param _feeMul uint  Fee multiply param
-    function initialize(uint _feeBase, uint _feeMul) initializer public {
+    function initialize(uint _feeBase, uint _feeMul, ILoyaltyNFTClaimer _claimer, ILoyaltyReferral _referral) initializer public {
         __Ownable_init(msg.sender);
         __ReentrancyGuard_init();
         __UUPSUpgradeable_init();
         __ProxyFee_init();
 
         setFeeParams(_feeBase, _feeMul);
+
+        claimer = _claimer;
+        emit SetClaimerEvent(address(_claimer));
+        referral = _referral;
+        emit SetReferralEvent(address(_referral));
     }
 
     receive() external payable {}
