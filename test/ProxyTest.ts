@@ -126,36 +126,66 @@ describe("Proxy test", function () {
 
     it("Should proxy coins", async function () {
         const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue } = await loadFixture(deployContractsFixture);
-        const bridgeValue = 10000;
-        const feeValue = 1;
+        const bridgeValue = 100000;
+        const feeValue = 20;
         const baseFee = rate * baseFeeInUsd;
-        const value = bridgeValue + feeValue; //100.1%
+        const value = bridgeValue + feeValue; //100.02%
         const data = (new ethers.Interface(["function testFunction(address tokenAddress)"]))
             .encodeFunctionData("testFunction", [zeroAddress]);
 
-        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), data, {value: 0}))
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), 0, zeroAddress, data, {value: 0}))
             .to.be.rejectedWith("ChainspotProxy: value not enough");
-        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), data, {value: baseFee}))
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), 0, zeroAddress, data, {value: baseFee}))
             .to.be.rejectedWith("ChainspotProxy: wrong client address");
         await expect(proxy.addClients([await bridge.getAddress()])).to.not.rejected;
-        await expect(proxy.connect(user1).metaProxy(zeroAddress, 0, await bridge.getAddress(), await bridge.getAddress(), data, {value: baseFee}))
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, 0, await bridge.getAddress(), await bridge.getAddress(), 0, zeroAddress, data, {value: baseFee}))
             .to.be.rejectedWith("ChainspotProxy: zero amount to proxy");
-        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), data, {value: baseFee}))
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), 0, zeroAddress, data, {value: baseFee}))
             .to.be.rejectedWith("ChainspotProxy: amount is too small");
 
-        const tx = await proxy.connect(user1).metaProxy(zeroAddress, bridgeValue + feeValue, await bridge.getAddress(), await bridge.getAddress(), data, {value: value + baseFee});
+        const tx = await proxy.connect(user1).metaProxy(zeroAddress, value + baseFee, await bridge.getAddress(), await bridge.getAddress(), 0, zeroAddress, data, {value: value + baseFee});
         await expect(() => tx).to.changeEtherBalances(
             [user1, owner, await bridge.getAddress()],
             [-(value + baseFee), feeValue + baseFee, bridgeValue]
         );
     });
 
+    it("Should proxy coins with loyalty logic", async function () {
+        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue } = await loadFixture(deployContractsFixture);
+        const bridgeValue = 100000;
+        const feeValue = 20;
+        const baseFee = rate * baseFeeInUsd;
+        const refValue = 60; // baseFee - 200, refBonus - 30%
+        const value = bridgeValue + feeValue; //100.02%
+        const data = (new ethers.Interface(["function testFunction(address tokenAddress)"]))
+            .encodeFunctionData("testFunction", [zeroAddress]);
+
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), nfts[0].level, user2.address, data, {value: 0}))
+            .to.be.rejectedWith("ChainspotProxy: value not enough");
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), nfts[0].level, user2.address, data, {value: baseFee}))
+            .to.be.rejectedWith("ChainspotProxy: wrong client address");
+        await expect(proxy.addClients([await bridge.getAddress()])).to.not.rejected;
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, 0, await bridge.getAddress(), await bridge.getAddress(), nfts[0].level, user2.address, data, {value: baseFee}))
+            .to.be.rejectedWith("ChainspotProxy: zero amount to proxy");
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), nfts[0].level, user2.address, data, {value: baseFee}))
+            .to.be.rejectedWith("ChainspotProxy: amount is too small");
+
+        const tx = await proxy.connect(user1).metaProxy(zeroAddress, value + baseFee, await bridge.getAddress(), await bridge.getAddress(), nfts[0].level, user2.address, data, {value: value + baseFee});
+        await expect(() => tx).to.changeEtherBalances(
+            [user1, owner, referral, await bridge.getAddress()],
+            [-(value + baseFee), feeValue + baseFee - refValue, refValue, bridgeValue]
+        );
+        const referrerData = await referral.referrers(user2.address);
+        expect(referrerData[0]).to.be.equal(true);
+        expect(referrerData[1].toString()).to.be.equal(refValue.toString());
+    });
+
     it("Should proxy tokens", async function () {
         const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue } = await loadFixture(deployContractsFixture);
-        const bridgeValue = 10000n;
-        const feeValue = 2n;
+        const bridgeValue = 100000n;
+        const feeValue = 20n;
         const baseFee = rate * baseFeeInUsd;
-        const value = bridgeValue + feeValue; //100.1%
+        const value = bridgeValue + feeValue; //100.02%
         const data = (new ethers.Interface(["function testFunction(address tokenAddress)"]))
             .encodeFunctionData("testFunction", [await token.getAddress()]);
 
@@ -166,35 +196,85 @@ describe("Proxy test", function () {
 
         const txApproveZero = await token.connect(user1).approve(await proxy.getAddress(), 0);
         await txApproveZero.wait();
-        await expect(proxy.connect(user1).metaProxy(await token.getAddress(), value, await bridge.getAddress(), await bridge.getAddress(), data, {value: baseFee}))
+        await expect(proxy.connect(user1).metaProxy(await token.getAddress(), value, await bridge.getAddress(), await bridge.getAddress(), 0, zeroAddress, data, {value: baseFee}))
             .to.be.rejectedWith("ChainspotProxy: wrong client address");
         await expect(proxy.addClients([await bridge.getAddress()])).to.not.rejected;
-        await expect(proxy.connect(user1).metaProxy(await token.getAddress(), 0, await bridge.getAddress(), await bridge.getAddress(), data, {value: baseFee}))
+        await expect(proxy.connect(user1).metaProxy(await token.getAddress(), 0, await bridge.getAddress(), await bridge.getAddress(), 0, zeroAddress, data, {value: baseFee}))
             .to.be.rejectedWith("ChainspotProxy: zero amount to proxy");
-        await expect(proxy.connect(user1).metaProxy(await token.getAddress(), value, await bridge.getAddress(), await bridge.getAddress(), data, {value: baseFee}))
+        await expect(proxy.connect(user1).metaProxy(await token.getAddress(), value, await bridge.getAddress(), await bridge.getAddress(), 0, zeroAddress, data, {value: baseFee}))
             .to.be.rejectedWith("ChainspotProxy: zero amount");
 
         await expect(token.connect(user1).approve(await proxy.getAddress(), bridgeValue)).to.not.rejected;
-        await expect(proxy.connect(user1).metaProxy(await token.getAddress(), value, await bridge.getAddress(), await bridge.getAddress(), data, {value: baseFee}))
+        await expect(proxy.connect(user1).metaProxy(await token.getAddress(), value, await bridge.getAddress(), await bridge.getAddress(), 0, zeroAddress, data, {value: baseFee}))
             .to.be.rejectedWith("ChainspotProxy: amount is too small");
 
         await expect(token.connect(user1).approve(await proxy.getAddress(), value)).to.not.rejected;
-        const tx = await proxy.connect(user1).metaProxy(await token.getAddress(), value, await bridge.getAddress(), await bridge.getAddress(), data, {value: baseFee});
+        const tx = await proxy.connect(user1).metaProxy(await token.getAddress(), value, await bridge.getAddress(), await bridge.getAddress(), 0, zeroAddress, data, {value: baseFee});
         await tx.wait();
 
         expect(await token.balanceOf(user1.address)).to.eq(0);
         expect(await token.balanceOf(await bridge.getAddress())).to.eq(bridgeValue);
         expect(await token.balanceOf(owner.address)).to.eq(startOwnerTokenBalance - bridgeValue);
         expect(await token.balanceOf(await proxy.getAddress())).to.eq(0);
+        await expect(() => tx).to.changeEtherBalances(
+            [owner],
+            [baseFee]
+        );
+    });
+
+    it("Should proxy tokens with loyalty logic", async function () {
+        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue } = await loadFixture(deployContractsFixture);
+        const bridgeValue = 100000n;
+        const feeValue = 20n;
+        const baseFee = rate * baseFeeInUsd;
+        const refValue = 60; // baseFee - 200, refBonus - 30%
+        const value = bridgeValue + feeValue; //100.02%
+        const data = (new ethers.Interface(["function testFunction(address tokenAddress)"]))
+            .encodeFunctionData("testFunction", [await token.getAddress()]);
+
+        const startOwnerTokenBalance = await token.balanceOf(owner.address);
+        const txTransfer = await token.transfer(user1.address, value);
+        await txTransfer.wait();
+        expect(await token.balanceOf(user1.address)).to.eq(value);
+
+        const txApproveZero = await token.connect(user1).approve(await proxy.getAddress(), 0);
+        await txApproveZero.wait();
+        await expect(proxy.connect(user1).metaProxy(await token.getAddress(), value, await bridge.getAddress(), await bridge.getAddress(), nfts[0].level, user2.address, data, {value: baseFee}))
+            .to.be.rejectedWith("ChainspotProxy: wrong client address");
+        await expect(proxy.addClients([await bridge.getAddress()])).to.not.rejected;
+        await expect(proxy.connect(user1).metaProxy(await token.getAddress(), 0, await bridge.getAddress(), await bridge.getAddress(), nfts[0].level, user2.address, data, {value: baseFee}))
+            .to.be.rejectedWith("ChainspotProxy: zero amount to proxy");
+        await expect(proxy.connect(user1).metaProxy(await token.getAddress(), value, await bridge.getAddress(), await bridge.getAddress(), nfts[0].level, user2.address, data, {value: baseFee}))
+            .to.be.rejectedWith("ChainspotProxy: zero amount");
+
+        await expect(token.connect(user1).approve(await proxy.getAddress(), bridgeValue)).to.not.rejected;
+        await expect(proxy.connect(user1).metaProxy(await token.getAddress(), value, await bridge.getAddress(), await bridge.getAddress(), nfts[0].level, user2.address, data, {value: baseFee}))
+            .to.be.rejectedWith("ChainspotProxy: amount is too small");
+
+        await expect(token.connect(user1).approve(await proxy.getAddress(), value)).to.not.rejected;
+        const tx = await proxy.connect(user1).metaProxy(await token.getAddress(), value, await bridge.getAddress(), await bridge.getAddress(), nfts[0].level, user2.address, data, {value: baseFee});
+        await tx.wait();
+
+        expect(await token.balanceOf(user1.address)).to.eq(0);
+        expect(await token.balanceOf(await bridge.getAddress())).to.eq(bridgeValue);
+        expect(await token.balanceOf(owner.address)).to.eq(startOwnerTokenBalance - bridgeValue);
+        expect(await token.balanceOf(await proxy.getAddress())).to.eq(0);
+        await expect(() => tx).to.changeEtherBalances(
+            [owner, await referral.getAddress()],
+            [baseFee - refValue, refValue]
+        );
+        const referrerData = await referral.referrers(user2.address);
+        expect(referrerData[0]).to.be.equal(true);
+        expect(referrerData[1].toString()).to.be.equal(refValue.toString());
     });
 
     it("Should proxy coins with changed mul fee", async function () {
         const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue } = await loadFixture(deployContractsFixture);
-        const bridgeValue = 10000;
-        const feeValue = 1;
+        const bridgeValue = 100000;
+        const feeValue = 10;
         const feeMulNew = 1;
         const baseFee = rate * baseFeeInUsd;
-        const value = bridgeValue + feeValue; //100.2%
+        const value = bridgeValue + feeValue; //100.02%
         const data = (new ethers.Interface(["function testFunction(address tokenAddress)"]))
             .encodeFunctionData("testFunction", [zeroAddress]);
 
@@ -205,13 +285,13 @@ describe("Proxy test", function () {
         await expect(proxy.setFeeParams(feeBase, feeMulNew)).to.not.rejected;
         expect(await proxy.feeMul()).to.eq(feeMulNew);
 
-        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), data, {value: 0}))
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), 0, zeroAddress, data, {value: 0}))
             .to.be.rejectedWith("ChainspotProxy: value not enough");
         await expect(proxy.addClients([await bridge.getAddress()])).to.not.rejected;
-        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), data, {value: baseFee}))
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), 0, zeroAddress, data, {value: baseFee}))
             .to.be.rejectedWith("ChainspotProxy: amount is too small");
 
-        const tx = await proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), data, {value: value + baseFee});
+        const tx = await proxy.connect(user1).metaProxy(zeroAddress, value + baseFee, await bridge.getAddress(), await bridge.getAddress(), 0, zeroAddress, data, {value: value + baseFee});
         await expect(() => tx).to.changeEtherBalances(
             [user1, owner, await bridge.getAddress()],
             [-(value + baseFee), feeValue + baseFee, bridgeValue]
@@ -220,9 +300,9 @@ describe("Proxy test", function () {
 
     it("Should proxy coins with changed base fee", async function () {
         const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue } = await loadFixture(deployContractsFixture);
-        const bridgeValue = 10000;
+        const bridgeValue = 100000;
         const feeValue = 200;
-        const feeBaseNew = 100;
+        const feeBaseNew = 1000;
         const baseFee = rate * baseFeeInUsd;
         const value = bridgeValue + feeValue; //101%
         const data = (new ethers.Interface(["function testFunction(address tokenAddress)"]))
@@ -235,20 +315,20 @@ describe("Proxy test", function () {
         await expect(proxy.setFeeParams(feeBaseNew, feeMul)).to.not.rejected;
         expect(await proxy.feeBase()).to.eq(feeBaseNew);
 
-        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), data, {value: 0}))
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), 0, zeroAddress, data, {value: 0}))
             .to.be.rejectedWith("ChainspotProxy: value not enough");
         await expect(proxy.addClients([await bridge.getAddress()])).to.not.rejected;
-        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), data, {value: baseFee}))
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), 0, zeroAddress, data, {value: baseFee}))
             .to.be.rejectedWith("ChainspotProxy: amount is too small");
 
-        const tx = await proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), data, {value: value + baseFee});
+        const tx = await proxy.connect(user1).metaProxy(zeroAddress, value + baseFee, await bridge.getAddress(), await bridge.getAddress(), 0, zeroAddress, data, {value: value + baseFee});
         await expect(() => tx).to.changeEtherBalances(
             [user1, owner, await bridge.getAddress()],
             [-(value + baseFee), feeValue + baseFee, bridgeValue]
         );
     });
 
-    it("Should claimer returned level NFT address", async function () {
+    it("Should claimer return level NFT address", async function () {
         const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue } = await loadFixture(deployContractsFixture);
 
         let notExists = await claimer.getNFTLevelData(255);
@@ -265,7 +345,7 @@ describe("Proxy test", function () {
         expect(exists[4]).to.be.equal(nfts[0].cashback);
     });
 
-    it("Should claimer added request successfully", async function () {
+    it("Should claimer add request successfully", async function () {
         const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue } = await loadFixture(deployContractsFixture);
 
         await expect(claimer.connect(user1).addClaimRequest(255, 0, {value: 0}))
@@ -360,5 +440,60 @@ describe("Proxy test", function () {
         expect(level).to.be.equal(nfts[1].level);
         await expect(await nftLvl1.balanceOf(await claimer.getAddress())).to.be.equal(1);
         await expect(await nftLvl2.balanceOf(user1.address)).to.be.equal(1);
+    });
+
+    it("Should claim referral profit successfully", async function () {
+        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue } = await loadFixture(deployContractsFixture);
+        const bridgeValue = 100000;
+        const feeValue = 20;
+        const baseFee = rate * baseFeeInUsd;
+        const refValue = 60; // baseFee - 200, refBonus - 30%
+        const value = bridgeValue + feeValue; //100.02%
+        const data = (new ethers.Interface(["function testFunction(address tokenAddress)"]))
+            .encodeFunctionData("testFunction", [zeroAddress]);
+        let tx;
+
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), nfts[0].level, user2.address, data, {value: 0}))
+            .to.be.rejectedWith("ChainspotProxy: value not enough");
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), nfts[0].level, user2.address, data, {value: baseFee}))
+            .to.be.rejectedWith("ChainspotProxy: wrong client address");
+        await expect(proxy.addClients([await bridge.getAddress()])).to.not.rejected;
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, 0, await bridge.getAddress(), await bridge.getAddress(), nfts[0].level, user2.address, data, {value: baseFee}))
+            .to.be.rejectedWith("ChainspotProxy: zero amount to proxy");
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), nfts[0].level, user2.address, data, {value: baseFee}))
+            .to.be.rejectedWith("ChainspotProxy: amount is too small");
+
+        tx = await proxy.connect(user1).metaProxy(zeroAddress, value + baseFee, await bridge.getAddress(), await bridge.getAddress(), nfts[0].level, user2.address, data, {value: value + baseFee});
+        await expect(() => tx).to.changeEtherBalances(
+            [user1, owner, referral, await bridge.getAddress()],
+            [-(value + baseFee), feeValue + baseFee - refValue, refValue, bridgeValue]
+        );
+        const referrerData = await referral.referrers(user2.address);
+        expect(referrerData[0]).to.be.equal(true);
+        expect(referrerData[1].toString()).to.be.equal(refValue.toString());
+
+        await expect(referral.connect(user2).addWithdrawalRequest(refValue))
+            .to.be.rejectedWith("LoyaltyReferral: invalid value");
+        await expect(referral.addWithdrawalRequest(refValue, {value: mitWithdrawValue}))
+            .to.be.rejectedWith("LoyaltyReferral: referrer not exists");
+        await expect(referral.connect(user2).addWithdrawalRequest(100500, {value: mitWithdrawValue}))
+            .to.be.rejectedWith("LoyaltyReferral: balance not enough");
+        tx = await expect(referral.connect(user2).addWithdrawalRequest(refValue, {value: mitWithdrawValue})).to.not.rejected;
+        await expect(referral.connect(user2).addWithdrawalRequest(refValue, {value: mitWithdrawValue}))
+            .to.be.rejectedWith("LoyaltyReferral: request exists already");
+        await expect(() => tx).to.changeEtherBalances(
+            [user2, referral],
+            [-mitWithdrawValue, mitWithdrawValue]
+        );
+
+        await expect(referral.confirmWithdrawalRequest(owner.address))
+            .to.be.rejectedWith("LoyaltyReferral: referrer not exists");
+        tx = await expect(referral.confirmWithdrawalRequest(user2.address)).to.not.rejected;
+        await expect(referral.confirmWithdrawalRequest(user2.address))
+            .to.be.rejectedWith("LoyaltyReferral: request not exists");
+        await expect(() => tx).to.changeEtherBalances(
+            [user2, referral],
+            [refValue, -refValue]
+        );
     });
 });

@@ -9,6 +9,9 @@ import './tasks/proxy_deploy_task';
 import './tasks/claimer_deploy_task';
 import './tasks/referral_deploy_task';
 import './tasks/proxy_updaterate_task';
+import './tasks/claimer_addnftlvl_task';
+import './tasks/claimer_fillnftlvl_task';
+import './tasks/proxy_fulldeploy_task';
 
 const config = {
   solidity: {

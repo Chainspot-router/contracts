@@ -13,6 +13,8 @@ import {ILoyaltyNFTClaimer} from "./interfaces/ILoyaltyNFTClaimer.sol";
 import {ILoyaltyReferral} from "./interfaces/ILoyaltyReferral.sol";
 import {ILoyaltyEnv} from "./interfaces/ILoyaltyEnv.sol";
 
+import "hardhat/console.sol";
+
 contract ChainspotProxy is ILoyaltyEnv, UUPSUpgradeable, ReentrancyGuardUpgradeable, ProxyWithdrawal, ProxyFee {
 
     using AddressLib for address;
@@ -85,37 +87,33 @@ contract ChainspotProxy is ILoyaltyEnv, UUPSUpgradeable, ReentrancyGuardUpgradea
     /// @param _amount uint  Amount to proxy
     /// @param _approveTo address  Approve to address
     /// @param _callDataTo address  Calldata address
+    /// @param _level uint8  Loyalty user level
+    /// @param _referrer address  User referrer address
     /// @param _data bytes  Calldata
-    function metaProxy(IERC20 _token, uint _amount, address _approveTo, address _callDataTo, bytes calldata _data) external payable nonReentrant {
+    function metaProxy(IERC20 _token, uint _amount, address _approveTo, address _callDataTo, uint8 _level, address _referrer, bytes calldata _data) external payable nonReentrant {
         require(msg.value >= calcBaseFee(), "ChainspotProxy: value not enough");
         require(clients[_callDataTo].exists, "ChainspotProxy: wrong client address");
         require(_amount > 0, "ChainspotProxy: zero amount to proxy");
 
         if (address(_token) == address(0)) {
-            proxyCoins(_callDataTo, _amount, _data);
+            proxyCoins(_callDataTo, _amount, _level, _referrer, _data);
         } else {
-            proxyTokens(_token, _amount, _approveTo, _callDataTo, _data);
+            proxyTokens(_token, _amount, _approveTo, _callDataTo, _level, _referrer, _data);
         }
     }
 
     /// Proxy coins
     /// @param _to address  Calldata address
     /// @param _amount uint  Amount to proxy
+    /// @param _level uint8  Loyalty user level
+    /// @param _referrer address  User referrer address
     /// @param _data bytes  Calldata
-    function proxyCoins(address _to, uint _amount, bytes calldata _data) internal {
+    function proxyCoins(address _to, uint _amount, uint8 _level, address _referrer, bytes calldata _data) internal {
         uint amount = msg.value;
         require(amount > 0, "ChainspotProxy: zero amount");
         require(amount >= _amount, "ChainspotProxy: amount is too small");
 
-        uint totalFeeAmount = calcBaseFee();
-        uint feeAmount = calcAdditionalFee(_amount);
-        totalFeeAmount = totalFeeAmount.add(feeAmount);
-        if (totalFeeAmount > 0) {
-            (bool successFee, ) = owner().call{value: totalFeeAmount}("");
-            require(successFee, "ChainspotProxy: fee not sent");
-        }
-
-        uint routerAmount = _amount.sub(feeAmount);
+        uint routerAmount = _amount.sub(transferBaseFee(_amount, _level, _referrer, true));
         require(routerAmount > 0, "ChainspotProxy: routerAmount is too small");
 
         (bool success, ) = _to.call{value: routerAmount}(_data);
@@ -127,15 +125,12 @@ contract ChainspotProxy is ILoyaltyEnv, UUPSUpgradeable, ReentrancyGuardUpgradea
     /// @param _amount uint  Amount to proxy
     /// @param _approveTo address  Approve to address
     /// @param _callDataTo address  Calldata address
+    /// @param _level uint8  Loyalty user level
+    /// @param _referrer address  User referrer address
     /// @param _data bytes  Calldata
-    function proxyTokens(IERC20 _token, uint _amount, address _approveTo, address _callDataTo, bytes calldata _data) internal {
+    function proxyTokens(IERC20 _token, uint _amount, address _approveTo, address _callDataTo, uint8 _level, address _referrer, bytes calldata _data) internal {
         address fromAddress = msg.sender;
         address selfAddress = address(this);
-        uint baseFeeAmount = calcBaseFee();
-        if (baseFeeAmount > 0) {
-            (bool successTV, ) = fromAddress.call{value: baseFeeAmount}("");
-            require(successTV, "ChainspotProxy: base fee not sent");
-        }
 
         uint amount = _token.allowance(fromAddress, selfAddress);
         require(amount > 0, "ChainspotProxy: zero amount");
@@ -152,11 +147,49 @@ contract ChainspotProxy is ILoyaltyEnv, UUPSUpgradeable, ReentrancyGuardUpgradea
 
         require(_token.approve(_approveTo, routerAmount), "ChainspotProxy: approve request failed");
 
-        (bool success, ) = _callDataTo.call{value: msg.value.sub(baseFeeAmount)}(_data);
+        (bool success, ) = _callDataTo.call{value: msg.value.sub(transferBaseFee(_amount, _level, _referrer, false))}(_data);
         require(success, "ChainspotProxy: call data request failed");
 
         if (_token.allowance(selfAddress, _approveTo) > 0) {
             require(_token.approve(_approveTo, 0), "ChainspotProxy: revert approve request failed");
         }
+    }
+
+    /// Transfer base fee (loyalty logic included)
+    /// @param _transferAmount uint  Transfer amount
+    /// @param _level uint8  User loyalty level
+    /// @param _referrer address  User referrer address
+    /// @param _isNativeTransfer bool  Is native coins transfer flag
+    /// @return uint  Total transferred fee amount
+    function transferBaseFee(uint _transferAmount, uint8 _level, address _referrer, bool _isNativeTransfer) private returns(uint) {
+        uint baseFeeAmount = calcBaseFee();
+        if (baseFeeAmount == 0) {
+            return 0;
+        }
+        console.log(_transferAmount);
+        console.log(baseFeeAmount);
+
+        uint additionalFee = _isNativeTransfer ? calcAdditionalFee(_transferAmount) : 0;
+        console.log(additionalFee);
+
+        uint finalBaseFeeAmount = baseFeeAmount;
+        if (_level > 0 && _referrer != address(0)) {
+            LoyaltyLevel memory levelData = claimer.getNFTLevelData(_level);
+            require(levelData.exists, "ChainspotProxy: loyalty level not exists");
+
+            uint refAmount = baseFeeAmount.mul(levelData.refProfitInPercent).div(100);
+            console.log(refAmount);
+            if (refAmount > 0) {
+                finalBaseFeeAmount = finalBaseFeeAmount.sub(refAmount);
+                referral.addRefererProfit{value: refAmount}(_referrer);
+            }
+        }
+        console.log(finalBaseFeeAmount);
+        console.log(baseFeeAmount + additionalFee);
+
+        (bool successTV, ) = owner().call{value: finalBaseFeeAmount + additionalFee}("");
+        require(successTV, "ChainspotProxy: fee not sent");
+
+        return baseFeeAmount + additionalFee;
     }
 }
