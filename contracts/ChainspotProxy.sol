@@ -13,8 +13,6 @@ import {ILoyaltyNFTClaimer} from "./interfaces/ILoyaltyNFTClaimer.sol";
 import {ILoyaltyReferral} from "./interfaces/ILoyaltyReferral.sol";
 import {ILoyaltyEnv} from "./interfaces/ILoyaltyEnv.sol";
 
-import "hardhat/console.sol";
-
 contract ChainspotProxy is ILoyaltyEnv, UUPSUpgradeable, ReentrancyGuardUpgradeable, ProxyWithdrawal, ProxyFee {
 
     using AddressLib for address;
@@ -166,11 +164,8 @@ contract ChainspotProxy is ILoyaltyEnv, UUPSUpgradeable, ReentrancyGuardUpgradea
         if (baseFeeAmount == 0) {
             return 0;
         }
-        console.log(_transferAmount);
-        console.log(baseFeeAmount);
 
         uint additionalFee = _isNativeTransfer ? calcAdditionalFee(_transferAmount) : 0;
-        console.log(additionalFee);
 
         uint finalBaseFeeAmount = baseFeeAmount;
         if (_level > 0 && _referrer != address(0)) {
@@ -178,14 +173,11 @@ contract ChainspotProxy is ILoyaltyEnv, UUPSUpgradeable, ReentrancyGuardUpgradea
             require(levelData.exists, "ChainspotProxy: loyalty level not exists");
 
             uint refAmount = baseFeeAmount.mul(levelData.refProfitInPercent).div(100);
-            console.log(refAmount);
             if (refAmount > 0) {
                 finalBaseFeeAmount = finalBaseFeeAmount.sub(refAmount);
                 referral.addRefererProfit{value: refAmount}(_referrer);
             }
         }
-        console.log(finalBaseFeeAmount);
-        console.log(baseFeeAmount + additionalFee);
 
         (bool successTV, ) = owner().call{value: finalBaseFeeAmount + additionalFee}("");
         require(successTV, "ChainspotProxy: fee not sent");
