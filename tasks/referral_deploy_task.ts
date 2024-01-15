@@ -4,7 +4,7 @@ import { Chains } from "./base/base_chains";
 
 async function deployBase(hre: any, isTestnet: any) {
     const [owner] = await ethers.getSigners();
-    const Referral = await ethers.getContractFactory("LoyaltyReferral");
+    const Referral = await ethers.getContractFactory("LoyaltyReferralV1");
 
     const chains = isTestnet == 1 ? Chains.testnet : Chains.mainnet;
 
@@ -41,7 +41,7 @@ task("referral:deploy", "Deploy loyalty referral contract")
         });
         await referral.waitForDeployment();
         gasLimit += await ethers.provider.estimateGas({
-            data: (await (await ethers.getContractFactory("LoyaltyReferral"))
+            data: (await (await ethers.getContractFactory("LoyaltyReferralV1"))
                 .getDeployTransaction()).data
         });
 

@@ -3,7 +3,7 @@ import { task } from 'hardhat/config';
 
 async function deployBase(hre) {
     const [owner] = await ethers.getSigners();
-    const Nft = await ethers.getContractFactory("LoyaltyNFT");
+    const Nft = await ethers.getContractFactory("LoyaltyNFTV1");
 
     let gasLimit = 0n;
     const zeroAddress: string = '0x0000000000000000000000000000000000000000';
@@ -28,7 +28,7 @@ task("nft:deploy", "Deploy loyalty NFT contract")
         });
         await nft.waitForDeployment();
         gasLimit += await ethers.provider.estimateGas({
-            data: (await (await ethers.getContractFactory("LoyaltyNFT")).getDeployTransaction()).data
+            data: (await (await ethers.getContractFactory("LoyaltyNFTV1")).getDeployTransaction()).data
         });
 
         console.log("Deployment was done\n");

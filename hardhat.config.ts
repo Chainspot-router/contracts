@@ -5,12 +5,16 @@ require('dotenv').config();
 
 import './tasks/accounts_task';
 import './tasks/nft_deploy_task';
-import './tasks/proxy_deploy_task';
-import './tasks/claimer_deploy_task';
+import './tasks/nft_update_task';
 import './tasks/referral_deploy_task';
-import './tasks/proxy_updaterate_task';
+import './tasks/referral_update_task';
+import './tasks/claimer_deploy_task';
+import './tasks/claimer_update_task';
 import './tasks/claimer_addnftlvl_task';
 import './tasks/claimer_fillnftlvl_task';
+import './tasks/proxy_deploy_task';
+import './tasks/proxy_update_task';
+import './tasks/proxy_updaterate_task';
 import './tasks/proxy_fulldeploy_task';
 
 const config = {

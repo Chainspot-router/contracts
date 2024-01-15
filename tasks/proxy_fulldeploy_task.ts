@@ -4,10 +4,10 @@ import { Chains } from "./base/base_chains";
 
 async function deployBase(hre: any, isTestnet: any) {
     const [owner] = await ethers.getSigners();
-    const Proxy = await ethers.getContractFactory("ChainspotProxy");
-    const Claimer = await ethers.getContractFactory("LoyaltyNFTClaimer");
-    const Referral = await ethers.getContractFactory("LoyaltyReferral");
-    const Nft = await ethers.getContractFactory("LoyaltyNFT");
+    const Proxy = await ethers.getContractFactory("ChainspotProxyV1");
+    const Claimer = await ethers.getContractFactory("LoyaltyNFTClaimerV1");
+    const Referral = await ethers.getContractFactory("LoyaltyReferralV1");
+    const Nft = await ethers.getContractFactory("LoyaltyNFTV1");
 
     const chains = isTestnet == 1 ? Chains.testnet : Chains.mainnet;
 
@@ -48,7 +48,7 @@ task("proxy:fullDeploy", "Fully deploy proxy contract")
         });
         await referral.waitForDeployment();
         gasLimit += await ethers.provider.estimateGas({
-            data: (await (await ethers.getContractFactory("LoyaltyReferral"))
+            data: (await (await ethers.getContractFactory("LoyaltyReferralV1"))
                 .getDeployTransaction()).data
         });
         if (taskArgs.minWithdrawalValue != '0') {
@@ -63,7 +63,7 @@ task("proxy:fullDeploy", "Fully deploy proxy contract")
         });
         await claimer.waitForDeployment();
         gasLimit += await ethers.provider.estimateGas({
-            data: (await (await ethers.getContractFactory("LoyaltyNFTClaimer"))
+            data: (await (await ethers.getContractFactory("LoyaltyNFTClaimerV1"))
                 .getDeployTransaction()).data
         });
         if (taskArgs.minClaimValue != '0') {
@@ -80,7 +80,7 @@ task("proxy:fullDeploy", "Fully deploy proxy contract")
             });
             await nfts[i].waitForDeployment();
             gasLimit += await ethers.provider.estimateGas({
-                data: (await (await ethers.getContractFactory("LoyaltyNFT")).getDeployTransaction()).data
+                data: (await (await ethers.getContractFactory("LoyaltyNFTV1")).getDeployTransaction()).data
             });
         }
 
@@ -108,7 +108,7 @@ task("proxy:fullDeploy", "Fully deploy proxy contract")
         );
         await proxy.waitForDeployment();
         gasLimit += await ethers.provider.estimateGas({
-            data: (await (await ethers.getContractFactory("ChainspotProxy"))
+            data: (await (await ethers.getContractFactory("ChainspotProxyV1"))
                 .getDeployTransaction()).data
         });
         if (currentChain.trustAddresses.length > 0) {

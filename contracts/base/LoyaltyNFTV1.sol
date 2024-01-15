@@ -8,25 +8,34 @@ import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/U
 import {ERC721EnumerableUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
 import {Counters} from "../utils/CountersLib.sol";
 
-contract LoyaltyNFT is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable, OwnableUpgradeable, UUPSUpgradeable {
+contract LoyaltyNFTV1 is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable, OwnableUpgradeable, UUPSUpgradeable {
     using Counters for Counters.Counter;
 
-    Counters.Counter private _tokenIdCounter;
+    Counters.Counter private tokenIdCounter;
+    address private manipulator;
 
     /// Initializing function for upgradeable contracts (constructor)
     /// @param _title string  NFT title
     /// @param _symbol string  NFT symbol
-    /// @param _initialOwner address  Owner address (address(0) - msg.sender)
-    function initialize(string memory _title, string memory _symbol, address _initialOwner) initializer public {
+    /// @param _initialManipulator address  Manipulator address
+    function initialize(string memory _title, string memory _symbol, address _initialManipulator) initializer public {
         __ERC721_init(_title, _symbol);
         __ERC721Enumerable_init();
-        __Ownable_init(_initialOwner == address(0) ? msg.sender : _initialOwner);
+        __Ownable_init(msg.sender);
         __UUPSUpgradeable_init();
+
+        manipulator = _initialManipulator;
     }
 
     /// Upgrade implementation address for UUPS logic
     /// @param _newImplementation address  New implementation address
     function _authorizeUpgrade(address _newImplementation) internal onlyOwner override {}
+
+    /// Only manipulator modifier
+    modifier onlyManipulator() {
+        require(msg.sender == manipulator, "LoyaltyReferral: only manipulator");
+        _;
+    }
 
     // The following functions are overrides required by Solidity.
 
@@ -57,9 +66,9 @@ contract LoyaltyNFT is Initializable, ERC721Upgradeable, ERC721EnumerableUpgrade
 
     /// Safe mint (only for owner)
     /// @param _to address  Target address
-    function safeMint(address _to) public onlyOwner {
-        _tokenIdCounter.increment();
-        uint256 tokenId = _tokenIdCounter.current();
+    function safeMint(address _to) public onlyManipulator {
+        tokenIdCounter.increment();
+        uint256 tokenId = tokenIdCounter.current();
         _safeMint(_to, tokenId);
     }
 

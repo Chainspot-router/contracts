@@ -13,7 +13,7 @@ import {ILoyaltyNFTClaimer} from "./interfaces/ILoyaltyNFTClaimer.sol";
 import {ILoyaltyReferral} from "./interfaces/ILoyaltyReferral.sol";
 import {ILoyaltyEnv} from "./interfaces/ILoyaltyEnv.sol";
 
-contract ChainspotProxy is ILoyaltyEnv, UUPSUpgradeable, ReentrancyGuardUpgradeable, ProxyWithdrawal, ProxyFee {
+contract ChainspotProxyV1 is ILoyaltyEnv, UUPSUpgradeable, ReentrancyGuardUpgradeable, ProxyWithdrawal, ProxyFee {
 
     using AddressLib for address;
     using SafeERC20 for IERC20;

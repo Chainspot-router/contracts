@@ -6,10 +6,10 @@ describe("Proxy test", function () {
     async function deployContractsFixture() {
         const Token = await ethers.getContractFactory("TestTokenChainspot");
         const Bridge = await ethers.getContractFactory("TestBridgeContract");
-        const Proxy = await ethers.getContractFactory("ChainspotProxy");
-        const Nft = await ethers.getContractFactory("LoyaltyNFT");
-        const Claimer = await ethers.getContractFactory("LoyaltyNFTClaimer");
-        const Referral = await ethers.getContractFactory("LoyaltyReferral");
+        const Proxy = await ethers.getContractFactory("ChainspotProxyV1");
+        const Nft = await ethers.getContractFactory("LoyaltyNFTV1");
+        const Claimer = await ethers.getContractFactory("LoyaltyNFTClaimerV1");
+        const Referral = await ethers.getContractFactory("LoyaltyReferralV1");
 
         const zeroAddress: string = '0x0000000000000000000000000000000000000000';
         const feeBase: number = 10000;

@@ -8,7 +8,7 @@ import {IERC721} from "./interfaces/IERC721.sol";
 import {ILoyaltyEnv} from "./interfaces/ILoyaltyEnv.sol";
 import {ProxyWithdrawal} from "./ProxyWithdrawal.sol";
 
-contract LoyaltyNFTClaimer is ILoyaltyEnv, ILoyaltyNFTClaimer, ProxyWithdrawal, UUPSUpgradeable, ReentrancyGuardUpgradeable {
+contract LoyaltyNFTClaimerV1 is ILoyaltyEnv, ILoyaltyNFTClaimer, ProxyWithdrawal, UUPSUpgradeable, ReentrancyGuardUpgradeable {
 
     event SetLevelNFTEvent(uint8 _level, uint8 _prevLevel, address _nftAddress, uint _refProfit, uint _cashback);
     event AddClaimRequestEvent(address _targetAddress, uint8 _level, uint _tokenId);

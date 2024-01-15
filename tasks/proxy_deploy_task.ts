@@ -4,7 +4,7 @@ import { Chains } from "./base/base_chains";
 
 async function deployBase(hre: any, isTestnet: any) {
     const [owner] = await ethers.getSigners();
-    const Proxy = await ethers.getContractFactory("ChainspotProxy");
+    const Proxy = await ethers.getContractFactory("ChainspotProxyV1");
 
     const chains = isTestnet == 1 ? Chains.testnet : Chains.mainnet;
 
@@ -50,7 +50,7 @@ task("proxy:deploy", "Deploy proxy contract")
         );
         await proxy.waitForDeployment();
         gasLimit += await ethers.provider.estimateGas({
-            data: (await (await ethers.getContractFactory("ChainspotProxy"))
+            data: (await (await ethers.getContractFactory("ChainspotProxyV1"))
                 .getDeployTransaction()).data
         });
 
@@ -60,7 +60,7 @@ task("proxy:deploy", "Deploy proxy contract")
             gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
         }
 
-        console.log("Deployment was done\n");
+        console.log("\nDeployment was done\n");
         console.log("Total gas limit: %s", gasLimit.toString());
         console.log("Owner address: %s", owner.address);
         console.log("Proxy address: %s\n", await proxy.getAddress());

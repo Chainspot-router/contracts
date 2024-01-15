@@ -7,7 +7,7 @@ import {ILoyaltyReferral} from "./interfaces/ILoyaltyReferral.sol";
 import {IERC721} from "./interfaces/IERC721.sol";
 import {ProxyWithdrawal} from "./ProxyWithdrawal.sol";
 
-contract LoyaltyReferral is ILoyaltyReferral, ProxyWithdrawal, UUPSUpgradeable, ReentrancyGuardUpgradeable {
+contract LoyaltyReferralV1 is ILoyaltyReferral, ProxyWithdrawal, UUPSUpgradeable, ReentrancyGuardUpgradeable {
 
     event AddWithdrawalRequestEvent(address _refererAddress, uint _amount);
     event ConfirmWithdrawalRequestEvent(address _refererAddress, uint _amount);

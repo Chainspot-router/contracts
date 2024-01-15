@@ -4,7 +4,7 @@ import { Chains } from "./base/base_chains";
 
 async function deployBase(hre: any, isTestnet: any) {
     const [owner] = await ethers.getSigners();
-    const Claimer = await ethers.getContractFactory("LoyaltyNFTClaimer");
+    const Claimer = await ethers.getContractFactory("LoyaltyNFTClaimerV1");
 
     const chains = isTestnet == 1 ? Chains.testnet : Chains.mainnet;
 
