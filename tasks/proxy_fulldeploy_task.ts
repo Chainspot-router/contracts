@@ -8,6 +8,7 @@ async function deployBase(hre: any, isTestnet: any) {
     const Claimer = await ethers.getContractFactory("LoyaltyNFTClaimerV1");
     const Referral = await ethers.getContractFactory("LoyaltyReferralV1");
     const Nft = await ethers.getContractFactory("LoyaltyNFTV1");
+    const Cashback = await ethers.getContractFactory("LoyaltyCashbackV1");
 
     const chains = isTestnet == 1 ? Chains.testnet : Chains.mainnet;
 
@@ -24,22 +25,38 @@ async function deployBase(hre: any, isTestnet: any) {
     }
 
     let gasLimit = 0n;
-    return {Proxy, Claimer, Referral, Nft, owner, currentChain, gasLimit};
+    return {Proxy, Claimer, Referral, Nft, Cashback, owner, currentChain, gasLimit};
 }
 
 task("proxy:fullDeploy", "Fully deploy proxy contract")
     .addPositionalParam("feeBase", "FeeBase param for percent calculation", '10000')
     .addPositionalParam("feeMul", "FeeMul param for percent calculation", '2')
     .addPositionalParam("minClaimValue", "Minimal claim request transaction value", '0')
-    .addPositionalParam("minWithdrawalValue", "Minimal withdrawal request transaction value", '0')
+    .addPositionalParam("minReferralWithdrawalValue", "Minimal referral withdrawal request transaction value", '0')
+    .addPositionalParam("minCashbackWithdrawalValue", "Minimal cashback withdrawal request transaction value", '0')
     .addPositionalParam("isTestnet", "Is testnet flag (1 - testnet, 0 - mainnet)", '0')
     .addPositionalParam("gasPrice", "Gas price (for some networks)", '0')
     .setAction(async (taskArgs, hre) => {
-        let {Proxy, Claimer, Referral, Nft, owner, currentChain, gasLimit} = await deployBase(hre, taskArgs.isTestnet);
+        let {Proxy, Claimer, Referral, Nft, Cashback, owner, currentChain, gasLimit} = await deployBase(hre, taskArgs.isTestnet);
 
         let tx;
         const gasPrice = parseInt(taskArgs.gasPrice);
-        console.log("Deploying full proxy contracts...");
+        console.log("Deploying full Chainspot contracts...");
+
+        // Cashback deployment
+        const cashback = await upgrades.deployProxy(Cashback, [], {
+            initialize: 'initialize',
+            kind: 'uups',
+        });
+        await cashback.waitForDeployment();
+        gasLimit += await ethers.provider.estimateGas({
+            data: (await (await ethers.getContractFactory("LoyaltyCashbackV1"))
+                .getDeployTransaction()).data
+        });
+        if (taskArgs.minCashbackWithdrawalValue != '0') {
+            tx = await cashback.setMinWithdrawRequestValue(taskArgs.minCashbackWithdrawalValue, gasPrice > 0 ? {gasPrice: gasPrice} : {});
+            gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
+        }
 
         // Referral deployment
         const referral = await upgrades.deployProxy(Referral, [], {
@@ -51,8 +68,8 @@ task("proxy:fullDeploy", "Fully deploy proxy contract")
             data: (await (await ethers.getContractFactory("LoyaltyReferralV1"))
                 .getDeployTransaction()).data
         });
-        if (taskArgs.minWithdrawalValue != '0') {
-            tx = await referral.setMinWithdrawRequestValue(taskArgs.minWithdrawalValue, gasPrice > 0 ? {gasPrice: gasPrice} : {});
+        if (taskArgs.minReferralWithdrawalValue != '0') {
+            tx = await referral.setMinWithdrawRequestValue(taskArgs.minReferralWithdrawalValue, gasPrice > 0 ? {gasPrice: gasPrice} : {});
             gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
         }
 
@@ -122,6 +139,7 @@ task("proxy:fullDeploy", "Fully deploy proxy contract")
         console.log("\nDeployment was done\n");
         console.log("Total gas limit: %s", gasLimit.toString());
         console.log("Owner address: %s", owner.address);
+        console.log("Cashback address: %s", await cashback.getAddress());
         console.log("Referral address: %s", await referral.getAddress());
         console.log("Claimer address: %s", await claimer.getAddress());
         for (let i = 0; i < currentChain.levelNfts.length; i++) {

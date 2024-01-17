@@ -10,14 +10,15 @@ describe("Proxy test", function () {
         const Nft = await ethers.getContractFactory("LoyaltyNFTV1");
         const Claimer = await ethers.getContractFactory("LoyaltyNFTClaimerV1");
         const Referral = await ethers.getContractFactory("LoyaltyReferralV1");
+        const Cashback = await ethers.getContractFactory("LoyaltyCashbackV1");
 
         const zeroAddress: string = '0x0000000000000000000000000000000000000000';
         const feeBase: number = 10000;
         const feeMul: number = 2;
         const rate: number = 100;
         const baseFeeInUsd: number = 2;
-        const mitClaimValue: number = 1000;
-        const mitWithdrawValue: number = 1000;
+        const minClaimValue = 1000n;
+        const minWithdrawValue = 1000n;
         const nfts = [
                 {title: 'NftLevel1', symbol: 'NL1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0},
                 {title: 'NftLevel2', symbol: 'NL2', refProfit: 40, cashback: 15, level: 2, prevLevel: 1},
@@ -60,14 +61,14 @@ describe("Proxy test", function () {
                 [nfts[0].refProfit, nfts[1].refProfit, nfts[2].refProfit],
                 [nfts[0].cashback, nfts[1].cashback, nfts[2].cashback],
         );
-        await claimer.setMinClaimRequestValue(mitClaimValue);
+        await claimer.setMinClaimRequestValue(minClaimValue);
 
         const referral = await upgrades.deployProxy(Referral, [], {
             initialize: 'initialize',
             kind: 'uups',
         });
         await referral.waitForDeployment();
-        await referral.setMinWithdrawRequestValue(mitWithdrawValue);
+        await referral.setMinWithdrawRequestValue(minWithdrawValue);
 
         const proxy = await upgrades.deployProxy(Proxy, [feeBase, feeMul, await claimer.getAddress(), await referral.getAddress()], {
             initialize: 'initialize',
@@ -78,16 +79,28 @@ describe("Proxy test", function () {
 
         await referral.setProxyAddress(await proxy.getAddress());
 
-        return { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue };
+        const cashback = await upgrades.deployProxy(Cashback, [], {
+            initialize: 'initialize',
+            kind: 'uups',
+        });
+        await cashback.waitForDeployment();
+        await cashback.setMinWithdrawRequestValue(minWithdrawValue);
+
+        const stableCoin = await Token.deploy();
+        await stableCoin.waitForDeployment();
+
+        await cashback.addStableCoin(await stableCoin.getAddress());
+
+        return { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Cashback, cashback, stableCoin, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, minClaimValue, minWithdrawValue };
     }
 
     it("Should default proxy balance should be 0 eth", async function () {
-        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue } = await loadFixture(deployContractsFixture);
+        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Cashback, cashback, stableCoin, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, minClaimValue, minWithdrawValue } = await loadFixture(deployContractsFixture);
         expect(await proxy.getBalance()).to.eq(0);
     });
 
     it("Should withdraw coins", async function() {
-        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue } = await loadFixture(deployContractsFixture);
+        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Cashback, cashback, stableCoin, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, minClaimValue, minWithdrawValue } = await loadFixture(deployContractsFixture);
         const value = 1000;
         await expect(user1.sendTransaction({to: await proxy.getAddress(), value: value})).to.changeEtherBalances(
             [user1, await proxy.getAddress()],
@@ -104,7 +117,7 @@ describe("Proxy test", function () {
     });
 
     it("Should withdraw tokens", async function() {
-        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue } = await loadFixture(deployContractsFixture);
+        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Cashback, cashback, stableCoin, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, minClaimValue, minWithdrawValue } = await loadFixture(deployContractsFixture);
         const value = 1000;
 
         const txTransferTokens = await token.transfer(await proxy.getAddress(), value);
@@ -125,7 +138,7 @@ describe("Proxy test", function () {
     });
 
     it("Should proxy coins", async function () {
-        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue } = await loadFixture(deployContractsFixture);
+        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Cashback, cashback, stableCoin, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, minClaimValue, minWithdrawValue } = await loadFixture(deployContractsFixture);
         const bridgeValue = 100000;
         const feeValue = 20;
         const baseFee = rate * baseFeeInUsd;
@@ -151,7 +164,7 @@ describe("Proxy test", function () {
     });
 
     it("Should proxy coins with loyalty logic", async function () {
-        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue } = await loadFixture(deployContractsFixture);
+        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Cashback, cashback, stableCoin, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, minClaimValue, minWithdrawValue } = await loadFixture(deployContractsFixture);
         const bridgeValue = 100000;
         const feeValue = 20;
         const baseFee = rate * baseFeeInUsd;
@@ -181,7 +194,7 @@ describe("Proxy test", function () {
     });
 
     it("Should proxy tokens", async function () {
-        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue } = await loadFixture(deployContractsFixture);
+        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Cashback, cashback, stableCoin, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, minClaimValue, minWithdrawValue } = await loadFixture(deployContractsFixture);
         const bridgeValue = 100000n;
         const feeValue = 20n;
         const baseFee = rate * baseFeeInUsd;
@@ -223,7 +236,7 @@ describe("Proxy test", function () {
     });
 
     it("Should proxy tokens with loyalty logic", async function () {
-        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue } = await loadFixture(deployContractsFixture);
+        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Cashback, cashback, stableCoin, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, minClaimValue, minWithdrawValue } = await loadFixture(deployContractsFixture);
         const bridgeValue = 100000n;
         const feeValue = 20n;
         const baseFee = rate * baseFeeInUsd;
@@ -269,7 +282,7 @@ describe("Proxy test", function () {
     });
 
     it("Should proxy coins with changed mul fee", async function () {
-        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue } = await loadFixture(deployContractsFixture);
+        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Cashback, cashback, stableCoin, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, minClaimValue, minWithdrawValue } = await loadFixture(deployContractsFixture);
         const bridgeValue = 100000;
         const feeValue = 10;
         const feeMulNew = 1;
@@ -299,7 +312,7 @@ describe("Proxy test", function () {
     });
 
     it("Should proxy coins with changed base fee", async function () {
-        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue } = await loadFixture(deployContractsFixture);
+        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Cashback, cashback, stableCoin, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, minClaimValue, minWithdrawValue } = await loadFixture(deployContractsFixture);
         const bridgeValue = 100000;
         const feeValue = 200;
         const feeBaseNew = 1000;
@@ -329,7 +342,7 @@ describe("Proxy test", function () {
     });
 
     it("Should claimer return level NFT address", async function () {
-        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue } = await loadFixture(deployContractsFixture);
+        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Cashback, cashback, stableCoin, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, minClaimValue, minWithdrawValue } = await loadFixture(deployContractsFixture);
 
         let notExists = await claimer.getNFTLevelData(255);
         expect(notExists[0]).to.be.equal(false);
@@ -346,14 +359,14 @@ describe("Proxy test", function () {
     });
 
     it("Should claimer add request successfully", async function () {
-        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue } = await loadFixture(deployContractsFixture);
+        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Cashback, cashback, stableCoin, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, minClaimValue, minWithdrawValue } = await loadFixture(deployContractsFixture);
 
         await expect(claimer.connect(user1).addClaimRequest(255, 0, {value: 0}))
             .to.be.rejectedWith("LoyaltyNFTClaimer: invalid value");
-        await expect(claimer.connect(user1).addClaimRequest(255, 0, {value: mitClaimValue}))
+        await expect(claimer.connect(user1).addClaimRequest(255, 0, {value: minClaimValue}))
             .to.be.rejectedWith("LoyaltyNFTClaimer: level not exists");
         let targetAddress, level, tokenId;
-        await expect(claimer.connect(user1).addClaimRequest(nfts[0].level, 0, {value: mitClaimValue}))
+        await expect(claimer.connect(user1).addClaimRequest(nfts[0].level, 0, {value: minClaimValue}))
             .to.emit(claimer, 'AddClaimRequestEvent')
             .withArgs(
                 (value) => {targetAddress = value; return true;},
@@ -363,14 +376,14 @@ describe("Proxy test", function () {
         expect(targetAddress).to.be.equal(user1.address);
         expect(level).to.be.equal(nfts[0].level);
         expect(tokenId).to.be.equal(0);
-        await expect(claimer.connect(user1).addClaimRequest(nfts[0].level, 0, {value: mitClaimValue}))
+        await expect(claimer.connect(user1).addClaimRequest(nfts[0].level, 0, {value: minClaimValue}))
             .to.be.rejectedWith("LoyaltyNFTClaimer: claim request exists already");
     });
 
     it("Should claimer confirm NFT level 1 request successfully", async function () {
-        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue } = await loadFixture(deployContractsFixture);
+        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Cashback, cashback, stableCoin, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, minClaimValue, minWithdrawValue } = await loadFixture(deployContractsFixture);
 
-        await expect(claimer.connect(user1).addClaimRequest(nfts[0].level, 0, {value: mitClaimValue})).to.not.rejected;
+        await expect(claimer.connect(user1).addClaimRequest(nfts[0].level, 0, {value: minClaimValue})).to.not.rejected;
         await expect(claimer.confirmClaimRequest(user1.address, 255, true))
             .to.be.rejectedWith("LoyaltyNFTClaimer: level not exists");
         await expect(claimer.confirmClaimRequest(user1.address, nfts[1].level, true))
@@ -390,9 +403,9 @@ describe("Proxy test", function () {
     });
 
     it("Should claimer confirm NFT level 1 request rejected, then added request again", async function () {
-        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue } = await loadFixture(deployContractsFixture);
+        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Cashback, cashback, stableCoin, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, minClaimValue, minWithdrawValue } = await loadFixture(deployContractsFixture);
 
-        await expect(claimer.connect(user1).addClaimRequest(nfts[0].level, 0, {value: mitClaimValue})).to.not.rejected;
+        await expect(claimer.connect(user1).addClaimRequest(nfts[0].level, 0, {value: minClaimValue})).to.not.rejected;
         await expect(claimer.confirmClaimRequest(user1.address, 255, true))
             .to.be.rejectedWith("LoyaltyNFTClaimer: level not exists");
         await expect(claimer.confirmClaimRequest(user1.address, nfts[1].level, true))
@@ -410,25 +423,25 @@ describe("Proxy test", function () {
         let reasonText = ethers.AbiCoder.defaultAbiCoder().decode(['string'], reason)[0];
         expect(reasonText).to.be.equal('LoyaltyNFTClaimer: validation error');
         await expect(await nftLvl1.balanceOf(user1.address)).to.be.equal(0);
-        await expect(claimer.connect(user1).addClaimRequest(nfts[0].level, 0, {value: mitClaimValue})).to.not.rejected;
+        await expect(claimer.connect(user1).addClaimRequest(nfts[0].level, 0, {value: minClaimValue})).to.not.rejected;
     });
 
     it("Should claimer confirm NFT level 2 request successfully", async function () {
-        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue } = await loadFixture(deployContractsFixture);
+        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Cashback, cashback, stableCoin, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, minClaimValue, minWithdrawValue } = await loadFixture(deployContractsFixture);
 
         await expect(claimer.claimNftManual(nfts[0].level, owner.address)).to.not.rejected;
         await expect(await nftLvl1.balanceOf(owner.address)).to.be.equal(1);
-        await expect(claimer.connect(user1).addClaimRequest(nfts[0].level, 0, {value: mitClaimValue})).to.not.rejected;
+        await expect(claimer.connect(user1).addClaimRequest(nfts[0].level, 0, {value: minClaimValue})).to.not.rejected;
         await expect(claimer.confirmClaimRequest(user1.address, nfts[0].level, true)).to.not.rejected;
         await expect(await nftLvl1.balanceOf(user1.address)).to.be.equal(1);
         const tokenId = (await nftLvl1.tokensOfOwner(user1.address))[0].toString();
         expect(tokenId).to.be.equal('2');
-        await expect(claimer.connect(user1).addClaimRequest(nfts[1].level, 1, {value: mitClaimValue}))
+        await expect(claimer.connect(user1).addClaimRequest(nfts[1].level, 1, {value: minClaimValue}))
             .to.be.rejectedWith("LoyaltyNFTClaimer: wrong NFT owner");
-        await expect(claimer.connect(user1).addClaimRequest(nfts[1].level, tokenId, {value: mitClaimValue}))
+        await expect(claimer.connect(user1).addClaimRequest(nfts[1].level, tokenId, {value: minClaimValue}))
             .to.be.rejectedWith("LoyaltyNFTClaimer: NFT not approved");
         await expect(nftLvl1.connect(user1).approve(await claimer.getAddress(), tokenId)).to.not.rejected;
-        await expect(claimer.connect(user1).addClaimRequest(nfts[1].level, tokenId, {value: mitClaimValue})).to.not.rejected;
+        await expect(claimer.connect(user1).addClaimRequest(nfts[1].level, tokenId, {value: minClaimValue})).to.not.rejected;
         let targetAddress, level;
         await expect(claimer.confirmClaimRequest(user1.address, nfts[1].level, true))
             .to.emit(claimer, 'ConfirmClaimRequestSuccessEvent')
@@ -443,7 +456,7 @@ describe("Proxy test", function () {
     });
 
     it("Should claim referral profit successfully", async function () {
-        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, mitClaimValue, mitWithdrawValue } = await loadFixture(deployContractsFixture);
+        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Cashback, cashback, stableCoin, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, minClaimValue, minWithdrawValue } = await loadFixture(deployContractsFixture);
         const bridgeValue = 100000;
         const feeValue = 20;
         const baseFee = rate * baseFeeInUsd;
@@ -474,16 +487,16 @@ describe("Proxy test", function () {
 
         await expect(referral.connect(user2).addWithdrawalRequest(refValue))
             .to.be.rejectedWith("LoyaltyReferral: invalid value");
-        await expect(referral.addWithdrawalRequest(refValue, {value: mitWithdrawValue}))
+        await expect(referral.addWithdrawalRequest(refValue, {value: minWithdrawValue}))
             .to.be.rejectedWith("LoyaltyReferral: referrer not exists");
-        await expect(referral.connect(user2).addWithdrawalRequest(100500, {value: mitWithdrawValue}))
+        await expect(referral.connect(user2).addWithdrawalRequest(100500, {value: minWithdrawValue}))
             .to.be.rejectedWith("LoyaltyReferral: balance not enough");
-        tx = await expect(referral.connect(user2).addWithdrawalRequest(refValue, {value: mitWithdrawValue})).to.not.rejected;
-        await expect(referral.connect(user2).addWithdrawalRequest(refValue, {value: mitWithdrawValue}))
+        tx = await expect(referral.connect(user2).addWithdrawalRequest(refValue, {value: minWithdrawValue})).to.not.rejected;
+        await expect(referral.connect(user2).addWithdrawalRequest(refValue, {value: minWithdrawValue}))
             .to.be.rejectedWith("LoyaltyReferral: request exists already");
         await expect(() => tx).to.changeEtherBalances(
             [user2, referral],
-            [-mitWithdrawValue, mitWithdrawValue]
+            [-minWithdrawValue, minWithdrawValue]
         );
 
         await expect(referral.confirmWithdrawalRequest(owner.address))
@@ -495,5 +508,65 @@ describe("Proxy test", function () {
             [user2, referral],
             [refValue, -refValue]
         );
+    });
+
+    it("Should add cashback request successfully", async function () {
+        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Cashback, cashback, stableCoin, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, minClaimValue, minWithdrawValue } = await loadFixture(deployContractsFixture);
+
+        const stableCoinBalance = 1000n;
+        const withdrawAmount = 100n;
+        await expect(stableCoin.transfer(await cashback.getAddress(), stableCoinBalance)).to.not.rejected;
+        const userBalanceBefore = await ethers.provider.getBalance(user1.address);
+        const cashbackBalanceBefore = await ethers.provider.getBalance(await cashback.getAddress());
+
+        await expect(cashback.connect(user1).addWithdrawalRequest(await stableCoin.getAddress(), withdrawAmount, {value: 0}))
+            .to.be.rejectedWith("LoyaltyCashback: invalid value");
+        await expect(cashback.connect(user1).addWithdrawalRequest(owner.address, withdrawAmount, {value: minWithdrawValue}))
+            .to.be.rejectedWith("LoyaltyCashback: stable coin not exists");
+        await expect(cashback.connect(user1).addWithdrawalRequest(await stableCoin.getAddress(), 0, {value: minWithdrawValue}))
+            .to.be.rejectedWith("LoyaltyCashback: amount is to small");
+        await expect(cashback.connect(user1).addWithdrawalRequest(await stableCoin.getAddress(), 100500, {value: minWithdrawValue}))
+            .to.be.rejectedWith("LoyaltyCashback: stable coin balance not enough");
+        let targetAddress, amount, tokenAddress;
+        await expect(cashback.connect(user1).addWithdrawalRequest(await stableCoin.getAddress(), withdrawAmount, {value: minWithdrawValue}))
+            .to.emit(cashback, 'AddWithdrawalRequestEvent')
+            .withArgs(
+                (value) => {targetAddress = value; return true;},
+                (value) => {amount = value; return true;},
+                (value) => {tokenAddress = value; return true;},
+            );
+        expect(targetAddress).to.be.equal(user1.address);
+        expect(amount.toString()).to.be.equal(withdrawAmount.toString());
+        expect(tokenAddress).to.be.equal(await stableCoin.getAddress());
+        expect(await ethers.provider.getBalance(user1.address)).to.be.lessThan(userBalanceBefore);
+        expect(await ethers.provider.getBalance(await cashback.getAddress())).to.be.equal(cashbackBalanceBefore + minWithdrawValue);
+        await expect(cashback.connect(user1).addWithdrawalRequest(await stableCoin.getAddress(), withdrawAmount, {value: minWithdrawValue}))
+            .to.be.rejectedWith("LoyaltyCashback: request exists already");
+    });
+
+    it("Should confirm cashback request successfully", async function () {
+        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Cashback, cashback, stableCoin, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, minClaimValue, minWithdrawValue } = await loadFixture(deployContractsFixture);
+
+        const stableCoinBalance = 1000n;
+        const withdrawAmount = 100n;
+        await expect(stableCoin.transfer(await cashback.getAddress(), stableCoinBalance)).to.not.rejected;
+        await expect(cashback.connect(user1).addWithdrawalRequest(await stableCoin.getAddress(), withdrawAmount, {value: minWithdrawValue})).to.not.rejected;
+        const cashbackTokenBalanceBefore = await stableCoin.balanceOf(await cashback.getAddress());
+
+        await expect(cashback.confirmWithdrawalRequest(user2.address))
+            .to.be.rejectedWith("LoyaltyCashback: request not exists");
+        let targetAddress, amount, tokenAddress;
+        await expect(cashback.confirmWithdrawalRequest(user1.address))
+            .to.emit(cashback, 'ConfirmWithdrawalRequestEvent')
+            .withArgs(
+                (value) => {targetAddress = value; return true;},
+                (value) => {amount = value; return true;},
+                (value) => {tokenAddress = value; return true;},
+            );
+        expect(targetAddress).to.be.equal(user1.address);
+        expect(amount.toString()).to.be.equal(withdrawAmount.toString());
+        expect(tokenAddress).to.be.equal(await stableCoin.getAddress());
+        expect(await stableCoin.balanceOf(user1.address)).to.be.equal(withdrawAmount);
+        expect(await stableCoin.balanceOf(await cashback.getAddress())).to.be.equal(cashbackTokenBalanceBefore - withdrawAmount);
     });
 });

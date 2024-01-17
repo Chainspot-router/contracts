@@ -9,6 +9,7 @@ export const Chains = {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -25,6 +26,7 @@ export const Chains = {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -41,6 +43,7 @@ export const Chains = {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -63,6 +66,7 @@ export const Chains = {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -79,6 +83,7 @@ export const Chains = {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -94,6 +99,7 @@ export const Chains = {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -109,6 +115,7 @@ export const Chains = {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -124,6 +131,7 @@ export const Chains = {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -138,6 +146,7 @@ export const Chains = {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -152,6 +161,7 @@ export const Chains = {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
             },
             trustAddresses: [
                 '0xcE8f24A58D85eD5c5A6824f7be1F8d4711A0eb4C', // Symbiosis
@@ -166,6 +176,7 @@ export const Chains = {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -180,6 +191,7 @@ export const Chains = {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
             },
             trustAddresses: [
                 '0xcE8f24A58D85eD5c5A6824f7be1F8d4711A0eb4C', // Symbiosis
@@ -198,6 +210,7 @@ export const Chains = {
                 proxy: '0x798f111c92E38F102931F34D1e0ea7e671BDBE31',
                 claimer: '0xCC5Bc84C3FDbcF262AaDD9F76652D6784293dD9e',
                 referral: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
+                cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
             },
             trustAddresses: [],
             levelNfts: [
@@ -216,6 +229,7 @@ export const Chains = {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
             },
             trustAddresses: [],
             levelNfts: [],
@@ -228,6 +242,7 @@ export const Chains = {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
             },
             trustAddresses: [],
             levelNfts: [],
@@ -240,6 +255,7 @@ export const Chains = {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
             },
             trustAddresses: [],
             levelNfts: [],

@@ -16,6 +16,8 @@ import './tasks/proxy_deploy_task';
 import './tasks/proxy_update_task';
 import './tasks/proxy_updaterate_task';
 import './tasks/proxy_fulldeploy_task';
+import './tasks/cashback_deploy_task';
+import './tasks/cashback_update_task';
 
 const config = {
   solidity: {

@@ -4,7 +4,7 @@ import { Chains } from "./base/base_chains";
 
 async function deployBase(hre: any, isTestnet: any) {
     const [owner] = await ethers.getSigners();
-    const Referral = await ethers.getContractFactory("LoyaltyReferralV1");
+    const Cashback = await ethers.getContractFactory("LoyaltyCashbackV1");
 
     const chains = isTestnet == 1 ? Chains.testnet : Chains.mainnet;
 
@@ -21,37 +21,37 @@ async function deployBase(hre: any, isTestnet: any) {
     }
 
     let gasLimit = 0n;
-    return {Referral, owner, currentChain, gasLimit};
+    return {Cashback, owner, currentChain, gasLimit};
 }
 
-task("referral:deploy", "Deploy loyalty referral contract")
+task("cashback:deploy", "Deploy loyalty cashback contract")
     .addPositionalParam("minRequestValue", "Minimal withdrawal request transaction value", '0')
     .addPositionalParam("isTestnet", "Is testnet flag (1 - testnet, 0 - mainnet)", '0')
     .addPositionalParam("gasPrice", "Gas price (for some networks)", '0')
     .setAction(async (taskArgs, hre) => {
-        let {Referral, owner, currentChain, gasLimit} = await deployBase(hre, taskArgs.isTestnet);
+        let {Cashback, owner, currentChain, gasLimit} = await deployBase(hre, taskArgs.isTestnet);
 
         let tx;
         const gasPrice = parseInt(taskArgs.gasPrice);
-        console.log("Deploying referral contract...");
+        console.log("Deploying cashback contract...");
 
-        const referral = await upgrades.deployProxy(Referral, [], {
+        const cashback = await upgrades.deployProxy(Cashback, [], {
             initialize: 'initialize',
             kind: 'uups',
         });
-        await referral.waitForDeployment();
+        await cashback.waitForDeployment();
         gasLimit += await ethers.provider.estimateGas({
-            data: (await (await ethers.getContractFactory("LoyaltyReferralV1"))
+            data: (await (await ethers.getContractFactory("LoyaltyCashbackV1"))
                 .getDeployTransaction()).data
         });
 
         if (taskArgs.minRequestValue != '0') {
-            tx = await referral.setMinWithdrawRequestValue(taskArgs.minRequestValue, gasPrice > 0 ? {gasPrice: gasPrice} : {});
+            tx = await cashback.setMinWithdrawRequestValue(taskArgs.minRequestValue, gasPrice > 0 ? {gasPrice: gasPrice} : {});
             gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
         }
 
         console.log("Deployment was done\n");
         console.log("Total gas limit: %s", gasLimit.toString());
         console.log("Owner address: %s", owner.address);
-        console.log("Referral address: %s\n", await referral.getAddress());
+        console.log("Cashback address: %s\n", await cashback.getAddress());
     })
