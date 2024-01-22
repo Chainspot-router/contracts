@@ -133,7 +133,7 @@ task("proxy:fullDeploy", "Fully deploy proxy contract")
             gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
         }
 
-        tx = await referral.setProxyAddress(await proxy.getAddress());
+        tx = await referral.setBaseProxyAddress(await proxy.getAddress());
         gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
 
         console.log("\nDeployment was done\n");

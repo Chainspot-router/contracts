@@ -77,7 +77,7 @@ describe("Proxy test", function () {
         await proxy.waitForDeployment();
         await proxy.updateRate(rate);
 
-        await referral.setProxyAddress(await proxy.getAddress());
+        await referral.setBaseProxyAddress(await proxy.getAddress());
 
         const cashback = await upgrades.deployProxy(Cashback, [], {
             initialize: 'initialize',
@@ -499,14 +499,69 @@ describe("Proxy test", function () {
             [-minWithdrawValue, minWithdrawValue]
         );
 
-        await expect(referral.confirmWithdrawalRequest(owner.address))
+        await expect(referral.confirmWithdrawalRequest(owner.address, true))
             .to.be.rejectedWith("LoyaltyReferral: referrer not exists");
-        tx = await expect(referral.confirmWithdrawalRequest(user2.address)).to.not.rejected;
-        await expect(referral.confirmWithdrawalRequest(user2.address))
+        tx = await expect(referral.confirmWithdrawalRequest(user2.address, true)).to.not.rejected;
+        await expect(referral.confirmWithdrawalRequest(user2.address, true))
             .to.be.rejectedWith("LoyaltyReferral: request not exists");
         await expect(() => tx).to.changeEtherBalances(
             [user2, referral],
             [refValue, -refValue]
+        );
+    });
+
+    it("Should claim referral profit with false flag successfully", async function () {
+        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Cashback, cashback, stableCoin, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, minClaimValue, minWithdrawValue } = await loadFixture(deployContractsFixture);
+        const bridgeValue = 100000;
+        const feeValue = 20;
+        const baseFee = rate * baseFeeInUsd;
+        const refValue = 60; // baseFee - 200, refBonus - 30%
+        const value = bridgeValue + feeValue; //100.02%
+        const data = (new ethers.Interface(["function testFunction(address tokenAddress)"]))
+            .encodeFunctionData("testFunction", [zeroAddress]);
+        let tx;
+
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), nfts[0].level, user2.address, data, {value: 0}))
+            .to.be.rejectedWith("ChainspotProxy: value not enough");
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), nfts[0].level, user2.address, data, {value: baseFee}))
+            .to.be.rejectedWith("ChainspotProxy: wrong client address");
+        await expect(proxy.addClients([await bridge.getAddress()])).to.not.rejected;
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, 0, await bridge.getAddress(), await bridge.getAddress(), nfts[0].level, user2.address, data, {value: baseFee}))
+            .to.be.rejectedWith("ChainspotProxy: zero amount to proxy");
+        await expect(proxy.connect(user1).metaProxy(zeroAddress, value, await bridge.getAddress(), await bridge.getAddress(), nfts[0].level, user2.address, data, {value: baseFee}))
+            .to.be.rejectedWith("ChainspotProxy: amount is too small");
+
+        tx = await proxy.connect(user1).metaProxy(zeroAddress, value + baseFee, await bridge.getAddress(), await bridge.getAddress(), nfts[0].level, user2.address, data, {value: value + baseFee});
+        await expect(() => tx).to.changeEtherBalances(
+            [user1, owner, referral, await bridge.getAddress()],
+            [-(value + baseFee), feeValue + baseFee - refValue, refValue, bridgeValue]
+        );
+        const referrerData = await referral.referrers(user2.address);
+        expect(referrerData[0]).to.be.equal(true);
+        expect(referrerData[1].toString()).to.be.equal(refValue.toString());
+
+        await expect(referral.connect(user2).addWithdrawalRequest(refValue))
+            .to.be.rejectedWith("LoyaltyReferral: invalid value");
+        await expect(referral.addWithdrawalRequest(refValue, {value: minWithdrawValue}))
+            .to.be.rejectedWith("LoyaltyReferral: referrer not exists");
+        await expect(referral.connect(user2).addWithdrawalRequest(100500, {value: minWithdrawValue}))
+            .to.be.rejectedWith("LoyaltyReferral: balance not enough");
+        tx = await expect(referral.connect(user2).addWithdrawalRequest(refValue, {value: minWithdrawValue})).to.not.rejected;
+        await expect(referral.connect(user2).addWithdrawalRequest(refValue, {value: minWithdrawValue}))
+            .to.be.rejectedWith("LoyaltyReferral: request exists already");
+        await expect(() => tx).to.changeEtherBalances(
+            [user2, referral],
+            [-minWithdrawValue, minWithdrawValue]
+        );
+
+        await expect(referral.confirmWithdrawalRequest(owner.address, false))
+            .to.be.rejectedWith("LoyaltyReferral: referrer not exists");
+        tx = await expect(referral.confirmWithdrawalRequest(user2.address, false)).to.not.rejected;
+        await expect(referral.confirmWithdrawalRequest(user2.address, false))
+            .to.be.rejectedWith("LoyaltyReferral: request not exists");
+        await expect(() => tx).to.changeEtherBalances(
+            [user2, referral],
+            [0, 0]
         );
     });
 
