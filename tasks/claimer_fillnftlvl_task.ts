@@ -42,7 +42,8 @@ task("claim:fillLevelNft", "Fill level NFT data")
             prevLevels = [],
             nftAddresses = [],
             refProfits = [],
-            cashbacks = [];
+            cashbacks = [],
+            maxUserLevelForRefProfits = [];
         for (let i = 0; i < currentChain.levelNfts.length; i++) {
             if (currentChain.levelNfts[i].nftAddress == '0x0000000000000000000000000000000000000000') {
                 break;
@@ -53,13 +54,14 @@ task("claim:fillLevelNft", "Fill level NFT data")
             nftAddresses.push(currentChain.levelNfts[i].nftAddress);
             refProfits.push(currentChain.levelNfts[i].refProfit);
             cashbacks.push(currentChain.levelNfts[i].cashback);
+            maxUserLevelForRefProfits.push(currentChain.levelNfts[i].maxUserLevelForRefProfit);
         }
 
         if (levels.length <= 0) {
             throw new Error('Config is not filled!');
         }
 
-        tx = await claimer.setLevelNFTs(levels, prevLevels, nftAddresses, refProfits, cashbacks, gasPrice > 0 ? {gasPrice: gasPrice} : {});
+        tx = await claimer.setLevelNFTs(levels, prevLevels, nftAddresses, refProfits, maxUserLevelForRefProfits, cashbacks, gasPrice > 0 ? {gasPrice: gasPrice} : {});
         gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
 
         console.log("\nLevels NFT filled successfully\n");

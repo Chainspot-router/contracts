@@ -106,15 +106,17 @@ task("proxy:fullDeploy", "Fully deploy proxy contract")
             prevLevels = [],
             nftAddresses = [],
             refProfits = [],
-            cashbacks = [];
+            cashbacks = [],
+            maxUserLevelForRefProfits = [];
         for (let i = 0; i < currentChain.levelNfts.length; i++) {
             levels.push(currentChain.levelNfts[i].level);
             prevLevels.push(currentChain.levelNfts[i].prevLevel);
             nftAddresses.push(await nfts[i].getAddress());
             refProfits.push(currentChain.levelNfts[i].refProfit);
             cashbacks.push(currentChain.levelNfts[i].cashback);
+            maxUserLevelForRefProfits.push(currentChain.levelNfts[i].maxUserLevelForRefProfit);
         }
-        tx = await claimer.setLevelNFTs(levels, prevLevels, nftAddresses, refProfits, cashbacks, gasPrice > 0 ? {gasPrice: gasPrice} : {});
+        tx = await claimer.setLevelNFTs(levels, prevLevels, nftAddresses, refProfits, maxUserLevelForRefProfits, cashbacks, gasPrice > 0 ? {gasPrice: gasPrice} : {});
         gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
 
         // Proxy deployment
