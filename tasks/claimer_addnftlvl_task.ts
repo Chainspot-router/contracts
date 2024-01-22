@@ -34,6 +34,7 @@ task("claim:addLevelNft", "Add level NFT data")
     .addPositionalParam("prevLevel", "Previous level (0 - base level)")
     .addPositionalParam("nftAddress", "Level NFT address")
     .addPositionalParam("refProfit", "Level referrer profit (in percent, uint)")
+    .addPositionalParam("maxUserLevelForRefProfit", "Level referrer profit (in percent, uint)")
     .addPositionalParam("cachback", "Level cashback (in cents, uint)")
     .addPositionalParam("isTestnet", "Is testnet flag (1 - testnet, 0 - mainnet)", '0')
     .addPositionalParam("gasPrice", "Gas price (for some networks)", '0')
@@ -44,7 +45,10 @@ task("claim:addLevelNft", "Add level NFT data")
         const gasPrice = parseInt(taskArgs.gasPrice);
         console.log("Add level NFT...");
 
-        tx = await claimer.setLevelNFT(taskArgs.level, taskArgs.prevLevel, taskArgs.nftAddress, taskArgs.refProfit, taskArgs.cachback, gasPrice > 0 ? {gasPrice: gasPrice} : {});
+        tx = await claimer.setLevelNFT(
+            taskArgs.level, taskArgs.prevLevel, taskArgs.nftAddress, taskArgs.refProfit,
+            taskArgs.maxUserLevelForRefProfit, taskArgs.cachback, gasPrice > 0 ? {gasPrice: gasPrice} : {}
+        );
         gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
 
         console.log("\nLevel NFT added successfully\n");

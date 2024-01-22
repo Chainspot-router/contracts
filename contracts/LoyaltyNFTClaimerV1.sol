@@ -10,7 +10,7 @@ import {ProxyWithdrawal} from "./ProxyWithdrawal.sol";
 
 contract LoyaltyNFTClaimerV1 is ILoyaltyEnv, ILoyaltyNFTClaimer, ProxyWithdrawal, UUPSUpgradeable, ReentrancyGuardUpgradeable {
 
-    event SetLevelNFTEvent(uint8 _level, uint8 _prevLevel, address _nftAddress, uint _refProfit, uint _cashback);
+    event SetLevelNFTEvent(uint8 _level, uint8 _prevLevel, address _nftAddress, uint _refProfit, uint8 _laxUserLvlRefForProfit, uint _cashback);
     event AddClaimRequestEvent(address _targetAddress, uint8 _level, uint _tokenId);
     event ConfirmClaimRequestSuccessEvent(address _targetAddress, uint8 _level);
     event ConfirmClaimRequestErrorEvent(address _targetAddress, uint8 _level, bytes _reason);
@@ -46,10 +46,18 @@ contract LoyaltyNFTClaimerV1 is ILoyaltyEnv, ILoyaltyNFTClaimer, ProxyWithdrawal
     /// @param _prevLevels uint8[]  Previous loyalty levels
     /// @param _nftAddresses address[]  Level NFTs
     /// @param _refProfits uint[]  Referral profits in percent
+    /// @param _laxUserLvlRefForProfits uint8[]  Maximum user levels for referral profit
     /// @param _cashbacks uint[]  Cachbacks in cents
-    function setLevelNFTs(uint8[] calldata _levels, uint8[] calldata _prevLevels, address[] calldata _nftAddresses, uint[] calldata _refProfits, uint[] calldata _cashbacks) public onlyOwner {
+    function setLevelNFTs(
+        uint8[] calldata _levels,
+        uint8[] calldata _prevLevels,
+        address[] calldata _nftAddresses,
+        uint[] calldata _refProfits,
+        uint8[] calldata _laxUserLvlRefForProfits,
+        uint[] calldata _cashbacks
+    ) public onlyOwner {
         for (uint i = 0; i < _levels.length; i++) {
-            setLevelNFT(_levels[i], _prevLevels[i], _nftAddresses[i], _refProfits[i], _cashbacks[i]);
+            setLevelNFT(_levels[i], _prevLevels[i], _nftAddresses[i], _refProfits[i], _laxUserLvlRefForProfits[i], _cashbacks[i]);
         }
     }
 
@@ -58,15 +66,24 @@ contract LoyaltyNFTClaimerV1 is ILoyaltyEnv, ILoyaltyNFTClaimer, ProxyWithdrawal
     /// @param _prevLevel uint8  Previous loyalty level
     /// @param _nftAddress address  Level NFT
     /// @param _refProfit uint  Referral profit in percent
+    /// @param _laxUserLvlRefForProfit uint8  Maximum user level for referral profit
     /// @param _cashback uint  Cachback in cents
-    function setLevelNFT(uint8 _level, uint8 _prevLevel, address _nftAddress, uint _refProfit, uint _cashback) public onlyOwner {
+    function setLevelNFT(
+        uint8 _level,
+        uint8 _prevLevel,
+        address _nftAddress,
+        uint _refProfit,
+        uint8 _laxUserLvlRefForProfit,
+        uint _cashback
+    ) public onlyOwner {
         levels[_level].exists = true;
         levels[_level].nftAddress = _nftAddress;
         levels[_level].prevLevel = levels[_prevLevel].exists ? _prevLevel : 0;
         levels[_level].refProfitInPercent = _refProfit;
+        levels[_level].maxUserLevelForRefProfit = _laxUserLvlRefForProfit;
         levels[_level].cashbackInCent = _cashback;
 
-        emit SetLevelNFTEvent(_level, _prevLevel, _nftAddress, _refProfit, _cashback);
+        emit SetLevelNFTEvent(_level, _prevLevel, _nftAddress, _refProfit, _laxUserLvlRefForProfit, _cashback);
     }
 
     /// Set min claim request value
