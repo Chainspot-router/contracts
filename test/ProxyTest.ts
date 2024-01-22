@@ -553,20 +553,50 @@ describe("Proxy test", function () {
         await expect(cashback.connect(user1).addWithdrawalRequest(await stableCoin.getAddress(), withdrawAmount, {value: minWithdrawValue})).to.not.rejected;
         const cashbackTokenBalanceBefore = await stableCoin.balanceOf(await cashback.getAddress());
 
-        await expect(cashback.confirmWithdrawalRequest(user2.address))
+        await expect(cashback.confirmWithdrawalRequest(user2.address, true))
             .to.be.rejectedWith("LoyaltyCashback: request not exists");
-        let targetAddress, amount, tokenAddress;
-        await expect(cashback.confirmWithdrawalRequest(user1.address))
+        let targetAddress, amount, tokenAddress, isSuccess;
+        await expect(cashback.confirmWithdrawalRequest(user1.address, true))
             .to.emit(cashback, 'ConfirmWithdrawalRequestEvent')
             .withArgs(
                 (value) => {targetAddress = value; return true;},
                 (value) => {amount = value; return true;},
                 (value) => {tokenAddress = value; return true;},
+                (value) => {isSuccess = value; return true;},
             );
         expect(targetAddress).to.be.equal(user1.address);
         expect(amount.toString()).to.be.equal(withdrawAmount.toString());
         expect(tokenAddress).to.be.equal(await stableCoin.getAddress());
+        expect(isSuccess).to.be.equal(true);
         expect(await stableCoin.balanceOf(user1.address)).to.be.equal(withdrawAmount);
         expect(await stableCoin.balanceOf(await cashback.getAddress())).to.be.equal(cashbackTokenBalanceBefore - withdrawAmount);
+    });
+
+    it("Should confirm cashback request with false flag successfully", async function () {
+        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Cashback, cashback, stableCoin, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, minClaimValue, minWithdrawValue } = await loadFixture(deployContractsFixture);
+
+        const stableCoinBalance = 1000n;
+        const withdrawAmount = 100n;
+        await expect(stableCoin.transfer(await cashback.getAddress(), stableCoinBalance)).to.not.rejected;
+        await expect(cashback.connect(user1).addWithdrawalRequest(await stableCoin.getAddress(), withdrawAmount, {value: minWithdrawValue})).to.not.rejected;
+        const cashbackTokenBalanceBefore = await stableCoin.balanceOf(await cashback.getAddress());
+
+        await expect(cashback.confirmWithdrawalRequest(user2.address, false))
+            .to.be.rejectedWith("LoyaltyCashback: request not exists");
+        let targetAddress, amount, tokenAddress, isSuccess;
+        await expect(cashback.confirmWithdrawalRequest(user1.address, false))
+            .to.emit(cashback, 'ConfirmWithdrawalRequestEvent')
+            .withArgs(
+                (value) => {targetAddress = value; return true;},
+                (value) => {amount = value; return true;},
+                (value) => {tokenAddress = value; return true;},
+                (value) => {isSuccess = value; return true;},
+            );
+        expect(targetAddress).to.be.equal(user1.address);
+        expect(amount.toString()).to.be.equal(withdrawAmount.toString());
+        expect(tokenAddress).to.be.equal(await stableCoin.getAddress());
+        expect(isSuccess).to.be.equal(false);
+        expect(await stableCoin.balanceOf(user1.address)).to.be.equal(0);
+        expect(await stableCoin.balanceOf(await cashback.getAddress())).to.be.equal(cashbackTokenBalanceBefore);
     });
 });

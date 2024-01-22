@@ -13,7 +13,7 @@ contract LoyaltyCashbackV1 is ProxyWithdrawal, UUPSUpgradeable, ReentrancyGuardU
     using SafeERC20 for IERC20;
 
     event AddWithdrawalRequestEvent(address _refererAddress, uint _amount, address _tokenAddress);
-    event ConfirmWithdrawalRequestEvent(address _refererAddress, uint _amount, address _tokenAddress);
+    event ConfirmWithdrawalRequestEvent(address _refererAddress, uint _amount, address _tokenAddress, bool _result);
     event SetMinWithdrawRequestValueEvent(uint _amount);
     event AddStableCoinEvent(address _stable);
     event RemoveStableCoinEvent(address _stable);
@@ -94,15 +94,18 @@ contract LoyaltyCashbackV1 is ProxyWithdrawal, UUPSUpgradeable, ReentrancyGuardU
 
     /// Confirmation withdrawal request
     /// @param _userAddress address  User address
-    function confirmWithdrawalRequest(address _userAddress) external onlyOwner {
+    /// @param _isSuccess bool  Request result
+    function confirmWithdrawalRequest(address _userAddress, bool _isSuccess) external onlyOwner {
         require(requests[_userAddress].exists, "LoyaltyCashback: request not exists");
         uint amount = requests[_userAddress].amount;
         IERC20 token = requests[_userAddress].stableCoin;
         require(token.balanceOf(address(this)) >= amount, "LoyaltyCashback: stable coin balance not enough");
 
         delete requests[_userAddress];
-        token.safeTransfer(_userAddress, amount);
+        if (_isSuccess) {
+            token.safeTransfer(_userAddress, amount);
+        }
 
-        emit ConfirmWithdrawalRequestEvent(_userAddress, amount, address(token));
+        emit ConfirmWithdrawalRequestEvent(_userAddress, amount, address(token), _isSuccess);
     }
 }
