@@ -31,6 +31,7 @@ async function deployBase(hre: any, isTestnet: any) {
 task("claim:fillLevelNft", "Fill level NFT data")
     .addPositionalParam("isTestnet", "Is testnet flag (1 - testnet, 0 - mainnet)", '0')
     .addPositionalParam("gasPrice", "Gas price (for some networks)", '0')
+    .addPositionalParam("pauseInSeconds", "Pause script running in seconds", '2')
     .setAction(async (taskArgs, hre) => {
         let {Claimer, claimer, owner, currentChain, gasLimit} = await deployBase(hre, taskArgs.isTestnet);
 
@@ -62,6 +63,9 @@ task("claim:fillLevelNft", "Fill level NFT data")
         }
 
         tx = await claimer.setLevelNFTs(levels, prevLevels, nftAddresses, refProfits, maxUserLevelForRefProfits, cashbacks, gasPrice > 0 ? {gasPrice: gasPrice} : {});
+        if (taskArgs.pauseInSeconds != '0') {
+            await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
+        }
         gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
 
         console.log("\nLevels NFT filled successfully\n");

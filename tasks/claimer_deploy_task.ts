@@ -28,6 +28,7 @@ task("claimer:deploy", "Deploy loyalty NFT claimer contract")
     .addPositionalParam("minRequestValue", "Minimal claim request transaction value", '0')
     .addPositionalParam("isTestnet", "Is testnet flag (1 - testnet, 0 - mainnet)", '0')
     .addPositionalParam("gasPrice", "Gas price (for some networks)", '0')
+    .addPositionalParam("pauseInSeconds", "Pause script running in seconds", '2')
     .setAction(async (taskArgs, hre) => {
         let {Claimer, owner, currentChain, gasLimit} = await deployBase(hre, taskArgs.isTestnet);
 
@@ -44,13 +45,17 @@ task("claimer:deploy", "Deploy loyalty NFT claimer contract")
             data: (await (await ethers.getContractFactory("LoyaltyNFTClaimerV1"))
                 .getDeployTransaction()).data
         });
+        console.log("Claimer was deployed at: %s", await claimer.getAddress());
 
         if (taskArgs.minRequestValue != '0') {
             tx = await claimer.setMinClaimRequestValue(taskArgs.minRequestValue, gasPrice > 0 ? {gasPrice: gasPrice} : {});
+            if (taskArgs.pauseInSeconds != '0') {
+                await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
+            }
             gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
         }
 
-        console.log("Deployment was done\n");
+        console.log("\nDeployment was done\n");
         console.log("Total gas limit: %s", gasLimit.toString());
         console.log("Owner address: %s", owner.address);
         console.log("Claimer address: %s\n", await claimer.getAddress());

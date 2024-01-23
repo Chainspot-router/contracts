@@ -33,6 +33,7 @@ task("proxy:updateRate", "Update proxy native coins rate")
     .addPositionalParam("rate", "Native coins rate")
     .addPositionalParam("isTestnet", "Is testnet flag (1 - testnet, 0 - mainnet)", '0')
     .addPositionalParam("gasPrice", "Gas price (for some networks)", '0')
+    .addPositionalParam("pauseInSeconds", "Pause script running in seconds", '2')
     .setAction(async (taskArgs, hre) => {
         let {Proxy, proxy, owner, currentChain, gasLimit} = await deployBase(hre, taskArgs.isTestnet);
 
@@ -41,6 +42,9 @@ task("proxy:updateRate", "Update proxy native coins rate")
         console.log("Update proxy rate...");
 
         tx = await proxy.updateRate(taskArgs.rate, gasPrice > 0 ? {gasPrice: gasPrice} : {});
+        if (taskArgs.pauseInSeconds != '0') {
+            await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
+        }
         gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
 
         console.log("\nRate updated successfully\n");

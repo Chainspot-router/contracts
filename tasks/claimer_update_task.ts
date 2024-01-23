@@ -27,6 +27,7 @@ task("claimer:update", "Update claimer implementation contract")
     .addPositionalParam("implementationVersion", "Implementation version", '1')
     .addPositionalParam("isTestnet", "Is testnet flag (1 - testnet, 0 - mainnet)", '0')
     .addPositionalParam("gasPrice", "Gas price (for some networks)", '0')
+    .addPositionalParam("pauseInSeconds", "Pause script running in seconds", '2')
     .setAction(async (taskArgs, hre) => {
         let {Claimer, owner, gasLimit, currentChain} = await deployBase(hre, taskArgs.implementationVersion, taskArgs.isTestnet);
 
@@ -37,6 +38,7 @@ task("claimer:update", "Update claimer implementation contract")
             data: (await (await ethers.getContractFactory("LoyaltyNFTClaimerV" + taskArgs.implementationVersion))
                 .getDeployTransaction()).data
         });
+        console.log("Claimer was upgradeable at: %s", await claimer.getAddress());
         console.log("Claimer implementation upgrade successfully");
 
         console.log("\nUpdating was done\n");

@@ -38,6 +38,7 @@ task("claim:addLevelNft", "Add level NFT data")
     .addPositionalParam("cachback", "Level cashback (in cents, uint)")
     .addPositionalParam("isTestnet", "Is testnet flag (1 - testnet, 0 - mainnet)", '0')
     .addPositionalParam("gasPrice", "Gas price (for some networks)", '0')
+    .addPositionalParam("pauseInSeconds", "Pause script running in seconds", '2')
     .setAction(async (taskArgs, hre) => {
         let {Claimer, claimer, owner, currentChain, gasLimit} = await deployBase(hre, taskArgs.isTestnet);
 
@@ -49,6 +50,9 @@ task("claim:addLevelNft", "Add level NFT data")
             taskArgs.level, taskArgs.prevLevel, taskArgs.nftAddress, taskArgs.refProfit,
             taskArgs.maxUserLevelForRefProfit, taskArgs.cachback, gasPrice > 0 ? {gasPrice: gasPrice} : {}
         );
+        if (taskArgs.pauseInSeconds != '0') {
+            await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
+        }
         gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
 
         console.log("\nLevel NFT added successfully\n");
