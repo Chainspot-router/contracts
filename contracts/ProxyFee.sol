@@ -9,7 +9,7 @@ abstract contract ProxyFee is OwnableUpgradeable {
     using SafeMath for uint;
 
     uint public feeBase;
-    uint public feeMul; // example: feeBase + feeSum = 1001 or 100.1%
+    uint public feeMul; // example: feeBase + feeSum = 10002 or 100.02%
     uint public maxFeePercent; // Maximum but not current fee, just for validation
     uint public baseFeeInUsd; // Base fee in USD (must be uint!)
     // TODO: convert it to struct
@@ -43,6 +43,12 @@ abstract contract ProxyFee is OwnableUpgradeable {
         emit UpdateFeeParams(_feeBase, _feeMul);
     }
 
+    /// Return fee data
+    /// @return uint, uint, uint  Return feeBase, feeMul, baseFeeInUsd
+    function getFeeData() external view returns(uint, uint, uint) {
+        return (feeBase, feeMul, baseFeeInUsd);
+    }
+
     /// Return native coins rate (coins for $1)
     /// @return uint
     function getRate() external view returns(uint) {
@@ -65,7 +71,6 @@ abstract contract ProxyFee is OwnableUpgradeable {
     /// @param _amount uint  Amount
     /// @return uint  Calculated fee
     function calcAdditionalFee(uint _amount) internal view returns(uint) {
-        //TODO: update this logic
         return calcFeeWithParams(_amount, feeBase, feeMul);
     }
 

@@ -252,7 +252,7 @@ export const Chains = {
             title: "BSC",
             networkName: "bscTestnet",
             contractAddresses: {
-                proxy: '0xD66aB549761e029e2C407cB5a34f83DFA4d5B781',
+                proxy: '0xDd3D3c92f03D17ff23F710c60a8Cf65352BaDF09',
                 claimer: '0x556d3BB875af7e4f4d20C2f02858C6E6Aa8B127f',
                 referral: '0x8A2611542277684c182Dfcd1dccAa0553Cc9bef0',
                 cashback: '0xc69e8A48b607B82A3C0eBC7B2c42634b973C6c70',
