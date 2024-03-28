@@ -18,6 +18,7 @@ import './tasks/proxy_updaterate_task';
 import './tasks/proxy_fulldeploy_task';
 import './tasks/cashback_deploy_task';
 import './tasks/cashback_update_task';
+import './tasks/proxy_updatetrustedaddress_task';
 
 const config = {
   solidity: {
@@ -131,6 +132,21 @@ const config = {
       url: process.env.NETWORK_HOST_TELOS,
       accounts: [process.env.OWNER_PK_CHAINSPOT],
       chainId: 40
+    },
+    baseMainnet: {
+      url: process.env.NETWORK_HOST_BASE,
+      accounts: [process.env.OWNER_PK_CHAINSPOT],
+      chainId: 8453
+    },
+    lineaMainnet: {
+      url: process.env.NETWORK_HOST_LINEA,
+      accounts: [process.env.OWNER_PK_CHAINSPOT],
+      chainId: 59144
+    },
+    mantleMainnet: {
+      url: process.env.NETWORK_HOST_MANTLE,
+      accounts: [process.env.OWNER_PK_CHAINSPOT],
+      chainId: 5000
     },
   },
   etherscan: {

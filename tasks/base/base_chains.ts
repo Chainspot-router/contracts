@@ -13,8 +13,12 @@ export const Chains = {
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
-                '0xE75C7E85FE6ADd07077467064aD15847E6ba9877', // Symbiosis
+                '0xf621Fb08BBE51aF70e7E0F4EA63496894166Ff7F', // Symbiosis (crosschain)
+                '0xff9b21c3bfa4bce9b20b55fed56d102ced48b0f6', // Symbiosis (single chain)
                 '0x4315f344a905dC21a08189A117eFd6E1fcA37D57', // YXFinance
+                '0x663DC15D3C1aC63ff12E45Ab68FeA3F0a883C251', // deSwap
+                '0xce16F69375520ab01377ce7B88f5BA8C48F8D666', // Squid
+                '0xfceaaaeb8d564a9d0e71ef36f027b9d162bc334e', // Wanchain
             ],
             levelNfts: [],
         },
@@ -23,15 +27,18 @@ export const Chains = {
             title: "POL",
             networkName: "polygon",
             contractAddresses: {
-                proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                proxy: '0x5006E7E9431b9042C13973a9e93A04358D7B4073',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
-                '0xE75C7E85FE6ADd07077467064aD15847E6ba9877', // Symbiosis
+                '0xa260E3732593E4EcF9DdC144fD6C4c5fe7077978', // Symbiosis (crosschain)
                 '0x0c988b66EdEf267D04f100A879db86cdb7B9A34F', // YXFinance
+                '0x663DC15D3C1aC63ff12E45Ab68FeA3F0a883C251', // deSwap
+                '0xce16F69375520ab01377ce7B88f5BA8C48F8D666', // Squid
+                '0x2216072a246a84f7b9ce0f1415dd239c9bf201ab', // Wanchain
             ],
             levelNfts: [],
         },
@@ -40,15 +47,19 @@ export const Chains = {
             title: "BSC",
             networkName: "bsc",
             contractAddresses: {
-                proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                proxy: '0x09A37C555B252CC5D7FF0102114AF42D2009ed46',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
-                '0x81aB74A9f9d7457fF47dfD102e78A340cF72EC39', // Symbiosis
+                '0x44487a445a7595446309464A82244B4bD4e325D5', // Symbiosis (crosschain)
+                '0x0425841529882628880fBD228AC90606e0c2e09A', // Symbiosis (single chain)
                 '0x7D26F09d4e2d032Efa0729fC31a4c2Db8a2394b1', // YXFinance
+                '0x663DC15D3C1aC63ff12E45Ab68FeA3F0a883C251', // deSwap
+                '0xce16F69375520ab01377ce7B88f5BA8C48F8D666', // Squid
+                '0xc3711bdbe7e3063bf6c22e7fed42f782ac82baee', // Wanchain
             ],
             levelNfts: [
                 {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
@@ -70,8 +81,12 @@ export const Chains = {
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
-                '0xf1C374D065719Ce1Fdc63E2c5C13146813c0A83b', // Symbiosis
+                '0x6F0f6393e45fE0E7215906B6f9cfeFf53EA139cf', // Symbiosis (crosschain)
+                '0xA257F3FE4E4032291516DC355eDF90664e9eB932', // Symbiosis (single chain)
                 '0x2C86f0FF75673D489b7D72D9986929a2b0Ed596C', // YXFinance
+                '0x663DC15D3C1aC63ff12E45Ab68FeA3F0a883C251', // deSwap
+                '0xce16F69375520ab01377ce7B88f5BA8C48F8D666', // Squid
+                '0x74e121a34a66d54c33f3291f2cdf26b1cd037c3a', // Wanchain
             ],
             levelNfts: [],
         },
@@ -87,7 +102,12 @@ export const Chains = {
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
+                '0x0f91052dc5B4baE53d0FeA5DAe561A117268f5d2', // Symbiosis (crosschain)
+                '0x7775b274f0C3fA919B756b22A4d9674e55927ab8', // Symbiosis (single chain)
                 '0x7a6e01880693093abACcF442fcbED9E0435f1030', // YXFinance
+                '0x663DC15D3C1aC63ff12E45Ab68FeA3F0a883C251', // deSwap
+                '0xce16F69375520ab01377ce7B88f5BA8C48F8D666', // Squid
+                '0xc6ae1db6c66d909f7bfeeeb24f9adb8620bf9dbf', // Wanchain
             ],
             levelNfts: [],
         },
@@ -104,6 +124,9 @@ export const Chains = {
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
                 '0xDa241399697fa3F6cD496EdAFab6191498Ec37F5', // YXFinance
+                '0x663DC15D3C1aC63ff12E45Ab68FeA3F0a883C251', // deSwap
+                '0xce16F69375520ab01377ce7B88f5BA8C48F8D666', // Squid
+                '0xccffe9d337f3c1b16bd271d109e691246fd69ee3', // Wanchain
             ],
             levelNfts: [],
         },
@@ -119,7 +142,12 @@ export const Chains = {
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
+                '0xf7e96217347667064DEE8f20DB747B1C7df45DDe', // Symbiosis (crosschain)
+                '0x4FDA0599b78a49d289577a8DF2046459abC04d82', // Symbiosis (single chain)
                 '0x33383265290421C704c6b09F4BF27ce574DC4203', // YXFinance
+                '0x663DC15D3C1aC63ff12E45Ab68FeA3F0a883C251', // deSwap
+                '0xce16F69375520ab01377ce7B88f5BA8C48F8D666', // Squid
+                '0xf7ba155556e2cd4dfe3fe26e506a14d2f4b97613', // Wanchain
             ],
             levelNfts: [],
         },
@@ -156,7 +184,7 @@ export const Chains = {
         {
             id: 288,
             title: "BOBA",
-            networkName: "polygon",
+            networkName: "boba",
             contractAddresses: {
                 proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
@@ -164,7 +192,8 @@ export const Chains = {
                 cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
             },
             trustAddresses: [
-                '0xcE8f24A58D85eD5c5A6824f7be1F8d4711A0eb4C', // Symbiosis
+                '0xca506793A420E901BbCa8066be5661E3C52c84c2', // Symbiosis (crosschain)
+                '0x7e0B73141c8a1AC26B8693e9F34cf42BE17Fea2C', // Symbiosis (single chain)
             ],
             levelNfts: [],
         },
@@ -194,7 +223,80 @@ export const Chains = {
                 cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
             },
             trustAddresses: [
-                '0xcE8f24A58D85eD5c5A6824f7be1F8d4711A0eb4C', // Symbiosis
+                '0x8097f0B9f06C27AF9579F75762F971D745bb222F', // Symbiosis (crosschain)
+                '0xf02bBC9de6e443eFDf3FC41851529C2c3B9E5e0C', // Symbiosis (single chain)
+                '0x201e5de97dfc46aace142b2009332c524c9d8d82', // Wanchain
+            ],
+            levelNfts: [],
+        },
+        {
+            id: 8453,
+            title: "BSX", // Base
+            networkName: "baseMainnet",
+            contractAddresses: {
+                proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
+            },
+            trustAddresses: [
+                '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
+                '0x691df9C4561d95a4a726313089c8536dd682b946', // Symbiosis (crosschain)
+                '0xF951789c6A356BfbC3033648AA10b5Dd3e9d88C0', // Symbiosis (single chain)
+                '0xce16F69375520ab01377ce7B88f5BA8C48F8D666', // Squid
+            ],
+            levelNfts: [],
+        },
+        {
+            id: 59144,
+            title: "LNX", // Linea
+            networkName: "lineaMainnet",
+            contractAddresses: {
+                proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
+            },
+            trustAddresses: [
+                '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
+                '0x9A31bAC4b3B958C835C243800B474818D04393dd', // Symbiosis (crosschain)
+                '0x0f91052dc5B4baE53d0FeA5DAe561A117268f5d2', // Symbiosis (single chain)
+                '0xce16F69375520ab01377ce7B88f5BA8C48F8D666', // Squid
+            ],
+            levelNfts: [],
+        },
+        {
+            id: 5000,
+            title: "MTL", // Mantle
+            networkName: "mantleMainnet",
+            contractAddresses: {
+                proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
+            },
+            trustAddresses: [
+                '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
+                '0xca506793A420E901BbCa8066be5661E3C52c84c2', // Symbiosis (crosschain)
+                '0x7B4E28E7273aA8CB64C56fF191ebF43b64f409F9', // Symbiosis (single chain)
+                '0xce16F69375520ab01377ce7B88f5BA8C48F8D666', // Squid
+            ],
+            levelNfts: [],
+        },
+        {
+            id: 1284,
+            title: "MOO", // Moonbeam
+            networkName: "moonbeam",
+            contractAddresses: {
+                proxy: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
+            },
+            trustAddresses: [
+                '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
+                '0xce16F69375520ab01377ce7B88f5BA8C48F8D666', // Squid
+                '0x6372aec6263aa93eacedc994d38aa9117b6b95b5', // Wanchain
             ],
             levelNfts: [],
         },

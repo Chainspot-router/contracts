@@ -82,68 +82,85 @@ contract ChainspotProxyV1 is ILoyaltyEnv, UUPSUpgradeable, ReentrancyGuardUpgrad
 
     /// Meta proxy - transfer transaction initiation
     /// @param _token IERC20  Token address (address(0) - native coins)
-    /// @param _amount uint  Amount to proxy
+    /// @param _amount uint  Amount to proxy (user amount without addFee in transfer amount currency)
+    /// @param _targetAmount uint  Target amount (target amount with in transfer amount currency)
     /// @param _approveTo address  Approve to address
     /// @param _callDataTo address  Calldata address
     /// @param _userLevel uint8  Loyalty user level
     /// @param _referrer address  Referrer address
     /// @param _refLevel uint8  Referrer user level
     /// @param _data bytes  Calldata
-    function metaProxy(IERC20 _token, uint _amount, address _approveTo, address _callDataTo, uint8 _userLevel, address _referrer, uint8 _refLevel, bytes calldata _data) external payable nonReentrant {
+    function metaProxy(
+        IERC20 _token, uint _amount, uint _targetAmount, address _approveTo, address _callDataTo,
+        uint8 _userLevel, address _referrer, uint8 _refLevel, bytes calldata _data
+    ) external payable nonReentrant {
         require(msg.value >= calcBaseFee(), "ChainspotProxy: value not enough");
         require(clients[_callDataTo].exists, "ChainspotProxy: wrong client address");
         require(_amount > 0, "ChainspotProxy: zero amount to proxy");
+        require(_amount >= _targetAmount, "ChainspotProxy: amount is too small");
 
         if (address(_token) == address(0)) {
-            proxyCoins(_callDataTo, _amount, _userLevel, _referrer, _refLevel, _data);
+            proxyCoins(_callDataTo, _amount, _targetAmount, _userLevel, _referrer, _refLevel, _data);
         } else {
-            proxyTokens(_token, _amount, _approveTo, _callDataTo, _userLevel, _referrer, _refLevel, _data);
+            proxyTokens(_token, _amount, _targetAmount, _approveTo, _callDataTo, _userLevel, _referrer, _refLevel, _data);
         }
     }
 
     /// Proxy coins
     /// @param _to address  Calldata address
     /// @param _amount uint  Amount to proxy
+    /// @param _targetAmount uint  Target amount
     /// @param _userLevel uint8  Loyalty user level
     /// @param _referrer address  Referrer address
     /// @param _refLevel uint8  Referrer user level
     /// @param _data bytes  Calldata
-    function proxyCoins(address _to, uint _amount, uint8 _userLevel, address _referrer, uint8 _refLevel, bytes calldata _data) internal {
+    function proxyCoins(
+        address _to, uint _amount, uint _targetAmount, uint8 _userLevel,
+        address _referrer, uint8 _refLevel, bytes calldata _data
+    ) internal {
         uint amount = msg.value;
         require(amount > 0, "ChainspotProxy: zero amount");
         require(amount >= _amount, "ChainspotProxy: amount is too small");
 
         uint routerAmount = _amount.sub(transferBaseFee(_amount, _userLevel, _referrer, _refLevel, true));
-        require(routerAmount > 0, "ChainspotProxy: routerAmount is too small");
+        require(routerAmount >= _targetAmount, "ChainspotProxy: routerAmount is too small");
 
-        (bool success, ) = _to.call{value: routerAmount}(_data);
+        (bool success, ) = _to.call{value: _targetAmount}(_data);
         require(success, "ChainspotProxy: transfer not sent");
     }
 
     /// Proxy tokens
     /// @param _token IERC20  Token address
     /// @param _amount uint  Amount to proxy
+    /// @param _targetAmount uint  Target amount
     /// @param _approveTo address  Approve to address
     /// @param _callDataTo address  Calldata address
     /// @param _userLevel uint8  Loyalty user level
     /// @param _referrer address  Referrer address
     /// @param _refLevel uint8  Referrer user level
     /// @param _data bytes  Calldata
-    function proxyTokens(IERC20 _token, uint _amount, address _approveTo, address _callDataTo, uint8 _userLevel, address _referrer, uint8 _refLevel, bytes calldata _data) internal {
-        uint amount = _token.allowance(msg.sender, address(this));
-        require(amount > 0, "ChainspotProxy: zero amount");
-        require(amount >= _amount, "ChainspotProxy: amount is too small");
-
-        uint feeAmount = calcAdditionalFee(_amount);
-        if (feeAmount > 0) {
-            require(_token.transferFrom(msg.sender, owner(), feeAmount), "ChainspotProxy: fee transfer request failed");
+    function proxyTokens(
+        IERC20 _token, uint _amount, uint _targetAmount, address _approveTo, address _callDataTo,
+        uint8 _userLevel, address _referrer, uint8 _refLevel, bytes calldata _data
+    ) internal {
+        {
+            uint amount = _token.allowance(msg.sender, address(this));
+            require(amount > 0, "ChainspotProxy: zero amount");
+            require(amount >= _amount, "ChainspotProxy: amount is too small");
         }
 
-        uint routerAmount = _amount.sub(feeAmount);
-        require(routerAmount > 0, "ChainspotProxy: routerAmount is too small");
-        require(_token.transferFrom(msg.sender, address(this), routerAmount), "ChainspotProxy: transferFrom request failed");
+        {
+            uint feeAmount = calcAdditionalFee(_amount);
+            if (feeAmount > 0) {
+                require(_token.transferFrom(msg.sender, owner(), feeAmount), "ChainspotProxy: fee transfer request failed");
+            }
 
-        require(_token.approve(_approveTo, routerAmount), "ChainspotProxy: approve request failed");
+            uint routerAmount = _amount.sub(feeAmount);
+            require(routerAmount >= _targetAmount, "ChainspotProxy: routerAmount is too small");
+            require(_token.transferFrom(msg.sender, address(this), routerAmount), "ChainspotProxy: transferFrom request failed");
+
+            require(_token.approve(_approveTo, routerAmount), "ChainspotProxy: approve request failed");
+        }
 
         (bool success, ) = _callDataTo.call{value: msg.value.sub(transferBaseFee(_amount, _userLevel, _referrer, _refLevel, false))}(_data);
         require(success, "ChainspotProxy: call data request failed");
@@ -154,19 +171,19 @@ contract ChainspotProxyV1 is ILoyaltyEnv, UUPSUpgradeable, ReentrancyGuardUpgrad
     }
 
     /// Transfer base fee (loyalty logic included)
-    /// @param _transferAmount uint  Transfer amount
+    /// @param _amount uint  Transfer amount
     /// @param _userLevel uint8  Loyalty user level
     /// @param _referrer address  Referrer address
     /// @param _refLevel uint8  Referrer user level
     /// @param _isNativeTransfer bool  Is native coins transfer flag
-    /// @return uint  Total transferred fee amount
-    function transferBaseFee(uint _transferAmount, uint8 _userLevel, address _referrer, uint8 _refLevel, bool _isNativeTransfer) private returns(uint) {
+    /// @return uint  Transferred total fee amount (for coins - without baseFee)
+    function transferBaseFee(uint _amount, uint8 _userLevel, address _referrer, uint8 _refLevel, bool _isNativeTransfer) private returns(uint) {
         uint baseFeeAmount = calcBaseFee();
         if (baseFeeAmount == 0) {
             return 0;
         }
 
-        uint additionalFee = _isNativeTransfer ? calcAdditionalFee(_transferAmount) : 0;
+        uint additionalFee = _isNativeTransfer ? calcAdditionalFee(_amount) : 0;
 
         uint finalBaseFeeAmount = baseFeeAmount;
         if (_userLevel > 0 && _referrer != address(0) && _refLevel > 0) {
@@ -187,6 +204,6 @@ contract ChainspotProxyV1 is ILoyaltyEnv, UUPSUpgradeable, ReentrancyGuardUpgrad
         (bool successTV, ) = owner().call{value: finalBaseFeeAmount + additionalFee}("");
         require(successTV, "ChainspotProxy: fee not sent");
 
-        return baseFeeAmount + additionalFee;
+        return _isNativeTransfer ? additionalFee : baseFeeAmount + additionalFee;
     }
 }

@@ -9,7 +9,7 @@ abstract contract ProxyFee is OwnableUpgradeable {
     using SafeMath for uint;
 
     uint public feeBase;
-    uint public feeMul; // example: feeBase + feeSum = 10002 or 100.02%
+    uint public feeMul; // example: feeBase + feeMul = 10002 or 100.02%
     uint public maxFeePercent; // Maximum but not current fee, just for validation
     uint public baseFeeInUsd; // Base fee in USD (must be uint!)
     // TODO: convert it to struct
@@ -18,7 +18,11 @@ abstract contract ProxyFee is OwnableUpgradeable {
     /// Update fee params event
     /// @param _feeBase uint  Base fee amount
     /// @param _feeMul uint  Multiply fee amount
-    event UpdateFeeParams(uint _feeBase, uint _feeMul);
+    event UpdateFeeParamsEvent(uint _feeBase, uint _feeMul);
+
+    /// Set USD fee event
+    /// @param _fee uint  USD rate
+    event SetUsdFeeEvent(uint _fee);
 
     /// Initializing function for upgradeable contracts (constructor)
     function __ProxyFee_init() initializer public {
@@ -31,7 +35,6 @@ abstract contract ProxyFee is OwnableUpgradeable {
     /// @param _feeMul uint  Multiply fee
     function setFeeParams(uint _feeBase, uint _feeMul) public onlyOwner {
         require(_feeBase > 0, "Fee: _feeBase must be valid");
-        require(_feeMul > 0, "Fee: _feeMul must be valid");
         uint validationAmount = 1000;
         require(
             validationAmount.mul(maxFeePercent).div(100) >= calcFeeWithParams(validationAmount, _feeBase, _feeMul),
@@ -40,7 +43,14 @@ abstract contract ProxyFee is OwnableUpgradeable {
 
         feeBase = _feeBase;
         feeMul = _feeMul;
-        emit UpdateFeeParams(_feeBase, _feeMul);
+        emit UpdateFeeParamsEvent(_feeBase, _feeMul);
+    }
+
+    /// Set USD fee (only fo owner)
+    /// @param _fee uint  USD fee
+    function setUsdFee(uint _fee) public onlyOwner {
+        baseFeeInUsd = _fee;
+        emit SetUsdFeeEvent(_fee);
     }
 
     /// Return fee data
@@ -70,8 +80,15 @@ abstract contract ProxyFee is OwnableUpgradeable {
     /// Calculate additional fee by amount
     /// @param _amount uint  Amount
     /// @return uint  Calculated fee
-    function calcAdditionalFee(uint _amount) internal view returns(uint) {
+    function calcAdditionalFeeOld(uint _amount) internal view returns(uint) {
         return calcFeeWithParams(_amount, feeBase, feeMul);
+    }
+
+    /// Calculate additional fee by amount
+    /// @param _amount uint  Amount
+    /// @return uint  Calculated fee
+    function calcAdditionalFee(uint _amount) internal view returns(uint) {
+        return calcPercent(_amount);
     }
 
     /// Calculate fee with params
@@ -81,5 +98,21 @@ abstract contract ProxyFee is OwnableUpgradeable {
     /// @return uint  Calculated fee
     function calcFeeWithParams(uint _amount, uint _feeBase, uint _feeMul) internal pure returns(uint) {
         return _amount.mul(_feeMul).div(_feeBase.add(_feeMul));
+    }
+
+    /// Calculate percent from amount
+    /// param _amount uint  Amount (100%)
+    /// @return uint  Amount percent
+    function calcPercent(uint _amount) internal view returns(uint) {
+        return calcPercentWithParams(_amount, feeBase, feeMul);
+    }
+
+    /// Calculate percent from amount with params
+    /// param _amount uint  Amount (100%)
+    /// @param _feeBase uint  Base fee
+    /// @param _feeMul uint  Multiply fee
+    /// @return uint  Amount percent
+    function calcPercentWithParams(uint _amount, uint _feeBase, uint _feeMul) internal pure returns(uint) {
+        return _amount.mul(_feeMul).div(_feeBase);
     }
 }
