@@ -15,12 +15,18 @@ export const Chains = {
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
                 '0xf621Fb08BBE51aF70e7E0F4EA63496894166Ff7F', // Symbiosis (crosschain)
                 '0xff9b21c3bfa4bce9b20b55fed56d102ced48b0f6', // Symbiosis (single chain)
-                '0x4315f344a905dC21a08189A117eFd6E1fcA37D57', // YXFinance
+                '0x4315f344a905dC21a08189A117eFd6E1fcA37D57', // XYFinance
                 '0x663DC15D3C1aC63ff12E45Ab68FeA3F0a883C251', // deSwap
                 '0xce16F69375520ab01377ce7B88f5BA8C48F8D666', // Squid
                 '0xfceaaaeb8d564a9d0e71ef36f027b9d162bc334e', // Wanchain
             ],
-            levelNfts: [],
+            levelNfts: [
+                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+            ]
         },
         {
             id: 137,
@@ -28,19 +34,25 @@ export const Chains = {
             networkName: "polygon",
             contractAddresses: {
                 proxy: '0x5006E7E9431b9042C13973a9e93A04358D7B4073',
-                claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                claimer: '0xAE819FC6A8B82DD7a5D072C9E44E06b4404696e8',
                 referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
                 '0xa260E3732593E4EcF9DdC144fD6C4c5fe7077978', // Symbiosis (crosschain)
-                '0x0c988b66EdEf267D04f100A879db86cdb7B9A34F', // YXFinance
+                '0x0c988b66EdEf267D04f100A879db86cdb7B9A34F', // XYFinance
                 '0x663DC15D3C1aC63ff12E45Ab68FeA3F0a883C251', // deSwap
                 '0xce16F69375520ab01377ce7B88f5BA8C48F8D666', // Squid
                 '0x2216072a246a84f7b9ce0f1415dd239c9bf201ab', // Wanchain
             ],
-            levelNfts: [],
+            levelNfts: [
+                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+            ],
         },
         {
             id: 56,
@@ -56,7 +68,7 @@ export const Chains = {
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
                 '0x44487a445a7595446309464A82244B4bD4e325D5', // Symbiosis (crosschain)
                 '0x0425841529882628880fBD228AC90606e0c2e09A', // Symbiosis (single chain)
-                '0x7D26F09d4e2d032Efa0729fC31a4c2Db8a2394b1', // YXFinance
+                '0x7D26F09d4e2d032Efa0729fC31a4c2Db8a2394b1', // XYFinance
                 '0x663DC15D3C1aC63ff12E45Ab68FeA3F0a883C251', // deSwap
                 '0xce16F69375520ab01377ce7B88f5BA8C48F8D666', // Squid
                 '0xc3711bdbe7e3063bf6c22e7fed42f782ac82baee', // Wanchain
@@ -83,12 +95,18 @@ export const Chains = {
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
                 '0x6F0f6393e45fE0E7215906B6f9cfeFf53EA139cf', // Symbiosis (crosschain)
                 '0xA257F3FE4E4032291516DC355eDF90664e9eB932', // Symbiosis (single chain)
-                '0x2C86f0FF75673D489b7D72D9986929a2b0Ed596C', // YXFinance
+                '0x2C86f0FF75673D489b7D72D9986929a2b0Ed596C', // XYFinance
                 '0x663DC15D3C1aC63ff12E45Ab68FeA3F0a883C251', // deSwap
                 '0xce16F69375520ab01377ce7B88f5BA8C48F8D666', // Squid
                 '0x74e121a34a66d54c33f3291f2cdf26b1cd037c3a', // Wanchain
             ],
-            levelNfts: [],
+            levelNfts: [
+                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+            ]
         },
         {
             id: 10,
@@ -104,12 +122,18 @@ export const Chains = {
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
                 '0x0f91052dc5B4baE53d0FeA5DAe561A117268f5d2', // Symbiosis (crosschain)
                 '0x7775b274f0C3fA919B756b22A4d9674e55927ab8', // Symbiosis (single chain)
-                '0x7a6e01880693093abACcF442fcbED9E0435f1030', // YXFinance
+                '0x7a6e01880693093abACcF442fcbED9E0435f1030', // XYFinance
                 '0x663DC15D3C1aC63ff12E45Ab68FeA3F0a883C251', // deSwap
                 '0xce16F69375520ab01377ce7B88f5BA8C48F8D666', // Squid
                 '0xc6ae1db6c66d909f7bfeeeb24f9adb8620bf9dbf', // Wanchain
             ],
-            levelNfts: [],
+            levelNfts: [
+                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+            ]
         },
         {
             id: 250,
@@ -123,12 +147,18 @@ export const Chains = {
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
-                '0xDa241399697fa3F6cD496EdAFab6191498Ec37F5', // YXFinance
+                '0xDa241399697fa3F6cD496EdAFab6191498Ec37F5', // XYFinance
                 '0x663DC15D3C1aC63ff12E45Ab68FeA3F0a883C251', // deSwap
                 '0xce16F69375520ab01377ce7B88f5BA8C48F8D666', // Squid
                 '0xccffe9d337f3c1b16bd271d109e691246fd69ee3', // Wanchain
             ],
-            levelNfts: [],
+            levelNfts: [
+                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+            ]
         },
         {
             id: 42161,
@@ -144,12 +174,18 @@ export const Chains = {
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
                 '0xf7e96217347667064DEE8f20DB747B1C7df45DDe', // Symbiosis (crosschain)
                 '0x4FDA0599b78a49d289577a8DF2046459abC04d82', // Symbiosis (single chain)
-                '0x33383265290421C704c6b09F4BF27ce574DC4203', // YXFinance
+                '0x33383265290421C704c6b09F4BF27ce574DC4203', // XYFinance
                 '0x663DC15D3C1aC63ff12E45Ab68FeA3F0a883C251', // deSwap
                 '0xce16F69375520ab01377ce7B88f5BA8C48F8D666', // Squid
                 '0xf7ba155556e2cd4dfe3fe26e506a14d2f4b97613', // Wanchain
             ],
-            levelNfts: [],
+            levelNfts: [
+                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+            ]
         },
         {
             id: 1313161554,
@@ -164,7 +200,13 @@ export const Chains = {
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
             ],
-            levelNfts: [],
+            levelNfts: [
+                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+            ]
         },
         {
             id: 42220,
@@ -179,7 +221,13 @@ export const Chains = {
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
             ],
-            levelNfts: [],
+            levelNfts: [
+                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+            ]
         },
         {
             id: 288,
@@ -195,7 +243,13 @@ export const Chains = {
                 '0xca506793A420E901BbCa8066be5661E3C52c84c2', // Symbiosis (crosschain)
                 '0x7e0B73141c8a1AC26B8693e9F34cf42BE17Fea2C', // Symbiosis (single chain)
             ],
-            levelNfts: [],
+            levelNfts: [
+                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+            ]
         },
         {
             id: 100,
@@ -210,7 +264,13 @@ export const Chains = {
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
             ],
-            levelNfts: [],
+            levelNfts: [
+                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+            ]
         },
         {
             id: 40,
@@ -227,7 +287,13 @@ export const Chains = {
                 '0xf02bBC9de6e443eFDf3FC41851529C2c3B9E5e0C', // Symbiosis (single chain)
                 '0x201e5de97dfc46aace142b2009332c524c9d8d82', // Wanchain
             ],
-            levelNfts: [],
+            levelNfts: [
+                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+            ]
         },
         {
             id: 8453,
@@ -245,7 +311,13 @@ export const Chains = {
                 '0xF951789c6A356BfbC3033648AA10b5Dd3e9d88C0', // Symbiosis (single chain)
                 '0xce16F69375520ab01377ce7B88f5BA8C48F8D666', // Squid
             ],
-            levelNfts: [],
+            levelNfts: [
+                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+            ]
         },
         {
             id: 59144,
@@ -263,7 +335,13 @@ export const Chains = {
                 '0x0f91052dc5B4baE53d0FeA5DAe561A117268f5d2', // Symbiosis (single chain)
                 '0xce16F69375520ab01377ce7B88f5BA8C48F8D666', // Squid
             ],
-            levelNfts: [],
+            levelNfts: [
+                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+            ]
         },
         {
             id: 5000,
@@ -281,7 +359,13 @@ export const Chains = {
                 '0x7B4E28E7273aA8CB64C56fF191ebF43b64f409F9', // Symbiosis (single chain)
                 '0xce16F69375520ab01377ce7B88f5BA8C48F8D666', // Squid
             ],
-            levelNfts: [],
+            levelNfts: [
+                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+            ]
         },
         {
             id: 1284,
@@ -298,7 +382,13 @@ export const Chains = {
                 '0xce16F69375520ab01377ce7B88f5BA8C48F8D666', // Squid
                 '0x6372aec6263aa93eacedc994d38aa9117b6b95b5', // Wanchain
             ],
-            levelNfts: [],
+            levelNfts: [
+                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+            ]
         },
     ],
 

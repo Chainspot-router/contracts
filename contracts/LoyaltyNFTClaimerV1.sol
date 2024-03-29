@@ -107,6 +107,7 @@ contract LoyaltyNFTClaimerV1 is ILoyaltyEnv, ILoyaltyNFTClaimer, ProxyWithdrawal
     function addClaimRequest(uint8 _level, uint _tokenId) external payable {
         require(msg.value >= minClaimRequestValue, "LoyaltyNFTClaimer: invalid value");
         require(levels[_level].exists, "LoyaltyNFTClaimer: level not exists");
+        require(levels[_level].nftAddress != address(0), "LoyaltyNFTClaimer: claim level is disables");
         require(
             !requests[msg.sender][_level].exists || (requests[msg.sender][_level].exists && requests[msg.sender][_level].rejected),
             "LoyaltyNFTClaimer: claim request exists already"

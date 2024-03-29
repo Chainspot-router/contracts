@@ -34,6 +34,7 @@ task("proxy:fullDeploy", "Fully deploy proxy contract")
     .addPositionalParam("minClaimValue", "Minimal claim request transaction value", '0')
     .addPositionalParam("minReferralWithdrawalValue", "Minimal referral withdrawal request transaction value", '0')
     .addPositionalParam("minCashbackWithdrawalValue", "Minimal cashback withdrawal request transaction value", '0')
+    .addPositionalParam("mustDeployNFT", "Must deploy NFT for claimer", '1')
     .addPositionalParam("isTestnet", "Is testnet flag (1 - testnet, 0 - mainnet)", '0')
     .addPositionalParam("gasPrice", "Gas price (for some networks)", '0')
     .addPositionalParam("pauseInSeconds", "Pause script running in seconds", '2')
@@ -102,17 +103,19 @@ task("proxy:fullDeploy", "Fully deploy proxy contract")
         }
 
         // NFT deployment
-        let nfts = [];
-        for (let i = 0; i < currentChain.levelNfts.length; i++) {
-            nfts[i] = await upgrades.deployProxy(Nft, [currentChain.levelNfts[i].title, currentChain.levelNfts[i].symbol, await claimer.getAddress()], {
-                initialize: 'initialize',
-                kind: 'uups',
-            });
-            await nfts[i].waitForDeployment();
-            gasLimit += await ethers.provider.estimateGas({
-                data: (await (await ethers.getContractFactory("LoyaltyNFTV1")).getDeployTransaction()).data
-            });
-            console.log("NFT %s (%s) was deployed at: %s", currentChain.levelNfts[i].symbol, currentChain.levelNfts[i].title, await nfts[i].getAddress());
+        if (taskArgs.mustDeployNFT == '1') {
+            let nfts = [];
+            for (let i = 0; i < currentChain.levelNfts.length; i++) {
+                nfts[i] = await upgrades.deployProxy(Nft, [currentChain.levelNfts[i].title, currentChain.levelNfts[i].symbol, await claimer.getAddress()], {
+                    initialize: 'initialize',
+                    kind: 'uups',
+                });
+                await nfts[i].waitForDeployment();
+                gasLimit += await ethers.provider.estimateGas({
+                    data: (await (await ethers.getContractFactory("LoyaltyNFTV1")).getDeployTransaction()).data
+                });
+                console.log("NFT %s (%s) was deployed at: %s", currentChain.levelNfts[i].symbol, currentChain.levelNfts[i].title, await nfts[i].getAddress());
+            }
         }
 
         // Filling NFT levels
@@ -125,7 +128,7 @@ task("proxy:fullDeploy", "Fully deploy proxy contract")
         for (let i = 0; i < currentChain.levelNfts.length; i++) {
             levels.push(currentChain.levelNfts[i].level);
             prevLevels.push(currentChain.levelNfts[i].prevLevel);
-            nftAddresses.push(await nfts[i].getAddress());
+            nftAddresses.push(taskArgs.mustDeployNFT == '1' ? await nfts[i].getAddress() : currentChain.levelNfts[i].nftAddress);
             refProfits.push(currentChain.levelNfts[i].refProfit);
             cashbacks.push(currentChain.levelNfts[i].cashback);
             maxUserLevelForRefProfits.push(currentChain.levelNfts[i].maxUserLevelForRefProfit);

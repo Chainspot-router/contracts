@@ -47,7 +47,7 @@ task("claim:fillLevelNft", "Fill level NFT data")
             maxUserLevelForRefProfits = [];
         for (let i = 0; i < currentChain.levelNfts.length; i++) {
             if (currentChain.levelNfts[i].nftAddress == '0x0000000000000000000000000000000000000000') {
-                break;
+                // break;
             }
 
             levels.push(currentChain.levelNfts[i].level);

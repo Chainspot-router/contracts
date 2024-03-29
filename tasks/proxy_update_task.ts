@@ -33,7 +33,9 @@ task("proxy:update", "Update proxy implementation contract")
 
         console.log("Upgrading proxy implementation...");
 
-        const proxy = await upgrades.upgradeProxy(currentChain.contractAddresses.proxy, Proxy);
+        const gasPrice = parseInt(taskArgs.gasPrice);
+
+        const proxy = await upgrades.upgradeProxy(currentChain.contractAddresses.proxy, Proxy, gasPrice > 0 ? {gasPrice: gasPrice} : {});
         gasLimit += await ethers.provider.estimateGas({
             data: (await (await ethers.getContractFactory("ChainspotProxyV" + taskArgs.implementationVersion))
                 .getDeployTransaction()).data

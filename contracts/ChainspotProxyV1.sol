@@ -97,7 +97,6 @@ contract ChainspotProxyV1 is ILoyaltyEnv, UUPSUpgradeable, ReentrancyGuardUpgrad
         require(msg.value >= calcBaseFee(), "ChainspotProxy: value not enough");
         require(clients[_callDataTo].exists, "ChainspotProxy: wrong client address");
         require(_amount > 0, "ChainspotProxy: zero amount to proxy");
-        require(_amount >= _targetAmount, "ChainspotProxy: amount is too small");
 
         if (address(_token) == address(0)) {
             proxyCoins(_callDataTo, _amount, _targetAmount, _userLevel, _referrer, _refLevel, _data);
@@ -122,8 +121,8 @@ contract ChainspotProxyV1 is ILoyaltyEnv, UUPSUpgradeable, ReentrancyGuardUpgrad
         require(amount > 0, "ChainspotProxy: zero amount");
         require(amount >= _amount, "ChainspotProxy: amount is too small");
 
-        uint routerAmount = _amount.sub(transferBaseFee(_amount, _userLevel, _referrer, _refLevel, true));
-        require(routerAmount >= _targetAmount, "ChainspotProxy: routerAmount is too small");
+        uint amountWithoutFee = amount.sub(transferBaseFee(_amount, _userLevel, _referrer, _refLevel, true));
+        require(amountWithoutFee >= _targetAmount, "ChainspotProxy: routerAmount is too small");
 
         (bool success, ) = _to.call{value: _targetAmount}(_data);
         require(success, "ChainspotProxy: transfer not sent");
