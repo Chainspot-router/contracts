@@ -11,8 +11,19 @@ import {Counters} from "../utils/CountersLib.sol";
 contract LoyaltyNFTV1 is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable, OwnableUpgradeable, UUPSUpgradeable {
     using Counters for Counters.Counter;
 
+    event SetPublicClaimAvailableEvent(bool _flag);
+    event SetPublicClaimFeeEvent(uint _amount);
+    event PublicClaimEvent(address _address, uint _fee);
+
+    struct PublicClaim {
+        bool exists;
+    }
+
     Counters.Counter private tokenIdCounter;
     address private manipulator;
+    bool private publicClaimAvailable;
+    uint private publicClaimFee;
+    mapping(address => PublicClaim) public publicClaims;
 
     /// Initializing function for upgradeable contracts (constructor)
     /// @param _title string  NFT title
@@ -33,7 +44,7 @@ contract LoyaltyNFTV1 is Initializable, ERC721Upgradeable, ERC721EnumerableUpgra
 
     /// Only manipulator modifier
     modifier onlyManipulator() {
-        require(msg.sender == manipulator, "LoyaltyReferral: only manipulator");
+        require(msg.sender == manipulator, "LoyaltyNFT: only manipulator");
         _;
     }
 
@@ -60,6 +71,28 @@ contract LoyaltyNFTV1 is Initializable, ERC721Upgradeable, ERC721EnumerableUpgra
         return super.supportsInterface(interfaceId);
     }
 
+    /// Set public claim available flag
+    /// @param _flag bool  Public claim available flag
+    function setPublicClaimAvailable(bool _flag) external onlyOwner {
+        publicClaimAvailable = _flag;
+        emit SetPublicClaimAvailableEvent(_flag);
+    }
+
+    /// Set public claim fee value
+    /// @param _amount uint  Public claim fee value
+    function setPublicClaimFee(uint _amount) external onlyOwner {
+        publicClaimFee = _amount;
+        emit SetPublicClaimFeeEvent(_amount);
+    }
+
+    /// Private mint
+    /// @param _to address  Target address
+    function privateMint(address _to) private {
+        tokenIdCounter.increment();
+        uint256 tokenId = tokenIdCounter.current();
+        _safeMint(_to, tokenId);
+    }
+
     /// ************
     /// Base logic
     /// ************
@@ -67,9 +100,7 @@ contract LoyaltyNFTV1 is Initializable, ERC721Upgradeable, ERC721EnumerableUpgra
     /// Safe mint (only for owner)
     /// @param _to address  Target address
     function safeMint(address _to) public onlyManipulator {
-        tokenIdCounter.increment();
-        uint256 tokenId = tokenIdCounter.current();
-        _safeMint(_to, tokenId);
+        privateMint(_to);
     }
 
     /// Tokens for address
@@ -84,5 +115,17 @@ contract LoyaltyNFTV1 is Initializable, ERC721Upgradeable, ERC721EnumerableUpgra
         }
 
         return tokenIds;
+    }
+
+    /// Public NFT claim
+    function publicClaim() external payable {
+        require(publicClaimAvailable, "LoyaltyNFT: public claim is not available");
+        require(!publicClaims[msg.sender].exists, "LoyaltyNFT: NFT claimed already");
+        require(msg.value >= publicClaimFee, "LoyaltyNFT: wrong value");
+
+        publicClaims[msg.sender].exists = true;
+        privateMint(msg.sender);
+
+        emit PublicClaimEvent(msg.sender, msg.value);
     }
 }

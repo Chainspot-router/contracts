@@ -749,4 +749,25 @@ describe("Proxy test", function () {
         expect(referrerData[0]).to.be.equal(true);
         expect(referrerData[1].toString()).to.be.equal(refValue.toString());
     });
+
+    it("Should claiming public NFT", async function () {
+        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Cashback, cashback, stableCoin, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, minClaimValue, minWithdrawValue } = await loadFixture(deployContractsFixture);
+
+        const publicClaimFee = 1000000;
+        const user1NftBalanceBefore = await nftLvl1.balanceOf(user1.address);
+        expect(user1NftBalanceBefore).to.be.equal(0n);
+
+        await expect(nftLvl1.connect(user1).publicClaim())
+            .to.be.rejectedWith("LoyaltyNFT: public claim is not available");
+        await expect(nftLvl1.setPublicClaimAvailable(true)).to.not.rejected;
+        await expect(nftLvl1.setPublicClaimFee(publicClaimFee)).to.not.rejected;
+        await expect(nftLvl1.connect(user1).publicClaim())
+            .to.be.rejectedWith("LoyaltyNFT: wrong value");
+        await expect(nftLvl1.connect(user1).publicClaim({value: publicClaimFee - 100}))
+            .to.be.rejectedWith("LoyaltyNFT: wrong value");
+        await expect(nftLvl1.connect(user1).publicClaim({value: publicClaimFee})).to.not.rejected;
+        expect(await nftLvl1.balanceOf(user1.address)).to.be.equal(1n);
+        await expect(nftLvl1.connect(user1).publicClaim({value: publicClaimFee}))
+            .to.be.rejectedWith("LoyaltyNFT: NFT claimed already");
+    });
 });
