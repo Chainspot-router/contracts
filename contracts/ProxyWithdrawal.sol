@@ -1,13 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
-import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import {Ownable2StepUpgradeable} from "@openzeppelin/contracts-upgradeable/access/Ownable2StepUpgradeable.sol";
 import {SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {AddressLib} from "./utils/AddressLib.sol";
 
-abstract contract ProxyWithdrawal is OwnableUpgradeable {
+abstract contract ProxyWithdrawal is Ownable2StepUpgradeable {
 
     using AddressLib for address;
+    using SafeERC20 for IERC20;
 
     /// Transfer event
     /// @param _to address  Destination address
@@ -44,7 +45,7 @@ abstract contract ProxyWithdrawal is OwnableUpgradeable {
     /// @param _amount uint  Transfer amount
     function transferTokens(IERC20 _token, address _to, uint _amount) external onlyOwner {
         require(getTokenBalance(_token) >= _amount, "Withdrawal: not enough tokens");
-        require(_token.transfer(_to, _amount), "Withdrawal: transfer request failed");
+        _token.safeTransfer(_to, _amount);
         emit TransferEvent(_to, _amount, address(_token));
     }
 }

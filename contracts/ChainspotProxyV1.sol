@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
-import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {ReentrancyGuardUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
@@ -151,21 +150,22 @@ contract ChainspotProxyV1 is ILoyaltyEnv, UUPSUpgradeable, ReentrancyGuardUpgrad
         {
             uint feeAmount = calcAdditionalFee(_amount);
             if (feeAmount > 0) {
-                require(_token.transferFrom(msg.sender, owner(), feeAmount), "ChainspotProxy: fee transfer request failed");
+                _token.safeTransferFrom(msg.sender, owner(), feeAmount);
             }
 
             uint routerAmount = _amount.sub(feeAmount);
             require(routerAmount >= _targetAmount, "ChainspotProxy: routerAmount is too small");
-            require(_token.transferFrom(msg.sender, address(this), routerAmount), "ChainspotProxy: transferFrom request failed");
 
-            require(_token.approve(_approveTo, routerAmount), "ChainspotProxy: approve request failed");
+            _token.safeTransferFrom(msg.sender, address(this), routerAmount);
+            _token.forceApprove(_approveTo, routerAmount);
         }
 
         (bool success, ) = _callDataTo.call{value: msg.value.sub(transferBaseFee(_amount, _userLevel, _referrer, _refLevel, false))}(_data);
         require(success, "ChainspotProxy: call data request failed");
 
         if (_token.allowance(address(this), _approveTo) > 0) {
-            require(_token.approve(_approveTo, 0), "ChainspotProxy: revert approve request failed");
+            try _token.approve(_approveTo, 0) {
+            } catch (bytes memory) {}
         }
     }
 
@@ -203,6 +203,6 @@ contract ChainspotProxyV1 is ILoyaltyEnv, UUPSUpgradeable, ReentrancyGuardUpgrad
         (bool successTV, ) = owner().call{value: finalBaseFeeAmount + additionalFee}("");
         require(successTV, "ChainspotProxy: fee not sent");
 
-        return _isNativeTransfer ? additionalFee : baseFeeAmount + additionalFee;
+        return baseFeeAmount + additionalFee;
     }
 }

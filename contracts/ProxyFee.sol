@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
-import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import {Ownable2StepUpgradeable} from "@openzeppelin/contracts-upgradeable/access/Ownable2StepUpgradeable.sol";
 import {SafeMath} from "./utils/SafeMath.sol";
 
-abstract contract ProxyFee is OwnableUpgradeable {
+abstract contract ProxyFee is Ownable2StepUpgradeable {
 
     using SafeMath for uint;
 
@@ -12,8 +12,9 @@ abstract contract ProxyFee is OwnableUpgradeable {
     uint public feeMul; // example: feeBase + feeMul = 10002 or 100.02%
     uint public maxFeePercent; // Maximum but not current fee, just for validation
     uint public baseFeeInUsd; // Base fee in USD (must be uint!)
-    // TODO: convert it to struct
+    uint public maxBaseFeeInUsd;
     uint public rate; // Native coins for $1
+    uint[50] private __gap;
 
     /// Update fee params event
     /// @param _feeBase uint  Base fee amount
@@ -28,6 +29,7 @@ abstract contract ProxyFee is OwnableUpgradeable {
     function __ProxyFee_init() initializer public {
         maxFeePercent = 10;
         baseFeeInUsd = 2;
+        maxBaseFeeInUsd = 10;
     }
 
     /// Set system fee (only for owner)
@@ -49,6 +51,7 @@ abstract contract ProxyFee is OwnableUpgradeable {
     /// Set USD fee (only fo owner)
     /// @param _fee uint  USD fee
     function setUsdFee(uint _fee) public onlyOwner {
+        require(_fee <= maxBaseFeeInUsd, "Fee: fee must be less than maximum");
         baseFeeInUsd = _fee;
         emit SetUsdFeeEvent(_fee);
     }
