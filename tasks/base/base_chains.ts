@@ -60,7 +60,7 @@ export const Chains = {
             networkName: "bsc",
             contractAddresses: {
                 proxy: '0x09A37C555B252CC5D7FF0102114AF42D2009ed46',
-                claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
+                claimer: '0xffaD49a7f30221379C44A291B3f4F82620eD5982',
                 referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
             },
@@ -74,11 +74,11 @@ export const Chains = {
                 '0xc3711bdbe7e3063bf6c22e7fed42f782ac82baee', // Wanchain
             ],
             levelNfts: [
-                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
-                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
-                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
-                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
-                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000'},
+                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x314289E204c530d0695aaCcBB20dA37e3240945B'},
+                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x50201042f8178458b87182fa4E073a16996C7d42'},
+                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0xDE7a62aC5fB2156b902Ef339E3B4678AC02eeDff'},
+                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0x190459a88Ea8552EE0271489aAbcf749a2fe99B8'},
+                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0xaB03E98b1B053e53e152BDdd569FA67971CBefDD'},
             ],
         },
         {

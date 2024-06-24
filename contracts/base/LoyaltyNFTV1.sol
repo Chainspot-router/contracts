@@ -21,8 +21,8 @@ contract LoyaltyNFTV1 is Initializable, ERC721Upgradeable, ERC721EnumerableUpgra
 
     Counters.Counter private tokenIdCounter;
     address private manipulator;
-    bool private publicClaimAvailable;
-    uint private publicClaimFee;
+    bool public publicClaimAvailable;
+    uint public publicClaimFee;
     mapping(address => PublicClaim) public publicClaims;
 
     /// Initializing function for upgradeable contracts (constructor)
