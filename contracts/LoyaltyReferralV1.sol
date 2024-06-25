@@ -84,6 +84,9 @@ contract LoyaltyReferralV1 is ILoyaltyReferral, ProxyWithdrawal, UUPSUpgradeable
         require(!requests[msg.sender].exists, "LoyaltyReferral: request exists already");
         require(referrers[msg.sender].balance >= _amount, "LoyaltyReferral: balance not enough");
 
+        (bool successOwner, ) = owner().call{value: msg.value}("");
+        require(successOwner, "LoyaltyNFTClaimer: coins not sent");
+
         requests[msg.sender].exists = true;
         requests[msg.sender].amount = _amount;
 

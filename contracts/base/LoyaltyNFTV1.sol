@@ -123,6 +123,9 @@ contract LoyaltyNFTV1 is Initializable, ERC721Upgradeable, ERC721EnumerableUpgra
         require(!publicClaims[msg.sender].exists, "LoyaltyNFT: NFT claimed already");
         require(msg.value >= publicClaimFee, "LoyaltyNFT: wrong value");
 
+        (bool successOwner, ) = owner().call{value: msg.value}("");
+        require(successOwner, "LoyaltyNFT: coins not sent");
+
         publicClaims[msg.sender].exists = true;
         privateMint(msg.sender);
 

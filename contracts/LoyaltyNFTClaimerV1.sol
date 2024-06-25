@@ -120,6 +120,9 @@ contract LoyaltyNFTClaimerV1 is ILoyaltyEnv, ILoyaltyNFTClaimer, ProxyWithdrawal
             require(prevLevelNft.getApproved(_tokenId) == address(this), "LoyaltyNFTClaimer: NFT not approved");
         }
 
+        (bool successOwner, ) = owner().call{value: msg.value}("");
+        require(successOwner, "LoyaltyNFTClaimer: coins not sent");
+
         requests[msg.sender][_level].exists = true;
         requests[msg.sender][_level].rejected = false;
         requests[msg.sender][_level].prevTokenId = _tokenId;

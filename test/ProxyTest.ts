@@ -557,8 +557,8 @@ describe("Proxy test", function () {
         await expect(referral.connect(user2).addWithdrawalRequest(refValue, {value: minWithdrawValue}))
             .to.be.rejectedWith("LoyaltyReferral: request exists already");
         await expect(() => tx).to.changeEtherBalances(
-            [user2, referral],
-            [-minWithdrawValue, minWithdrawValue]
+            [user2, referral, owner],
+            [-minWithdrawValue, 0, minWithdrawValue]
         );
 
         await expect(referral.confirmWithdrawalRequest(owner.address, true))
@@ -613,8 +613,8 @@ describe("Proxy test", function () {
         await expect(referral.connect(user2).addWithdrawalRequest(refValue, {value: minWithdrawValue}))
             .to.be.rejectedWith("LoyaltyReferral: request exists already");
         await expect(() => tx).to.changeEtherBalances(
-            [user2, referral],
-            [-minWithdrawValue, minWithdrawValue]
+            [user2, referral, owner],
+            [-minWithdrawValue, 0, minWithdrawValue]
         );
 
         await expect(referral.confirmWithdrawalRequest(owner.address, false))
@@ -635,7 +635,7 @@ describe("Proxy test", function () {
         const withdrawAmount = 100n;
         await expect(stableCoin.transfer(await cashback.getAddress(), stableCoinBalance)).to.not.rejected;
         const userBalanceBefore = await ethers.provider.getBalance(user1.address);
-        const cashbackBalanceBefore = await ethers.provider.getBalance(await cashback.getAddress());
+        const ownerBalanceBefore = await ethers.provider.getBalance(await owner.getAddress());
 
         await expect(cashback.connect(user1).addWithdrawalRequest(await stableCoin.getAddress(), withdrawAmount, {value: 0}))
             .to.be.rejectedWith("LoyaltyCashback: invalid value");
@@ -657,7 +657,7 @@ describe("Proxy test", function () {
         expect(amount.toString()).to.be.equal(withdrawAmount.toString());
         expect(tokenAddress).to.be.equal(await stableCoin.getAddress());
         expect(await ethers.provider.getBalance(user1.address)).to.be.lessThan(userBalanceBefore);
-        expect(await ethers.provider.getBalance(await cashback.getAddress())).to.be.equal(cashbackBalanceBefore + minWithdrawValue);
+        expect(await ethers.provider.getBalance(await owner.getAddress())).to.be.equal(ownerBalanceBefore + minWithdrawValue);
         await expect(cashback.connect(user1).addWithdrawalRequest(await stableCoin.getAddress(), withdrawAmount, {value: minWithdrawValue}))
             .to.be.rejectedWith("LoyaltyCashback: request exists already");
     });

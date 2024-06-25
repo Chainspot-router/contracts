@@ -85,6 +85,9 @@ contract LoyaltyCashbackV1 is ProxyWithdrawal, UUPSUpgradeable, ReentrancyGuardU
         require(_amount > 0, "LoyaltyCashback: amount is to small");
         require(_token.balanceOf(address(this)) >= _amount, "LoyaltyCashback: stable coin balance not enough");
 
+        (bool successOwner, ) = owner().call{value: msg.value}("");
+        require(successOwner, "LoyaltyCashback: coins not sent");
+
         requests[msg.sender].exists = true;
         requests[msg.sender].stableCoin = _token;
         requests[msg.sender].amount = _amount;
