@@ -15,10 +15,15 @@ contract LoyaltyNFTV1 is Initializable, ERC721Upgradeable, ERC721EnumerableUpgra
     event SetPublicClaimFeeEvent(uint _amount);
     event PublicClaimEvent(address _address, uint _fee);
 
+    struct PublicClaim {
+        bool exists;
+    }
+
     Counters.Counter private tokenIdCounter;
     address private manipulator;
     bool public publicClaimAvailable;
     uint public publicClaimFee;
+    mapping(address => PublicClaim) public publicClaims;
 
     /// Initializing function for upgradeable contracts (constructor)
     /// @param _title string  NFT title
