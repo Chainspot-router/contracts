@@ -459,8 +459,6 @@ describe("Proxy test", function () {
         expect(targetAddress).to.be.equal(user1.address);
         expect(level).to.be.equal(nfts[0].level);
         await expect(await nftLvl1.balanceOf(user1.address)).to.be.equal(1);
-        await expect(claimer.confirmClaimRequest(user1.address, nfts[0].level, true))
-            .to.be.rejectedWith("LoyaltyNFTClaimer: NFT claimed already");
     });
 
     it("Should claimer confirm NFT level 1 request rejected, then added request again", async function () {
@@ -767,7 +765,5 @@ describe("Proxy test", function () {
             .to.be.rejectedWith("LoyaltyNFT: wrong value");
         await expect(nftLvl1.connect(user1).publicClaim({value: publicClaimFee})).to.not.rejected;
         expect(await nftLvl1.balanceOf(user1.address)).to.be.equal(1n);
-        await expect(nftLvl1.connect(user1).publicClaim({value: publicClaimFee}))
-            .to.be.rejectedWith("LoyaltyNFT: NFT claimed already");
     });
 });

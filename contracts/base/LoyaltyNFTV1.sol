@@ -15,15 +15,10 @@ contract LoyaltyNFTV1 is Initializable, ERC721Upgradeable, ERC721EnumerableUpgra
     event SetPublicClaimFeeEvent(uint _amount);
     event PublicClaimEvent(address _address, uint _fee);
 
-    struct PublicClaim {
-        bool exists;
-    }
-
     Counters.Counter private tokenIdCounter;
     address private manipulator;
     bool public publicClaimAvailable;
     uint public publicClaimFee;
-    mapping(address => PublicClaim) public publicClaims;
 
     /// Initializing function for upgradeable contracts (constructor)
     /// @param _title string  NFT title
@@ -120,13 +115,11 @@ contract LoyaltyNFTV1 is Initializable, ERC721Upgradeable, ERC721EnumerableUpgra
     /// Public NFT claim
     function publicClaim() external payable {
         require(publicClaimAvailable, "LoyaltyNFT: public claim is not available");
-        require(!publicClaims[msg.sender].exists, "LoyaltyNFT: NFT claimed already");
         require(msg.value >= publicClaimFee, "LoyaltyNFT: wrong value");
 
         (bool successOwner, ) = owner().call{value: msg.value}("");
         require(successOwner, "LoyaltyNFT: coins not sent");
 
-        publicClaims[msg.sender].exists = true;
         privateMint(msg.sender);
 
         emit PublicClaimEvent(msg.sender, msg.value);
