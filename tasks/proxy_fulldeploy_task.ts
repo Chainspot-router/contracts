@@ -187,7 +187,12 @@ task("proxy:fullDeploy", "Fully deploy proxy contract")
         console.log("Referral address: %s", await referral.getAddress());
         console.log("Claimer address: %s", await claimer.getAddress());
         for (let i = 0; i < currentChain.levelNfts.length; i++) {
-            console.log("%s (%s) address: %s", currentChain.levelNfts[i].title, currentChain.levelNfts[i].symbol, await nfts[i].getAddress());
+            console.log(
+                "%s (%s) address: %s",
+                currentChain.levelNfts[i].title,
+                currentChain.levelNfts[i].symbol,
+                taskArgs.mustDeployNFT == '1' ? await nfts[i].getAddress() : currentChain.levelNfts[i].nftAddress
+            );
         }
         console.log("Proxy address: %s\n", await proxy.getAddress());
     })

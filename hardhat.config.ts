@@ -150,6 +150,16 @@ const config = {
       accounts: [process.env.OWNER_PK_CHAINSPOT],
       chainId: 5000
     },
+    cronosMainnet: {
+      url: process.env.NETWORK_HOST_CRONOS,
+      accounts: [process.env.OWNER_PK_CHAINSPOT],
+      chainId: 25
+    },
+    blastMainnet: {
+      url: process.env.NETWORK_HOST_BLAST,
+      accounts: [process.env.OWNER_PK_CHAINSPOT],
+      chainId: 81457
+    },
   },
   etherscan: {
     apiKey: {
@@ -165,6 +175,10 @@ const config = {
       boba: process.env.BOBA_API_KEY,
       celo: process.env.CELO_API_KEY,
       gnosis: process.env.GNOSIS_API_KEY,
+      blastMainnet: process.env.BLAST_API_KEY,
+      lineaMainnet: process.env.LINEA_API_KEY,
+      baseMainnet: process.env.BASE_API_KEY,
+      cronosMainnet: process.env.CRONOS_API_KEY,
     },
     customChains: [
       {
@@ -181,6 +195,38 @@ const config = {
         urls: {
           apiURL: "https://api.bobascan.com/api",
           browserURL: "https://bobascan.com"
+        }
+      },
+      {
+        network: "baseMainnet",
+        chainId: 8453,
+        urls: {
+          apiURL: "https://api.basescan.org/api",
+          browserURL: "https://basescan.org"
+        }
+      },
+      {
+        network: "lineaMainnet",
+        chainId: 59144,
+        urls: {
+          apiURL: "https://api.lineascan.build/api",
+          browserURL: "https://lineascan.build"
+        }
+      },
+      {
+        network: "cronosMainnet",
+        chainId: 25,
+        urls: {
+          apiURL: "https://api.cronoscan.com/api",
+          browserURL: "https://cronoscan.com"
+        }
+      },
+      {
+        network: "blastMainnet",
+        chainId: 81457,
+        urls: {
+          apiURL: "https://api.blastscan.io/api",
+          browserURL: "https://blastscan.io"
         }
       },
     ],
