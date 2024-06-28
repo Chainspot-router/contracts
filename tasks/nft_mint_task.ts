@@ -25,10 +25,9 @@ async function deployBase(hre: any, levelIndex: number, isTestnet: any) {
     return {Nft, nft, owner, gasLimit, currentChain};
 }
 
-task("nft:setPublicClaimData", "Set public NFT claim data")
+task("nft:mint", "Mint nft to address")
+    .addPositionalParam("targetAddress", "Target address for minting NFT")
     .addPositionalParam("levelIndex", "Level NFT array index", '0')
-    .addPositionalParam("isAvailable", "Is public claim available (1 - available, 0 - disable)", '0')
-    .addPositionalParam("feeAmount", "Public claim fee amount in native coins", '0')
     .addPositionalParam("isTestnet", "Is testnet flag (1 - testnet, 0 - mainnet)", '0')
     .addPositionalParam("gasPrice", "Gas price (for some networks)", '0')
     .addPositionalParam("pauseInSeconds", "Pause script running in seconds", '2')
@@ -37,23 +36,16 @@ task("nft:setPublicClaimData", "Set public NFT claim data")
 
         let tx;
         const gasPrice = parseInt(taskArgs.gasPrice);
-        console.log("Updating public NFT claim data...");
+        console.log("Minting NFT...");
 
-        let txAvailable = await nft.setPublicClaimAvailable(taskArgs.isAvailable == '1', gasPrice > 0 ? {gasPrice: gasPrice} : {});
+        tx = await nft.connect(owner).safeMint(taskArgs.targetAddress, gasPrice > 0 ? {gasPrice: gasPrice} : {});
         if (taskArgs.pauseInSeconds != '0') {
             await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
         }
-        // gasLimit += (await ethers.provider.getTransactionReceipt(txAvailable.hash)).gasUsed;
+        gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
 
-        let txFee = await nft.setPublicClaimFee(taskArgs.feeAmount, gasPrice > 0 ? {gasPrice: gasPrice} : {});
-        if (taskArgs.pauseInSeconds != '0') {
-            await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
-        }
-        // gasLimit += (await ethers.provider.getTransactionReceipt(txFee.hash)).gasUsed;
-
-        console.log("\nLevels NFT filled successfully\n");
+        console.log("\nNFT minted successfully\n");
         console.log("Total gas limit: %s", gasLimit.toString());
         console.log("Target contract address: %s", await nft.getAddress());
-        console.log("Transaction hash (available flag setting): %s", txAvailable.hash);
-        console.log("Transaction hash (fee amount setting): %s\n", txFee.hash);
+        console.log("Transaction hash: %s\n", tx.hash);
     })

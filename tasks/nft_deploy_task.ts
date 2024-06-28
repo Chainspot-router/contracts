@@ -14,6 +14,7 @@ task("nft:deploy", "Deploy loyalty NFT contract")
     .addPositionalParam("title", "NFT title")
     .addPositionalParam("symbol", "NFT symbol")
     .addPositionalParam("initialAddress", "Config initial address (owner)", '0')
+    .addPositionalParam("url", "NFT URL", '')
     .addPositionalParam("gasPrice", "Gas price (for some networks)", '0')
     .addPositionalParam("pauseInSeconds", "Pause script running in seconds", '2')
     .setAction(async (taskArgs, hre) => {
@@ -23,7 +24,7 @@ task("nft:deploy", "Deploy loyalty NFT contract")
         const gasPrice = parseInt(taskArgs.gasPrice);
         console.log("Deploying NFT contract...");
         const manipulatorAddress = taskArgs.initialAddress == '0' ? zeroAddress : taskArgs.initialAddress;
-        const nft = await upgrades.deployProxy(Nft, [taskArgs.title, taskArgs.symbol, manipulatorAddress], {
+        const nft = await upgrades.deployProxy(Nft, [taskArgs.title, taskArgs.symbol, manipulatorAddress, taskArgs.url], {
             initialize: 'initialize',
             kind: 'uups',
         });

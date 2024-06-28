@@ -20,9 +20,9 @@ describe("Proxy test", function () {
         const minClaimValue = 1000n;
         const minWithdrawValue = 1000n;
         const nfts = [
-                {title: 'NftLevel1', symbol: 'NL1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 2},
-                {title: 'NftLevel2', symbol: 'NL2', refProfit: 40, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 2},
-                {title: 'NftLevel3', symbol: 'NL3', refProfit: 50, cashback: 20, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 2},
+                {title: 'NftLevel1', symbol: 'NL1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 2, url: ""},
+                {title: 'NftLevel2', symbol: 'NL2', refProfit: 40, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 2, url: ""},
+                {title: 'NftLevel3', symbol: 'NL3', refProfit: 50, cashback: 20, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 2, url: ""},
         ];
         const [ owner, user1, user2 ] = await ethers.getSigners();
 
@@ -38,17 +38,17 @@ describe("Proxy test", function () {
         });
         await claimer.waitForDeployment();
 
-        const nftLvl1 = await upgrades.deployProxy(Nft, [nfts[0].title, nfts[0].symbol, await claimer.getAddress()], {
+        const nftLvl1 = await upgrades.deployProxy(Nft, [nfts[0].title, nfts[0].symbol, await claimer.getAddress(), nfts[0].url], {
             initialize: 'initialize',
             kind: 'uups',
         });
         await nftLvl1.waitForDeployment();
-        const nftLvl2 = await upgrades.deployProxy(Nft, [nfts[1].title, nfts[1].symbol, await claimer.getAddress()], {
+        const nftLvl2 = await upgrades.deployProxy(Nft, [nfts[1].title, nfts[1].symbol, await claimer.getAddress(), nfts[1].url], {
             initialize: 'initialize',
             kind: 'uups',
         });
         await nftLvl2.waitForDeployment();
-        const nftLvl3 = await upgrades.deployProxy(Nft, [nfts[2].title, nfts[2].symbol, await claimer.getAddress()], {
+        const nftLvl3 = await upgrades.deployProxy(Nft, [nfts[2].title, nfts[2].symbol, await claimer.getAddress(), nfts[2].url], {
             initialize: 'initialize',
             kind: 'uups',
         });
@@ -748,7 +748,7 @@ describe("Proxy test", function () {
         expect(referrerData[1].toString()).to.be.equal(refValue.toString());
     });
 
-    it("Should claiming public NFT", async function () {
+    it("Should claiming public NFT successfully", async function () {
         const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Cashback, cashback, stableCoin, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, minClaimValue, minWithdrawValue } = await loadFixture(deployContractsFixture);
 
         const publicClaimFee = 1000000;
@@ -765,5 +765,14 @@ describe("Proxy test", function () {
             .to.be.rejectedWith("LoyaltyNFT: wrong value");
         await expect(nftLvl1.connect(user1).publicClaim({value: publicClaimFee})).to.not.rejected;
         expect(await nftLvl1.balanceOf(user1.address)).to.be.equal(1n);
+    });
+
+    it("Should mint NFT successfully", async function () {
+        const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Cashback, cashback, stableCoin, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, minClaimValue, minWithdrawValue } = await loadFixture(deployContractsFixture);
+
+        await expect(nftLvl1.connect(user1).safeMint(user1.address))
+            .to.be.rejectedWith("LoyaltyNFT: only owner or manipulator");
+        await expect(nftLvl1.safeMint(user1.address)).to.not.rejected;
+        expect(await nftLvl1.connect(owner).balanceOf(user1.address)).to.be.equal(1n);
     });
 });

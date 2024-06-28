@@ -51,6 +51,9 @@ task("proxy:fullDeploy", "Fully deploy proxy contract")
             kind: 'uups',
         });
         await cashback.waitForDeployment();
+        if (taskArgs.pauseInSeconds != '0') {
+            await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
+        }
         gasLimit += await ethers.provider.estimateGas({
             data: (await (await ethers.getContractFactory("LoyaltyCashbackV1"))
                 .getDeployTransaction()).data
@@ -70,6 +73,9 @@ task("proxy:fullDeploy", "Fully deploy proxy contract")
             kind: 'uups',
         });
         await referral.waitForDeployment();
+        if (taskArgs.pauseInSeconds != '0') {
+            await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
+        }
         gasLimit += await ethers.provider.estimateGas({
             data: (await (await ethers.getContractFactory("LoyaltyReferralV1"))
                 .getDeployTransaction()).data
@@ -89,6 +95,9 @@ task("proxy:fullDeploy", "Fully deploy proxy contract")
             kind: 'uups',
         });
         await claimer.waitForDeployment();
+        if (taskArgs.pauseInSeconds != '0') {
+            await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
+        }
         gasLimit += await ethers.provider.estimateGas({
             data: (await (await ethers.getContractFactory("LoyaltyNFTClaimerV1"))
                 .getDeployTransaction()).data
@@ -103,14 +112,17 @@ task("proxy:fullDeploy", "Fully deploy proxy contract")
         }
 
         // NFT deployment
+        let nfts = [];
         if (taskArgs.mustDeployNFT == '1') {
-            let nfts = [];
             for (let i = 0; i < currentChain.levelNfts.length; i++) {
-                nfts[i] = await upgrades.deployProxy(Nft, [currentChain.levelNfts[i].title, currentChain.levelNfts[i].symbol, await claimer.getAddress()], {
+                nfts[i] = await upgrades.deployProxy(Nft, [currentChain.levelNfts[i].title, currentChain.levelNfts[i].symbol, await claimer.getAddress(), currentChain.levelNfts[i].nftUrl], {
                     initialize: 'initialize',
                     kind: 'uups',
                 });
                 await nfts[i].waitForDeployment();
+                if (taskArgs.pauseInSeconds != '0') {
+                    await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
+                }
                 gasLimit += await ethers.provider.estimateGas({
                     data: (await (await ethers.getContractFactory("LoyaltyNFTV1")).getDeployTransaction()).data
                 });
@@ -146,6 +158,9 @@ task("proxy:fullDeploy", "Fully deploy proxy contract")
             {initialize: 'initialize', kind: 'uups'}
         );
         await proxy.waitForDeployment();
+        if (taskArgs.pauseInSeconds != '0') {
+            await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
+        }
         gasLimit += await ethers.provider.estimateGas({
             data: (await (await ethers.getContractFactory("ChainspotProxyV1"))
                 .getDeployTransaction()).data

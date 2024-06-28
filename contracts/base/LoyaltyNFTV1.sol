@@ -24,18 +24,29 @@ contract LoyaltyNFTV1 is Initializable, ERC721Upgradeable, ERC721EnumerableUpgra
     bool public publicClaimAvailable;
     uint public publicClaimFee;
     mapping(address => PublicClaim) public publicClaims;
+    string public nftUrl;
 
     /// Initializing function for upgradeable contracts (constructor)
     /// @param _title string  NFT title
     /// @param _symbol string  NFT symbol
     /// @param _initialManipulator address  Manipulator address
-    function initialize(string memory _title, string memory _symbol, address _initialManipulator) initializer public {
+    function initialize(string memory _title, string memory _symbol, address _initialManipulator, string memory _nftUrl) initializer public {
         __ERC721_init(_title, _symbol);
         __ERC721Enumerable_init();
         __Ownable_init(msg.sender);
         __UUPSUpgradeable_init();
 
         manipulator = _initialManipulator;
+        nftUrl = _nftUrl;
+    }
+
+    /**
+     * @dev See {IERC721Metadata-tokenURI}.
+     */
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+        _requireOwned(tokenId);
+
+        return nftUrl;
     }
 
     /// Upgrade implementation address for UUPS logic
@@ -45,6 +56,12 @@ contract LoyaltyNFTV1 is Initializable, ERC721Upgradeable, ERC721EnumerableUpgra
     /// Only manipulator modifier
     modifier onlyManipulator() {
         require(msg.sender == manipulator, "LoyaltyNFT: only manipulator");
+        _;
+    }
+
+    /// Only owner or manipulator modifier
+    modifier onlyOwnerOrManipulator() {
+        require(msg.sender == owner() || msg.sender == manipulator, "LoyaltyNFT: only owner or manipulator");
         _;
     }
 
@@ -97,9 +114,9 @@ contract LoyaltyNFTV1 is Initializable, ERC721Upgradeable, ERC721EnumerableUpgra
     /// Base logic
     /// ************
 
-    /// Safe mint (only for owner)
+    /// Safe mint (only for owner or manipulator)
     /// @param _to address  Target address
-    function safeMint(address _to) public onlyManipulator {
+    function safeMint(address _to) public onlyOwnerOrManipulator {
         privateMint(_to);
     }
 

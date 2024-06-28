@@ -7,6 +7,7 @@ import './tasks/accounts_task';
 import './tasks/nft_deploy_task';
 import './tasks/nft_update_task';
 import './tasks/nft_publicclaimdata_task';
+import './tasks/nft_mint_task';
 import './tasks/referral_deploy_task';
 import './tasks/referral_update_task';
 import './tasks/claimer_deploy_task';
