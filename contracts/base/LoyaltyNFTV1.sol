@@ -46,6 +46,15 @@ contract LoyaltyNFTV1 is Initializable, ERC721Upgradeable, ERC721EnumerableUpgra
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
         _requireOwned(tokenId);
 
+        return _baseURI();
+    }
+
+    /**
+     * @dev Base URI for computing {tokenURI}. If set, the resulting URI for each
+     * token will be the concatenation of the `baseURI` and the `tokenId`. Empty
+     * by default, can be overridden in child contracts.
+     */
+    function _baseURI() internal view override returns (string memory) {
         return nftUrl;
     }
 
