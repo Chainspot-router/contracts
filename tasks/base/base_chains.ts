@@ -77,11 +77,11 @@ export const Chains = {
                 '0xfa43DE785dd3Cd0ef3dAE0dD2b8bE3F1B5112d1a', // CrossCurve
             ],
             levelNfts: [
-                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x5475730386a6255ba91b633fea3078142482bEFd', nftUrl: "https://app.chainspot.io/api/1.0/loyalty/nft-image-data?level=1"},
-                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x080E018838085d5C77E57BAdEc1C90ED0D3f3DAa', nftUrl: "https://app.chainspot.io/api/1.0/loyalty/nft-image-data?level=2"},
-                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0xe2ee1aD5CEAFe28D8C20AB9A59d55Dd514374B33', nftUrl: "https://app.chainspot.io/api/1.0/loyalty/nft-image-data?level=3"},
-                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0xBe0cc9506cc3f9830abD3F7F2aE420E4FfE42019', nftUrl: "https://app.chainspot.io/api/1.0/loyalty/nft-image-data?level=4"},
-                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0xDC9692B6AD848Db7Daa1193ac84B36c752e98FBF', nftUrl: "https://app.chainspot.io/api/1.0/loyalty/nft-image-data?level=5"},
+                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x9781428D155F444F41d6f38Df737BFabDeCFf7d5', nftUrl: "https://app.chainspot.io/api/1.0/loyalty/nft-image-data?level=1"},
+                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0xB8C8Dc678e93a50286d8d789cb5Af8fFA85CFdA9', nftUrl: "https://app.chainspot.io/api/1.0/loyalty/nft-image-data?level=2"},
+                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0xEfd464C8851Cfee3d5060400dA6EDf2200b8C462', nftUrl: "https://app.chainspot.io/api/1.0/loyalty/nft-image-data?level=3"},
+                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0xCC9B21b395566a98C85aB834c9edE7f84213D5E0', nftUrl: "https://app.chainspot.io/api/1.0/loyalty/nft-image-data?level=4"},
+                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0xC611aA6e7B648a64d08D7BDA1b9A413a9835A33b', nftUrl: "https://app.chainspot.io/api/1.0/loyalty/nft-image-data?level=5"},
             ],
         },
         {

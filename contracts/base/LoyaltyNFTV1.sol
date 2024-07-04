@@ -119,6 +119,12 @@ contract LoyaltyNFTV1 is Initializable, ERC721Upgradeable, ERC721EnumerableUpgra
         _safeMint(_to, tokenId);
     }
 
+    /// Set NFT URL
+    /// @param _nftUrl string  NFT URL
+    function setNftUrl(string memory _nftUrl) external onlyOwner {
+        nftUrl = _nftUrl;
+    }
+
     /// ************
     /// Base logic
     /// ************

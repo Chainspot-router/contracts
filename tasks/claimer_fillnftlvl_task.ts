@@ -62,7 +62,7 @@ task("claim:fillLevelNft", "Fill level NFT data")
             throw new Error('Config is not filled!');
         }
 
-        tx = await claimer.setLevelNFTs(levels, prevLevels, nftAddresses, refProfits, maxUserLevelForRefProfits, cashbacks, gasPrice > 0 ? {gasPrice: gasPrice} : {});
+        tx = await claimer.connect(owner).setLevelNFTs(levels, prevLevels, nftAddresses, refProfits, maxUserLevelForRefProfits, cashbacks, gasPrice > 0 ? {gasPrice: gasPrice} : {});
         if (taskArgs.pauseInSeconds != '0') {
             await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
         }

@@ -20,6 +20,7 @@ import './tasks/proxy_updaterate_task';
 import './tasks/proxy_fulldeploy_task';
 import './tasks/cashback_deploy_task';
 import './tasks/cashback_update_task';
+import './tasks/cashback_addstable_task';
 import './tasks/proxy_updatetrustedaddress_task';
 import './tasks/owner_update';
 
@@ -52,7 +53,7 @@ const config = {
     },
     mainnet: {
       url: process.env.NETWORK_HOST_ETHEREUM,
-      accounts: [process.env.OWNER_PK_CHAINSPOT, process.env.OWNER_PK_CHAINSPOT_2],
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 1
     },
     ethereumGoerli: {
@@ -67,7 +68,7 @@ const config = {
     },
     polygon: {
       url: process.env.NETWORK_HOST_POLYGON,
-      accounts: [process.env.OWNER_PK_CHAINSPOT, process.env.OWNER_PK_CHAINSPOT_2],
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 137
     },
     polygonMumbai: {
@@ -87,78 +88,78 @@ const config = {
     },
     avalanche: {
       url: process.env.NETWORK_HOST_AVALANCHE,
-      accounts: [process.env.OWNER_PK_CHAINSPOT, process.env.OWNER_PK_CHAINSPOT_2],
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 43114
       // https://subnets.avax.network/c/c-chain-mainnet/rpc
     },
     optimisticEthereum: {
       url: process.env.NETWORK_HOST_OPTIMISM,
-      accounts: [process.env.OWNER_PK_CHAINSPOT, process.env.OWNER_PK_CHAINSPOT_2],
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 10
     },
     arbitrumOne: {
       url: process.env.NETWORK_HOST_ARBITRUM,
-      accounts: [process.env.OWNER_PK_CHAINSPOT, process.env.OWNER_PK_CHAINSPOT_2],
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 42161
     },
     opera: {
       url: process.env.NETWORK_HOST_FANTOM,
-      accounts: [process.env.OWNER_PK_CHAINSPOT, process.env.OWNER_PK_CHAINSPOT_2],
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 250
     },
     moonbeam: {
       url: process.env.NETWORK_HOST_MOON,
-      accounts: [process.env.OWNER_PK_CHAINSPOT, process.env.OWNER_PK_CHAINSPOT_2],
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 1284
     },
     celo: {
       url: process.env.NETWORK_HOST_CELO,
-      accounts: [process.env.OWNER_PK_CHAINSPOT, process.env.OWNER_PK_CHAINSPOT_2],
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 42220
     },
     aurora: {
       url: process.env.NETWORK_HOST_AURORA,
-      accounts: [process.env.OWNER_PK_CHAINSPOT, process.env.OWNER_PK_CHAINSPOT_2],
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 1313161554
     },
     boba: {
       url: process.env.NETWORK_HOST_BOBA,
-      accounts: [process.env.OWNER_PK_CHAINSPOT, process.env.OWNER_PK_CHAINSPOT_2],
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 288
     },
     gnosis: {
       url: process.env.NETWORK_HOST_GNOSIS,
-      accounts: [process.env.OWNER_PK_CHAINSPOT, process.env.OWNER_PK_CHAINSPOT_2],
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 100
     },
     telos: {
       url: process.env.NETWORK_HOST_TELOS,
-      accounts: [process.env.OWNER_PK_CHAINSPOT, process.env.OWNER_PK_CHAINSPOT_2],
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 40
     },
     baseMainnet: {
       url: process.env.NETWORK_HOST_BASE,
-      accounts: [process.env.OWNER_PK_CHAINSPOT, process.env.OWNER_PK_CHAINSPOT_2],
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 8453
     },
     lineaMainnet: {
       url: process.env.NETWORK_HOST_LINEA,
-      accounts: [process.env.OWNER_PK_CHAINSPOT, process.env.OWNER_PK_CHAINSPOT_2],
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 59144
     },
     mantleMainnet: {
       url: process.env.NETWORK_HOST_MANTLE,
-      accounts: [process.env.OWNER_PK_CHAINSPOT, process.env.OWNER_PK_CHAINSPOT_2],
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 5000
     },
     cronosMainnet: {
       url: process.env.NETWORK_HOST_CRONOS,
-      accounts: [process.env.OWNER_PK_CHAINSPOT, process.env.OWNER_PK_CHAINSPOT_2],
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 25
     },
     blastMainnet: {
       url: process.env.NETWORK_HOST_BLAST,
-      accounts: [process.env.OWNER_PK_CHAINSPOT, process.env.OWNER_PK_CHAINSPOT_2],
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 81457
     },
   },
