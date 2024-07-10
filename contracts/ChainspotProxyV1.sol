@@ -185,11 +185,9 @@ contract ChainspotProxyV1 is ILoyaltyEnv, UUPSUpgradeable, ReentrancyGuardUpgrad
         uint additionalFee = _isNativeTransfer ? calcAdditionalFee(_amount) : 0;
 
         uint finalBaseFeeAmount = baseFeeAmount;
-        if (_userLevel > 0 && _referrer != address(0) && _refLevel > 0) {
+        if (_referrer != address(0) && _refLevel > 0) {
             LoyaltyLevel memory refererLevelData = claimer.getNFTLevelData(_refLevel);
             require(refererLevelData.exists, "ChainspotProxy: referrer loyalty level not exists");
-            LoyaltyLevel memory userLevelData = claimer.getNFTLevelData(_userLevel);
-            require(userLevelData.exists, "ChainspotProxy: user loyalty level not exists");
 
             if (_userLevel <= refererLevelData.maxUserLevelForRefProfit) {
                 uint refAmount = baseFeeAmount.mul(refererLevelData.refProfitInPercent).div(100);

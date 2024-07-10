@@ -2,7 +2,7 @@ import "@nomicfoundation/hardhat-toolbox";
 import { task } from 'hardhat/config';
 import { Chains } from "./base/base_chains";
 
-async function deployBase(hre, implementationVersion, isTestnet) {
+async function deployBase(hre: any, implementationVersion: number, ownerAddress: any, isTestnet: number) {
     const [owner] = await ethers.getSigners();
     const Proxy = await ethers.getContractFactory("ChainspotProxyV" + implementationVersion);
 
@@ -25,17 +25,21 @@ async function deployBase(hre, implementationVersion, isTestnet) {
 
 task("proxy:update", "Update proxy implementation contract")
     .addPositionalParam("implementationVersion", "Implementation version", '1')
+    .addPositionalParam("proxyAddress", "Implementation version", '0')
     .addPositionalParam("isTestnet", "Is testnet flag (1 - testnet, 0 - mainnet)", '0')
     .addPositionalParam("gasPrice", "Gas price (for some networks)", '0')
     .addPositionalParam("pauseInSeconds", "Pause script running in seconds", '2')
     .setAction(async (taskArgs, hre) => {
-        let {Proxy, owner, gasLimit, currentChain} = await deployBase(hre, taskArgs.implementationVersion, taskArgs.isTestnet);
+        let {Proxy, owner, gasLimit, currentChain} = await deployBase(hre, taskArgs.implementationVersion, taskArgs.ownerAddress, taskArgs.isTestnet);
 
         console.log("Upgrading proxy implementation...");
 
         const gasPrice = parseInt(taskArgs.gasPrice);
 
-        const proxy = await upgrades.upgradeProxy(currentChain.contractAddresses.proxy, Proxy, gasPrice > 0 ? {gasPrice: gasPrice} : {});
+        const proxy = await upgrades.upgradeProxy(
+            taskArgs.proxyAddress == '0' ? currentChain.contractAddresses.proxy : taskArgs.proxyAddress, Proxy,
+            gasPrice > 0 ? {gasPrice: gasPrice} : {}
+        );
         gasLimit += await ethers.provider.estimateGas({
             data: (await (await ethers.getContractFactory("ChainspotProxyV" + taskArgs.implementationVersion))
                 .getDeployTransaction()).data

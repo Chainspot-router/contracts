@@ -56,13 +56,13 @@ task("owner:update", "Update contract owner")
         if (taskArgs.pauseInSeconds != '0') {
             await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
         }
-        // gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
+        gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
 
         tx = await contract.connect(newOwner).acceptOwnership(gasPrice > 0 ? {gasPrice: gasPrice} : {});
         if (taskArgs.pauseInSeconds != '0') {
             await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
         }
-        // gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
+        gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
 
         console.log("\nDeployment was done\n");
         console.log("Total gas limit: %s", gasLimit.toString());

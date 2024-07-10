@@ -78,7 +78,7 @@ const config = {
     },
     bsc: {
       url: process.env.NETWORK_HOST_BSC,
-      accounts: [process.env.OWNER_PK_CHAINSPOT, process.env.OWNER_PK_CHAINSPOT_2],
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 56
     },
     bscTestnet: {
