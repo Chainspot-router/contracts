@@ -2,7 +2,7 @@ import "@nomicfoundation/hardhat-toolbox";
 import { task } from 'hardhat/config';
 import { Chains } from "./base/base_chains";
 
-async function deployBase(hre, isTestnet) {
+async function deployBase(hre: any, proxyAddress: any, isTestnet: any) {
     const [owner] = await ethers.getSigners();
     const Proxy = await ethers.getContractFactory("ChainspotProxyV1");
 
@@ -19,18 +19,19 @@ async function deployBase(hre, isTestnet) {
         throw new Error('Chain not supported!');
     }
 
-    const proxy = await Proxy.attach(currentChain.contractAddresses.proxy);
+    const proxy = await Proxy.attach(proxyAddress != '0' ? proxyAddress : currentChain.contractAddresses.proxy);
 
     let gasLimit = 0n;
     return {Proxy, proxy, owner, gasLimit, currentChain};
 }
 
 task("proxy:trustedAddress", "Update proxy trusted addresses")
+    .addPositionalParam("proxyAddress", "Implementation version", '0')
     .addPositionalParam("isTestnet", "Is testnet flag (1 - testnet, 0 - mainnet)", '0')
     .addPositionalParam("gasPrice", "Gas price (for some networks)", '0')
     .addPositionalParam("pauseInSeconds", "Pause script running in seconds", '2')
     .setAction(async (taskArgs, hre) => {
-        let {Proxy, proxy, owner, gasLimit, currentChain} = await deployBase(hre, taskArgs.isTestnet);
+        let {Proxy, proxy, owner, gasLimit, currentChain} = await deployBase(hre, taskArgs.proxyAddress, taskArgs.isTestnet);
 
         console.log("Upgrading proxy trusted addresses...");
 
