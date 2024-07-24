@@ -2,7 +2,7 @@ import "@nomicfoundation/hardhat-toolbox";
 import { task } from 'hardhat/config';
 import { Chains } from "./base/base_chains";
 
-async function deployBase(hre: any, levelIndex: number, isTestnet: any) {
+async function deployBase(hre: any, levelIndex: number, nftAddress: any, isTestnet: any) {
     const [owner] = await ethers.getSigners();
     const Nft = await ethers.getContractFactory("LoyaltyNFTV1");
 
@@ -19,7 +19,7 @@ async function deployBase(hre: any, levelIndex: number, isTestnet: any) {
         throw new Error('Chain not supported!');
     }
 
-    const nft = await Nft.attach(currentChain.levelNfts[levelIndex].nftAddress);
+    const nft = await Nft.attach(nftAddress == '0' ? currentChain.levelNfts[levelIndex].nftAddress : nftAddress);
 
     let gasLimit = 0n;
     return {Nft, nft, owner, gasLimit, currentChain};
@@ -27,13 +27,14 @@ async function deployBase(hre: any, levelIndex: number, isTestnet: any) {
 
 task("nft:setPublicClaimData", "Set public NFT claim data")
     .addPositionalParam("levelIndex", "Level NFT array index", '0')
+    .addPositionalParam("nftAddress", "NFT address", '0')
     .addPositionalParam("isAvailable", "Is public claim available (1 - available, 0 - disable)", '0')
     .addPositionalParam("feeAmount", "Public claim fee amount in native coins", '0')
     .addPositionalParam("isTestnet", "Is testnet flag (1 - testnet, 0 - mainnet)", '0')
     .addPositionalParam("gasPrice", "Gas price (for some networks)", '0')
     .addPositionalParam("pauseInSeconds", "Pause script running in seconds", '2')
     .setAction(async (taskArgs, hre) => {
-        let {Nft, nft, owner, currentChain, gasLimit} = await deployBase(hre, taskArgs.levelIndex, taskArgs.isTestnet);
+        let {Nft, nft, owner, currentChain, gasLimit} = await deployBase(hre, taskArgs.levelIndex, taskArgs.nftAddress, taskArgs.isTestnet);
 
         let tx;
         const gasPrice = parseInt(taskArgs.gasPrice);

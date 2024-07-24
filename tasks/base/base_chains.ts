@@ -24,6 +24,7 @@ export const Chains = {
                 '0x6a000f20005980200259b80c5102003040001068', // RocketX (paraswap)
                 '0x1111111254eeb25477b68fb85ed929f73a960582', // RocketX (1inch)
                 '0x69460570c93f9DE5E2edbC3052bf10125f0Ca22d', // RocketX (rango)
+                '0xb9c9e445409eae3295C170194B02e1c8b02EA8fA', // WowMax
             ],
             levelNfts: [
                 {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeiaenlmhafvrfnvzfxkik53i7yv2iksfqsivs5qkaa2vj7afn5hcwi.ipfs.w3s.link/lvl0.png"},
@@ -86,6 +87,7 @@ export const Chains = {
                 '0x6352a56caadC4F1E25CD6c75970Fa768A3304e64', // RocketX (openocean)
                 '0x1111111254eeb25477b68fb85ed929f73a960582', // RocketX (1inch)
                 '0x69460570c93f9DE5E2edbC3052bf10125f0Ca22d', // RocketX (rango)
+                '0x543BA4453CDf6E21e0804FaB9285Be29D94F8291', // WowMax
             ],
             levelNfts: [
                 {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x9781428D155F444F41d6f38Df737BFabDeCFf7d5', nftUrl: "https://app.chainspot.io/api/1.0/loyalty/nft-image-data?level=1"},
@@ -211,6 +213,7 @@ export const Chains = {
                 '0x6352a56caadC4F1E25CD6c75970Fa768A3304e64', // RocketX (openocean)
                 '0x6a000f20005980200259b80c5102003040001068', // RocketX (paraswap)
                 '0x69460570c93f9DE5E2edbC3052bf10125f0Ca22d', // RocketX (rango)
+                '0x7adBbBe2DA9eE040E6B41081c4B0d91A9db81c08', // WowMax
             ],
             levelNfts: [
                 {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x1aeCD4F5e782c20672b61C9e780876f19500E381', nftUrl: "https://bafybeiaenlmhafvrfnvzfxkik53i7yv2iksfqsivs5qkaa2vj7afn5hcwi.ipfs.w3s.link/lvl0.png"},
@@ -354,6 +357,7 @@ export const Chains = {
                 '0x6352a56caadC4F1E25CD6c75970Fa768A3304e64', // RocketX (openocean)
                 '0x6a000f20005980200259b80c5102003040001068', // RocketX (paraswap)
                 '0x1111111254eeb25477b68fb85ed929f73a960582', // RocketX (1inch)
+                '0xb95f8f9b102bec1e8ccd7f811ebb2c447f80ec59', // WowMax
             ],
             levelNfts: [
                 {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x1aeCD4F5e782c20672b61C9e780876f19500E381', nftUrl: "https://bafybeiaenlmhafvrfnvzfxkik53i7yv2iksfqsivs5qkaa2vj7afn5hcwi.ipfs.w3s.link/lvl0.png"},
@@ -379,6 +383,7 @@ export const Chains = {
                 '0x0f91052dc5B4baE53d0FeA5DAe561A117268f5d2', // Symbiosis (single chain)
                 '0xce16F69375520ab01377ce7B88f5BA8C48F8D666', // Squid
                 '0x6352a56caadC4F1E25CD6c75970Fa768A3304e64', // RocketX (openocean)
+                '0x9773e6C011e6CF919904b2F99DDc66e616611269', // WowMax
             ],
             levelNfts: [
                 {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x1aeCD4F5e782c20672b61C9e780876f19500E381', nftUrl: "https://bafybeiaenlmhafvrfnvzfxkik53i7yv2iksfqsivs5qkaa2vj7afn5hcwi.ipfs.w3s.link/lvl0.png"},
@@ -452,6 +457,7 @@ export const Chains = {
                 '0x1a039cE63AE35a67Bf0E9F6DbFaE969639D59eC8', // Symbiosis (single chain)
                 '0x6352a56caadC4F1E25CD6c75970Fa768A3304e64', // RocketX (openocean)
                 '0x69460570c93f9DE5E2edbC3052bf10125f0Ca22d', // RocketX (rango)
+                '0x55b5b0562FB3Da3b4108145Cd30e6d3b6E16c69C', // WowMax
             ],
             levelNfts: [
                 {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0xAeF17294888544Eff9729aD770cb31F55ed06Fbd', nftUrl: "https://bafybeiaenlmhafvrfnvzfxkik53i7yv2iksfqsivs5qkaa2vj7afn5hcwi.ipfs.w3s.link/lvl0.png"},
@@ -476,6 +482,7 @@ export const Chains = {
                 '0x7057aB3fB2BeE9c18e0cDe4240DE4ff7f159E365', // Symbiosis (crosschain)
                 '0xf1C374D065719Ce1Fdc63E2c5C13146813c0A83b', // Symbiosis (single chain)
                 '0xc21E5553c8dDDf2E4a93E5bEDBaE436d4291F603', // Wanchain
+                '0xca63f155EaD7b40e2E67Dc5f7E8cA50BFB283FD0', // WowMax
             ],
             levelNfts: [
                 {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x1aeCD4F5e782c20672b61C9e780876f19500E381', nftUrl: "https://bafybeiaenlmhafvrfnvzfxkik53i7yv2iksfqsivs5qkaa2vj7afn5hcwi.ipfs.w3s.link/lvl0.png"},
@@ -483,6 +490,28 @@ export const Chains = {
                 {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0xAeF17294888544Eff9729aD770cb31F55ed06Fbd', nftUrl: "https://bafybeifnz4wm63pysa6xbrknay6hs6tjphnf647xrrshuccskevhr5bdli.ipfs.w3s.link/lvl2.png"},
                 {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0xFbF90594827E2c1127EE846B0bb1Dc42F34CF556', nftUrl: "https://bafybeibyot3kzcsqgxu6ulzzqdf45lrrb3ylkzcrio35bdkorftkfqarby.ipfs.w3s.link/lvl3.png"},
                 {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x3Fde753DFa5a14D85D753ef24792004e8689d96f', nftUrl: "https://bafybeihtwrb5dbfgdrzsviadssey5skok4ury7zc3wj46xhlwoudy2qkky.ipfs.w3s.link/lvltop.png"},
+            ]
+        },
+        {
+            id: 5165,
+            title: "FTN", // Bahamut (FTN)
+            networkName: "bahamutMainnet",
+            contractAddresses: {
+                proxy: '0x3f96aF2AF6f644D5Fd1FC2d5A016CcE991198103',
+                claimer: '0xebe8f37669a46ae08EE30F15964c05Bcab940480',
+                referral: '0xC55EAd2B60B57C6Aeca7a43840952683F555797D',
+                cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
+            },
+            trustAddresses: [
+                '0xf85FC807D05d3Ab2309364226970aAc57b4e1ea4', // Symbiosis (crosschain)
+                '0x70A16EB2B39A5573A8138b18582111bBA480fb8F', // Symbiosis (single chain)
+            ],
+            levelNfts: [
+                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeiaenlmhafvrfnvzfxkik53i7yv2iksfqsivs5qkaa2vj7afn5hcwi.ipfs.w3s.link/lvl0.png"},
+                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeign74i2lkuph53gbaabgrjts4ilyu664uf4lgszx4s2gou26aqxii.ipfs.w3s.link/lvl1.png"},
+                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeifnz4wm63pysa6xbrknay6hs6tjphnf647xrrshuccskevhr5bdli.ipfs.w3s.link/lvl2.png"},
+                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeibyot3kzcsqgxu6ulzzqdf45lrrb3ylkzcrio35bdkorftkfqarby.ipfs.w3s.link/lvl3.png"},
+                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeihtwrb5dbfgdrzsviadssey5skok4ury7zc3wj46xhlwoudy2qkky.ipfs.w3s.link/lvltop.png"},
             ]
         },
     ],

@@ -162,6 +162,11 @@ const config = {
       accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 81457
     },
+    bahamutMainnet: {
+      url: process.env.NETWORK_HOST_BAHAMUT,
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
+      chainId: 5165
+    },
   },
   etherscan: {
     apiKey: {
@@ -231,11 +236,19 @@ const config = {
           browserURL: "https://blastscan.io"
         }
       },
+      {
+        network: "bahamutMainnet",
+        chainId: 5165,
+        urls: {
+          apiURL: "https://api.ftnscan.com/api",
+          browserURL: "https://ftnscan.com"
+        }
+      },
     ],
   }
 };
 
-// Verify scanner: npx hardhat verify --network gnosis 0xe5AE6c3Fd6484069008879eB1eeBd88039aCCE32 1000 1
-// Verify sourcify: npx hardhat sourcifySubmit --contract-name "ChainspotProxy" --source-name "contracts/ChainspotProxy.sol" --address 0xe5AE6c3Fd6484069008879eB1eeBd88039aCCE32 --chain-id 1313161554
+// Verify scanner: npx hardhat verify --network gnosis {address} 1000 1
+// Verify sourcify: npx hardhat sourcifySubmit --contract-name "ChainspotProxy" --source-name "contracts/ChainspotProxy.sol" --address {address} --chain-id {chain-id}
 
 export default config;
