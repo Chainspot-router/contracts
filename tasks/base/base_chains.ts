@@ -166,10 +166,10 @@ export const Chains = {
             title: "FTM",
             networkName: "opera",
             contractAddresses: {
-                proxy: '0x0000000000000000000000000000000000000000',
-                claimer: '0x0000000000000000000000000000000000000000',
-                referral: '0x0000000000000000000000000000000000000000',
-                cashback: '0x0000000000000000000000000000000000000000',
+                proxy: '0xAE819FC6A8B82DD7a5D072C9E44E06b4404696e8',
+                claimer: '0xBE85c262B0Ad7Ef87262C8d50D927d5770BDCe4A',
+                referral: '0x6Ab79576aa81DaE505783c8F9794fD16855cC14C',
+                cashback: '0xc23f51Ff00dC08e9B736087D12C53B9ca3992622',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -398,10 +398,10 @@ export const Chains = {
             title: "MTL", // Mantle
             networkName: "mantleMainnet",
             contractAddresses: {
-                proxy: '0x0000000000000000000000000000000000000000',
-                claimer: '0x0000000000000000000000000000000000000000',
-                referral: '0x0000000000000000000000000000000000000000',
-                cashback: '0x0000000000000000000000000000000000000000',
+                proxy: '0x3f96aF2AF6f644D5Fd1FC2d5A016CcE991198103',
+                claimer: '0xebe8f37669a46ae08EE30F15964c05Bcab940480',
+                referral: '0xC55EAd2B60B57C6Aeca7a43840952683F555797D',
+                cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
