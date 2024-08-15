@@ -54,17 +54,17 @@ task("proxy:fullDeploy", "Fully deploy proxy contract")
         if (taskArgs.pauseInSeconds != '0') {
             await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
         }
-        gasLimit += await ethers.provider.estimateGas({
-            data: (await (await ethers.getContractFactory("LoyaltyCashbackV1"))
-                .getDeployTransaction()).data
-        });
+        // gasLimit += await ethers.provider.estimateGas({
+        //     data: (await (await ethers.getContractFactory("LoyaltyCashbackV1"))
+        //         .getDeployTransaction()).data
+        // });
         console.log("Cashback was deployed at: %s", await cashback.getAddress());
         if (taskArgs.minCashbackWithdrawalValue != '0') {
             tx = await cashback.setMinWithdrawRequestValue(taskArgs.minCashbackWithdrawalValue, gasPrice > 0 ? {gasPrice: gasPrice} : {});
             if (taskArgs.pauseInSeconds != '0') {
                 await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
             }
-            gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
+            // gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
         }
 
         // Referral deployment
@@ -76,17 +76,17 @@ task("proxy:fullDeploy", "Fully deploy proxy contract")
         if (taskArgs.pauseInSeconds != '0') {
             await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
         }
-        gasLimit += await ethers.provider.estimateGas({
-            data: (await (await ethers.getContractFactory("LoyaltyReferralV1"))
-                .getDeployTransaction()).data
-        });
+        // gasLimit += await ethers.provider.estimateGas({
+        //     data: (await (await ethers.getContractFactory("LoyaltyReferralV1"))
+        //         .getDeployTransaction()).data
+        // });
         console.log("Referral was deployed at: %s", await referral.getAddress());
         if (taskArgs.minReferralWithdrawalValue != '0') {
             tx = await referral.setMinWithdrawRequestValue(taskArgs.minReferralWithdrawalValue, gasPrice > 0 ? {gasPrice: gasPrice} : {});
             if (taskArgs.pauseInSeconds != '0') {
                 await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
             }
-            gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
+            // gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
         }
 
         // Claimer deployment
@@ -98,17 +98,17 @@ task("proxy:fullDeploy", "Fully deploy proxy contract")
         if (taskArgs.pauseInSeconds != '0') {
             await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
         }
-        gasLimit += await ethers.provider.estimateGas({
-            data: (await (await ethers.getContractFactory("LoyaltyNFTClaimerV1"))
-                .getDeployTransaction()).data
-        });
+        // gasLimit += await ethers.provider.estimateGas({
+        //     data: (await (await ethers.getContractFactory("LoyaltyNFTClaimerV1"))
+        //         .getDeployTransaction()).data
+        // });
         console.log("Claimer was deployed at: %s", await claimer.getAddress());
         if (taskArgs.minClaimValue != '0') {
             tx = await claimer.setMinClaimRequestValue(taskArgs.minClaimValue, gasPrice > 0 ? {gasPrice: gasPrice} : {});
             if (taskArgs.pauseInSeconds != '0') {
                 await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
             }
-            gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
+            // gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
         }
 
         // NFT deployment
@@ -123,9 +123,9 @@ task("proxy:fullDeploy", "Fully deploy proxy contract")
                 if (taskArgs.pauseInSeconds != '0') {
                     await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
                 }
-                gasLimit += await ethers.provider.estimateGas({
-                    data: (await (await ethers.getContractFactory("LoyaltyNFTV1")).getDeployTransaction()).data
-                });
+                // gasLimit += await ethers.provider.estimateGas({
+                //     data: (await (await ethers.getContractFactory("LoyaltyNFTV1")).getDeployTransaction()).data
+                // });
                 console.log("NFT %s (%s) was deployed at: %s", currentChain.levelNfts[i].symbol, currentChain.levelNfts[i].title, await nfts[i].getAddress());
             }
         }
@@ -149,7 +149,7 @@ task("proxy:fullDeploy", "Fully deploy proxy contract")
         if (taskArgs.pauseInSeconds != '0') {
             await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
         }
-        gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
+        // gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
 
         // Proxy deployment
         const proxy = await upgrades.deployProxy(
@@ -161,10 +161,10 @@ task("proxy:fullDeploy", "Fully deploy proxy contract")
         if (taskArgs.pauseInSeconds != '0') {
             await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
         }
-        gasLimit += await ethers.provider.estimateGas({
-            data: (await (await ethers.getContractFactory("ChainspotProxyV1"))
-                .getDeployTransaction()).data
-        });
+        // gasLimit += await ethers.provider.estimateGas({
+        //     data: (await (await ethers.getContractFactory("ChainspotProxyV1"))
+        //         .getDeployTransaction()).data
+        // });
 
         console.log("Proxy was deployed at: %s", await proxy.getAddress());
         if (currentChain.trustAddresses.length > 0) {
@@ -172,14 +172,14 @@ task("proxy:fullDeploy", "Fully deploy proxy contract")
             if (taskArgs.pauseInSeconds != '0') {
                 await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
             }
-            gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
+            // gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
         }
 
         tx = await referral.setBaseProxyAddress(await proxy.getAddress());
         if (taskArgs.pauseInSeconds != '0') {
             await new Promise(f => setTimeout(f, taskArgs.pauseInSeconds * 1000));
         }
-        gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
+        // gasLimit += (await ethers.provider.getTransactionReceipt(tx.hash)).gasUsed;
 
         console.log("\nDeployment was done\n");
         console.log("Total gas limit: %s", gasLimit.toString());

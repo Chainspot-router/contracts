@@ -167,6 +167,21 @@ const config = {
       accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 5165
     },
+    rootstockMainnet: {
+      url: process.env.NETWORK_HOST_ROOTSTOCK,
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
+      chainId: 30
+    },
+    taikoMainnet: {
+      url: process.env.NETWORK_HOST_TAIKO,
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
+      chainId: 167000
+    },
+    modeMainnet: {
+      url: process.env.NETWORK_HOST_MODE,
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
+      chainId: 34443
+    },
   },
   etherscan: {
     apiKey: {
@@ -186,6 +201,7 @@ const config = {
       lineaMainnet: process.env.LINEA_API_KEY,
       baseMainnet: process.env.BASE_API_KEY,
       cronosMainnet: process.env.CRONOS_API_KEY,
+      taikoMainnet: process.env.TAIKO_API_KEY,
     },
     customChains: [
       {
@@ -242,6 +258,14 @@ const config = {
         urls: {
           apiURL: "https://api.ftnscan.com/api",
           browserURL: "https://ftnscan.com"
+        }
+      },
+      {
+        network: "taikoMainnet",
+        chainId: 167000,
+        urls: {
+          apiURL: "https://api.taikoscan.io",
+          browserURL: "https://taikoscan.io"
         }
       },
     ],
