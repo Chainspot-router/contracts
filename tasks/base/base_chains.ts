@@ -423,10 +423,10 @@ export const Chains = {
             title: "MOO", // Moonbeam
             networkName: "moonbeam",
             contractAddresses: {
-                proxy: '0x0000000000000000000000000000000000000000',
-                claimer: '0x0000000000000000000000000000000000000000',
-                referral: '0x0000000000000000000000000000000000000000',
-                cashback: '0x0000000000000000000000000000000000000000',
+                proxy: '0x3f96aF2AF6f644D5Fd1FC2d5A016CcE991198103',
+                claimer: '0xebe8f37669a46ae08EE30F15964c05Bcab940480',
+                referral: '0xC55EAd2B60B57C6Aeca7a43840952683F555797D',
+                cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
