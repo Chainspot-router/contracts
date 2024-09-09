@@ -112,7 +112,7 @@ const config = {
       accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 1284
     },
-    celo: {
+    celoMainnet: {
       url: process.env.NETWORK_HOST_CELO,
       accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 42220
@@ -182,6 +182,28 @@ const config = {
       accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 34443
     },
+    scrollMainnet: {
+      url: process.env.NETWORK_HOST_SCROLL,
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
+      chainId: 534352,
+      gasPrice: 150000000
+    },
+    kavaMainnet: {
+      url: process.env.NETWORK_HOST_KAVA,
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
+      chainId: 2222
+    },
+    moonriverMainnet: {
+      url: process.env.NETWORK_HOST_MOONRIVER,
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
+      chainId: 1285
+    },
+    wanchainMainnet: {
+      url: process.env.NETWORK_HOST_WANCHAIN,
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
+      chainId: 888,
+      gasPrice: 5000000000
+    },
   },
   etherscan: {
     apiKey: {
@@ -195,13 +217,15 @@ const config = {
       moonbeam: process.env.MOONSCAN_API_KEY,
       aurora: process.env.AURORA_API_KEY,
       boba: process.env.BOBA_API_KEY,
-      celo: process.env.CELO_API_KEY,
+      celoMainnet: process.env.CELO_API_KEY,
       gnosis: process.env.GNOSIS_API_KEY,
       blastMainnet: process.env.BLAST_API_KEY,
       lineaMainnet: process.env.LINEA_API_KEY,
       baseMainnet: process.env.BASE_API_KEY,
       cronosMainnet: process.env.CRONOS_API_KEY,
       taikoMainnet: process.env.TAIKO_API_KEY,
+      scrollMainnet: process.env.SCROLL_API_KEY,
+      moonriverMainnet: process.env.MOONRIVER_API_KEY,
     },
     customChains: [
       {
@@ -266,6 +290,22 @@ const config = {
         urls: {
           apiURL: "https://api.taikoscan.io",
           browserURL: "https://taikoscan.io"
+        }
+      },
+      {
+        network: "scrollMainnet",
+        chainId: 534352,
+        urls: {
+          apiURL: "https://api.scrollscan.com",
+          browserURL: "https://scrollscan.com"
+        }
+      },
+      {
+        network: "moonriverMainnet",
+        chainId: 1285,
+        urls: {
+          apiURL: "https://api.moonriver.moonscan.io",
+          browserURL: "https://moonriver.moonscan.io"
         }
       },
     ],

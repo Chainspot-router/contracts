@@ -249,13 +249,13 @@ export const Chains = {
         },
         {
             id: 42220,
-            title: "CEL",
-            networkName: "celo",
+            title: "CEL", // Celo
+            networkName: "celoMainnet",
             contractAddresses: {
-                proxy: '0x0000000000000000000000000000000000000000',
-                claimer: '0x0000000000000000000000000000000000000000',
-                referral: '0x0000000000000000000000000000000000000000',
-                cashback: '0x0000000000000000000000000000000000000000',
+                proxy: '0x9Ec19B9c07484BbAA7aD563d632e882bB6F4ddA5',
+                claimer: '0x3f96aF2AF6f644D5Fd1FC2d5A016CcE991198103',
+                referral: '0x981B9cAe75E9f2Ad0bE53CDfF11B25d41c9F2632',
+                cashback: '0x2AE991C66cE9D9Fd4318e67B0b94E2B4170faa5D',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -320,10 +320,10 @@ export const Chains = {
             title: "TLOS",
             networkName: "telos",
             contractAddresses: {
-                proxy: '0x0000000000000000000000000000000000000000',
-                claimer: '0x0000000000000000000000000000000000000000',
-                referral: '0x0000000000000000000000000000000000000000',
-                cashback: '0x0000000000000000000000000000000000000000',
+                proxy: '0xaf7F50d8C86ddFd41C2FdC2e51B2BBbc5aBB75da',
+                claimer: '0x29F12E5dF6A1E9B6337A4fE00DF9E2e6B369CF48',
+                referral: '0x3f96aF2AF6f644D5Fd1FC2d5A016CcE991198103',
+                cashback: '0x981B9cAe75E9f2Ad0bE53CDfF11B25d41c9F2632',
             },
             trustAddresses: [
                 '0x8097f0B9f06C27AF9579F75762F971D745bb222F', // Symbiosis (crosschain)
@@ -341,7 +341,7 @@ export const Chains = {
         },
         {
             id: 8453,
-            title: "BSX", // Base
+            title: "BAS", // Base
             networkName: "baseMainnet",
             contractAddresses: {
                 proxy: '0xD07F76c7efCA7793757Db20512ACa97Cc81AC4BB',
@@ -369,7 +369,7 @@ export const Chains = {
         },
         {
             id: 59144,
-            title: "LNX", // Linea
+            title: "LNA", // Linea
             networkName: "lineaMainnet",
             contractAddresses: {
                 proxy: '0x5394707aD8Ad3a84f83682A4e66cF2AB78E643d7',
@@ -573,6 +573,96 @@ export const Chains = {
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
                 '0xcE8f24A58D85eD5c5A6824f7be1F8d4711A0eb4C', // Symbiosis (crosschain)
                 '0xd8db4fb1fEf63045A443202d506Bcf30ef404160', // Symbiosis (single chain)
+            ],
+            levelNfts: [
+                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeiaenlmhafvrfnvzfxkik53i7yv2iksfqsivs5qkaa2vj7afn5hcwi.ipfs.w3s.link/lvl0.png"},
+                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeign74i2lkuph53gbaabgrjts4ilyu664uf4lgszx4s2gou26aqxii.ipfs.w3s.link/lvl1.png"},
+                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeifnz4wm63pysa6xbrknay6hs6tjphnf647xrrshuccskevhr5bdli.ipfs.w3s.link/lvl2.png"},
+                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeibyot3kzcsqgxu6ulzzqdf45lrrb3ylkzcrio35bdkorftkfqarby.ipfs.w3s.link/lvl3.png"},
+                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeihtwrb5dbfgdrzsviadssey5skok4ury7zc3wj46xhlwoudy2qkky.ipfs.w3s.link/lvltop.png"},
+            ]
+        },
+        {
+            id: 534352,
+            title: "SCR", // Scroll
+            networkName: "scrollMainnet",
+            contractAddresses: {
+                proxy: '0x5c59718F693b9FDbC7c3d3149581dC3a8435AA54',
+                claimer: '0x981B9cAe75E9f2Ad0bE53CDfF11B25d41c9F2632',
+                referral: '0xC55EAd2B60B57C6Aeca7a43840952683F555797D',
+                cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
+            },
+            trustAddresses: [
+                '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
+                '0x624FFe62eBa13e6057878bCA1D7A9E35651E1D9c', // Symbiosis (crosschain)
+                '0xf02bBC9de6e443eFDf3FC41851529C2c3B9E5e0C', // Symbiosis (single chain)
+                '0x778C974568e376146dbC64fF12aD55B2d1c4133f', // XYFinance
+            ],
+            levelNfts: [
+                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeiaenlmhafvrfnvzfxkik53i7yv2iksfqsivs5qkaa2vj7afn5hcwi.ipfs.w3s.link/lvl0.png"},
+                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeign74i2lkuph53gbaabgrjts4ilyu664uf4lgszx4s2gou26aqxii.ipfs.w3s.link/lvl1.png"},
+                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeifnz4wm63pysa6xbrknay6hs6tjphnf647xrrshuccskevhr5bdli.ipfs.w3s.link/lvl2.png"},
+                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeibyot3kzcsqgxu6ulzzqdf45lrrb3ylkzcrio35bdkorftkfqarby.ipfs.w3s.link/lvl3.png"},
+                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeihtwrb5dbfgdrzsviadssey5skok4ury7zc3wj46xhlwoudy2qkky.ipfs.w3s.link/lvltop.png"},
+            ]
+        },
+        {
+            id: 2222,
+            title: "KVA", // Kava
+            networkName: "kavaMainnet",
+            contractAddresses: {
+                proxy: '0x3f96aF2AF6f644D5Fd1FC2d5A016CcE991198103',
+                claimer: '0xebe8f37669a46ae08EE30F15964c05Bcab940480',
+                referral: '0xC55EAd2B60B57C6Aeca7a43840952683F555797D',
+                cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
+            },
+            trustAddresses: [
+                '0x77Ed285AD9d1c8C0307eA23DcE68B8a5A6AfB39A', // Symbiosis (crosschain)
+                '0xca506793A420E901BbCa8066be5661E3C52c84c2', // Symbiosis (single chain)
+            ],
+            levelNfts: [
+                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeiaenlmhafvrfnvzfxkik53i7yv2iksfqsivs5qkaa2vj7afn5hcwi.ipfs.w3s.link/lvl0.png"},
+                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeign74i2lkuph53gbaabgrjts4ilyu664uf4lgszx4s2gou26aqxii.ipfs.w3s.link/lvl1.png"},
+                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeifnz4wm63pysa6xbrknay6hs6tjphnf647xrrshuccskevhr5bdli.ipfs.w3s.link/lvl2.png"},
+                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeibyot3kzcsqgxu6ulzzqdf45lrrb3ylkzcrio35bdkorftkfqarby.ipfs.w3s.link/lvl3.png"},
+                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeihtwrb5dbfgdrzsviadssey5skok4ury7zc3wj46xhlwoudy2qkky.ipfs.w3s.link/lvltop.png"},
+            ]
+        },
+        {
+            id: 1285,
+            title: "MOR", // Moonriver
+            networkName: "moonriverMainnet",
+            contractAddresses: {
+                proxy: '0x3f96aF2AF6f644D5Fd1FC2d5A016CcE991198103',
+                claimer: '0xebe8f37669a46ae08EE30F15964c05Bcab940480',
+                referral: '0xC55EAd2B60B57C6Aeca7a43840952683F555797D',
+                cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
+            },
+            trustAddresses: [
+                '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
+                '0xc67Dd7054915a2B0aA3e48f35DA714Ff861e71BD', // XYFinance
+                '0xde1ae3c465354f01189150f3836c7c15a1d6671d', // Wanchain
+            ],
+            levelNfts: [
+                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeiaenlmhafvrfnvzfxkik53i7yv2iksfqsivs5qkaa2vj7afn5hcwi.ipfs.w3s.link/lvl0.png"},
+                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeign74i2lkuph53gbaabgrjts4ilyu664uf4lgszx4s2gou26aqxii.ipfs.w3s.link/lvl1.png"},
+                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeifnz4wm63pysa6xbrknay6hs6tjphnf647xrrshuccskevhr5bdli.ipfs.w3s.link/lvl2.png"},
+                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeibyot3kzcsqgxu6ulzzqdf45lrrb3ylkzcrio35bdkorftkfqarby.ipfs.w3s.link/lvl3.png"},
+                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeihtwrb5dbfgdrzsviadssey5skok4ury7zc3wj46xhlwoudy2qkky.ipfs.w3s.link/lvltop.png"},
+            ]
+        },
+        {
+            id: 888,
+            title: "WAN", // Wanchain
+            networkName: "wanchainMainnet",
+            contractAddresses: {
+                proxy: '0x2f005C7f8e7A60bd8e9a2713eaCe8a40a9Fe92C0',
+                claimer: '0xaf7F50d8C86ddFd41C2FdC2e51B2BBbc5aBB75da',
+                referral: '0x9Ec19B9c07484BbAA7aD563d632e882bB6F4ddA5',
+                cashback: '0xb7686c3A1544928632c51a64B55Ad59b47076876',
+            },
+            trustAddresses: [
+                '0xe85b0d89cbc670733d6a40a9450d8788be13da47', // Wanchain
             ],
             levelNfts: [
                 {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeiaenlmhafvrfnvzfxkik53i7yv2iksfqsivs5qkaa2vj7afn5hcwi.ipfs.w3s.link/lvl0.png"},
