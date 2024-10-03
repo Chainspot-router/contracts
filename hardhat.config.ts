@@ -51,7 +51,7 @@ const config = {
       ],
       chainId: 31337
     },
-    mainnet: {
+    ethereumMainnet: {
       url: process.env.NETWORK_HOST_ETHEREUM,
       accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 1
@@ -66,7 +66,7 @@ const config = {
       accounts: [process.env.OWNER_PK_CHAINSPOT_TEST],
       chainId: 11155111
     },
-    polygon: {
+    polygonMainnet: {
       url: process.env.NETWORK_HOST_POLYGON,
       accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 137
@@ -76,7 +76,7 @@ const config = {
       accounts: [process.env.OWNER_PK_CHAINSPOT_TEST],
       chainId: 80001
     },
-    bsc: {
+    bscMainnet: {
       url: process.env.NETWORK_HOST_BSC,
       accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 56
@@ -86,28 +86,28 @@ const config = {
       accounts: [process.env.OWNER_PK_CHAINSPOT_TEST],
       chainId: 97
     },
-    avalanche: {
+    avalancheMainnet: {
       url: process.env.NETWORK_HOST_AVALANCHE,
       accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 43114
       // https://subnets.avax.network/c/c-chain-mainnet/rpc
     },
-    optimisticEthereum: {
+    optimismMainnet: {
       url: process.env.NETWORK_HOST_OPTIMISM,
       accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 10
     },
-    arbitrumOne: {
+    arbitrumMainnet: {
       url: process.env.NETWORK_HOST_ARBITRUM,
       accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 42161
     },
-    opera: {
+    operaMainnet: {
       url: process.env.NETWORK_HOST_FANTOM,
       accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 250
     },
-    moonbeam: {
+    moonbeamMainnet: {
       url: process.env.NETWORK_HOST_MOON,
       accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 1284
@@ -132,7 +132,7 @@ const config = {
       accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 100
     },
-    telos: {
+    telosMainnet: {
       url: process.env.NETWORK_HOST_TELOS,
       accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 40
@@ -204,17 +204,27 @@ const config = {
       chainId: 888,
       gasPrice: 5000000000
     },
+    mintMainnet: {
+      url: process.env.NETWORK_HOST_MINT,
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
+      chainId: 185
+    },
+    bobMainnet: {
+      url: process.env.NETWORK_HOST_BOB,
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
+      chainId: 60808
+    },
   },
   etherscan: {
     apiKey: {
-      mainnet: process.env.ETHERSCAN_API_KEY,
-      polygon: process.env.POLYGONSCAN_API_KEY,
-      bsc: process.env.BSCSCAN_API_KEY,
-      avalanche: process.env.AVALANCHESCAN_API_KEY,
-      optimisticEthereum: process.env.OPTIMISMSCAN_API_KEY,
-      arbitrumOne: process.env.ARBIRTUMSCAN_API_KEY,
-      opera: process.env.FANTOMSCAN_API_KEY,
-      moonbeam: process.env.MOONSCAN_API_KEY,
+      ethereumMainnet: process.env.ETHERSCAN_API_KEY,
+      polygonMainnet: process.env.POLYGONSCAN_API_KEY,
+      bscMainnet: process.env.BSCSCAN_API_KEY,
+      avalancheMainnet: process.env.AVALANCHESCAN_API_KEY,
+      optimismMainnet: process.env.OPTIMISMSCAN_API_KEY,
+      arbitrumMainnet: process.env.ARBIRTUMSCAN_API_KEY,
+      operaMainnet: process.env.FANTOMSCAN_API_KEY,
+      moonbeamMainnet: process.env.MOONSCAN_API_KEY,
       aurora: process.env.AURORA_API_KEY,
       boba: process.env.BOBA_API_KEY,
       celoMainnet: process.env.CELO_API_KEY,
@@ -229,7 +239,55 @@ const config = {
     },
     customChains: [
       {
-        network: "avalanche",
+        network: "ethereumMainnet",
+        chainId: 1,
+        urls: {
+          apiURL: "https://api.etherscan.io/api",
+          browserURL: "https://etherscan.io"
+        }
+      },
+      {
+        network: "polygonMainnet",
+        chainId: 137,
+        urls: {
+          apiURL: "https://api.polygonscan.com/api",
+          browserURL: "https://polygonscan.com"
+        }
+      },
+      {
+        network: "bscMainnet",
+        chainId: 56,
+        urls: {
+          apiURL: "https://api.bscscan.com/api",
+          browserURL: "https://bscscan.com"
+        }
+      },
+      {
+        network: "optimismMainnet",
+        chainId: 10,
+        urls: {
+          apiURL: "https://api-optimistic.etherscan.io/api",
+          browserURL: "https://optimistic.etherscan.io"
+        }
+      },
+      {
+        network: "arbitrumMainnet",
+        chainId: 42161,
+        urls: {
+          apiURL: "https://api.arbiscan.io/api",
+          browserURL: "https://arbiscan.io"
+        }
+      },
+      {
+        network: "operaMainnet",
+        chainId: 250,
+        urls: {
+          apiURL: "https://api.ftmscan.com/api",
+          browserURL: "https://ftmscan.com"
+        }
+      },
+      {
+        network: "avalancheMainnet",
         chainId: 43114,
         urls: {
           apiURL: "https://api.avascan.info/v2/network/mainnet/evm/43114/etherscan",
@@ -293,10 +351,26 @@ const config = {
         }
       },
       {
+        network: "celoMainnet",
+        chainId: 42220,
+        urls: {
+          apiURL: "https://api.celoscan.io/api",
+          browserURL: "https://celoscan.io"
+        }
+      },
+      {
+        network: "moonbeamMainnet",
+        chainId: 1284,
+        urls: {
+          apiURL: "https://api-moonbeam.moonscan.io/api",
+          browserURL: "https://moonscan.io"
+        }
+      },
+      {
         network: "scrollMainnet",
         chainId: 534352,
         urls: {
-          apiURL: "https://api.scrollscan.com",
+          apiURL: "https://api.scrollscan.com/api",
           browserURL: "https://scrollscan.com"
         }
       },
@@ -304,8 +378,24 @@ const config = {
         network: "moonriverMainnet",
         chainId: 1285,
         urls: {
-          apiURL: "https://api.moonriver.moonscan.io",
+          apiURL: "https://api-moonriver.moonscan.io/api",
           browserURL: "https://moonriver.moonscan.io"
+        }
+      },
+      {
+        network: "mintMainnet",
+        chainId: 185,
+        urls: {
+          apiURL: "https://api.mintscan.org/api",
+          browserURL: "https://mintscan.org"
+        }
+      },
+      {
+        network: "bobMainnet",
+        chainId: 60808,
+        urls: {
+          apiURL: "https://api-explorer.gobob.xyz/api",
+          browserURL: "https://explorer.gobob.xyz"
         }
       },
     ],
