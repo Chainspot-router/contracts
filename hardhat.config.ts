@@ -224,6 +224,11 @@ const config = {
       accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 11501
     },
+    b2Mainnet: {
+      url: process.env.NETWORK_HOST_B2,
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
+      chainId: 223
+    },
   },
   etherscan: {
     apiKey: {
@@ -422,6 +427,14 @@ const config = {
         urls: {
           apiURL: "https://api-mainnet.bevm.io/api",
           browserURL: "https://scan-mainnet.bevm.io"
+        }
+      },
+      {
+        network: "b2Mainnet",
+        chainId: 223,
+        urls: {
+          apiURL: "https://api-explorer.bsquared.network/api",
+          browserURL: "https://explorer.bsquared.network"
         }
       },
     ],
