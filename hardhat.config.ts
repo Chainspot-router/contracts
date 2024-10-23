@@ -219,6 +219,11 @@ const config = {
       accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 200901
     },
+    bevmMainnet: {
+      url: process.env.NETWORK_HOST_BEVM,
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
+      chainId: 11501
+    },
   },
   etherscan: {
     apiKey: {
@@ -409,6 +414,14 @@ const config = {
         urls: {
           apiURL: "https://api.btrscan.com/api",
           browserURL: "https://www.btrscan.com"
+        }
+      },
+      {
+        network: "bevmMainnet",
+        chainId: 11501,
+        urls: {
+          apiURL: "https://api-mainnet.bevm.io/api",
+          browserURL: "https://scan-mainnet.bevm.io"
         }
       },
     ],
