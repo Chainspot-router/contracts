@@ -214,6 +214,11 @@ const config = {
       accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 60808
     },
+    bitlayerMainnet: {
+      url: process.env.NETWORK_HOST_BITLAYER,
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
+      chainId: 200901
+    },
   },
   etherscan: {
     apiKey: {
@@ -396,6 +401,14 @@ const config = {
         urls: {
           apiURL: "https://api-explorer.gobob.xyz/api",
           browserURL: "https://explorer.gobob.xyz"
+        }
+      },
+      {
+        network: "bitlayerMainnet",
+        chainId: 200901,
+        urls: {
+          apiURL: "https://api.btrscan.com/api",
+          browserURL: "https://www.btrscan.com"
         }
       },
     ],

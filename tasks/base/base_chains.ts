@@ -359,6 +359,7 @@ export const Chains = {
                 '0x6a000f20005980200259b80c5102003040001068', // RocketX (paraswap)
                 '0x1111111254eeb25477b68fb85ed929f73a960582', // RocketX (1inch)
                 '0xb95f8f9b102bec1e8ccd7f811ebb2c447f80ec59', // WowMax
+                '0x2715aA7156634256aE75240C2c5543814660CD04', // Wanchain
             ],
             levelNfts: [
                 {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeiaenlmhafvrfnvzfxkik53i7yv2iksfqsivs5qkaa2vj7afn5hcwi.ipfs.w3s.link/lvl0.png"},
@@ -698,6 +699,27 @@ export const Chains = {
             id: 60808,
             title: "GOB", // BOB
             networkName: "bobMainnet",
+            contractAddresses: {
+                proxy: '0x3f96aF2AF6f644D5Fd1FC2d5A016CcE991198103',
+                claimer: '0xebe8f37669a46ae08EE30F15964c05Bcab940480',
+                referral: '0xC55EAd2B60B57C6Aeca7a43840952683F555797D',
+                cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
+            },
+            trustAddresses: [
+                '0xC626845BF4E6a5802Ef774dA0B3DfC6707F015F7', // Owlto
+            ],
+            levelNfts: [
+                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeiaenlmhafvrfnvzfxkik53i7yv2iksfqsivs5qkaa2vj7afn5hcwi.ipfs.w3s.link/lvl0.png"},
+                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeign74i2lkuph53gbaabgrjts4ilyu664uf4lgszx4s2gou26aqxii.ipfs.w3s.link/lvl1.png"},
+                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeifnz4wm63pysa6xbrknay6hs6tjphnf647xrrshuccskevhr5bdli.ipfs.w3s.link/lvl2.png"},
+                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeibyot3kzcsqgxu6ulzzqdf45lrrb3ylkzcrio35bdkorftkfqarby.ipfs.w3s.link/lvl3.png"},
+                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeihtwrb5dbfgdrzsviadssey5skok4ury7zc3wj46xhlwoudy2qkky.ipfs.w3s.link/lvltop.png"},
+            ]
+        },
+        {
+            id: 200901,
+            title: "BLR", // Birlayer
+            networkName: "bitlayerMainnet",
             contractAddresses: {
                 proxy: '0x3f96aF2AF6f644D5Fd1FC2d5A016CcE991198103',
                 claimer: '0xebe8f37669a46ae08EE30F15964c05Bcab940480',
