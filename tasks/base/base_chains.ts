@@ -225,7 +225,7 @@ export const Chains = {
         },
         {
             id: 1313161554,
-            title: "AOA", // Aurora
+            title: "AUR", // Aurora
             networkName: "aurora",
             contractAddresses: {
                 proxy: '0x0000000000000000000000000000000000000000',
@@ -360,6 +360,7 @@ export const Chains = {
                 '0x1111111254eeb25477b68fb85ed929f73a960582', // RocketX (1inch)
                 '0xb95f8f9b102bec1e8ccd7f811ebb2c447f80ec59', // WowMax
                 '0x2715aA7156634256aE75240C2c5543814660CD04', // Wanchain
+                '0xC626845BF4E6a5802Ef774dA0B3DfC6707F015F7', // Owlto
             ],
             levelNfts: [
                 {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeiaenlmhafvrfnvzfxkik53i7yv2iksfqsivs5qkaa2vj7afn5hcwi.ipfs.w3s.link/lvl0.png"},
@@ -386,6 +387,8 @@ export const Chains = {
                 '0xce16F69375520ab01377ce7B88f5BA8C48F8D666', // Squid
                 '0x6352a56caadC4F1E25CD6c75970Fa768A3304e64', // RocketX (openocean)
                 '0x9773e6C011e6CF919904b2F99DDc66e616611269', // WowMax
+                '0x73Ce60416035B8D7019f6399778c14ccf5C9c7A1', // XYFinance
+                '0xC626845BF4E6a5802Ef774dA0B3DfC6707F015F7', // Owlto
             ],
             levelNfts: [
                 {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeiaenlmhafvrfnvzfxkik53i7yv2iksfqsivs5qkaa2vj7afn5hcwi.ipfs.w3s.link/lvl0.png"},
