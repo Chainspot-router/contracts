@@ -19,6 +19,7 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
-    "big-integer": "^1.6.51"
+    "big-integer": "^1.6.51",
+    "bignumber.js": "^9.1.2"
   }
 }

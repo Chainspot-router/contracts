@@ -10,6 +10,11 @@ export const Chains = {
                 claimer: '0x0000000000000000000000000000000000000000',
                 referral: '0x0000000000000000000000000000000000000000',
                 cashback: '0x0000000000000000000000000000000000000000',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -43,6 +48,11 @@ export const Chains = {
                 claimer: '0x203c03B9Fc0BAa6EE4E24396e3FEB1D4BAF1fe0f',
                 referral: '0x7ff57A8F0503B865d24bCFC8D5b5Ec879987C401',
                 cashback: '0xaEA8E61B40498b5EC42b3824A3aA4DB86c82daFB',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -74,6 +84,11 @@ export const Chains = {
                 claimer: '0x0824589625Df81b2F556fF9EA07ad39Ed184bFa5',
                 referral: '0x80237d9E5c8AD9b94D59391370aa329C51B86f03',
                 cashback: '0x5db0558fffcc858f80fbaA714C7F3a6e094e18b3',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -106,6 +121,11 @@ export const Chains = {
                 claimer: '0x9A18481B8309cEA58c6af247Ae05688A47d519Fe',
                 referral: '0x7b390eB6e05Bd69E4EB24B5D793164935B3dC6b8',
                 cashback: '0x4B70139C0e544C25B6897317d9a93F30e6112dAd',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -138,6 +158,11 @@ export const Chains = {
                 claimer: '0x9A18481B8309cEA58c6af247Ae05688A47d519Fe',
                 referral: '0x7b390eB6e05Bd69E4EB24B5D793164935B3dC6b8',
                 cashback: '0x4B70139C0e544C25B6897317d9a93F30e6112dAd',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -170,6 +195,11 @@ export const Chains = {
                 claimer: '0xBE85c262B0Ad7Ef87262C8d50D927d5770BDCe4A',
                 referral: '0x6Ab79576aa81DaE505783c8F9794fD16855cC14C',
                 cashback: '0xc23f51Ff00dC08e9B736087D12C53B9ca3992622',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -200,6 +230,11 @@ export const Chains = {
                 claimer: '0x9A18481B8309cEA58c6af247Ae05688A47d519Fe',
                 referral: '0x7b390eB6e05Bd69E4EB24B5D793164935B3dC6b8',
                 cashback: '0x4B70139C0e544C25B6897317d9a93F30e6112dAd',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -232,6 +267,11 @@ export const Chains = {
                 claimer: '0x0000000000000000000000000000000000000000',
                 referral: '0x0000000000000000000000000000000000000000',
                 cashback: '0x0000000000000000000000000000000000000000',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -256,6 +296,11 @@ export const Chains = {
                 claimer: '0x3f96aF2AF6f644D5Fd1FC2d5A016CcE991198103',
                 referral: '0x981B9cAe75E9f2Ad0bE53CDfF11B25d41c9F2632',
                 cashback: '0x2AE991C66cE9D9Fd4318e67B0b94E2B4170faa5D',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -278,6 +323,11 @@ export const Chains = {
                 claimer: '0x0000000000000000000000000000000000000000',
                 referral: '0x0000000000000000000000000000000000000000',
                 cashback: '0x0000000000000000000000000000000000000000',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0xca506793A420E901BbCa8066be5661E3C52c84c2', // Symbiosis (crosschain)
@@ -300,6 +350,11 @@ export const Chains = {
                 claimer: '0x0000000000000000000000000000000000000000',
                 referral: '0x0000000000000000000000000000000000000000',
                 cashback: '0x0000000000000000000000000000000000000000',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -324,6 +379,11 @@ export const Chains = {
                 claimer: '0x29F12E5dF6A1E9B6337A4fE00DF9E2e6B369CF48',
                 referral: '0x3f96aF2AF6f644D5Fd1FC2d5A016CcE991198103',
                 cashback: '0x981B9cAe75E9f2Ad0bE53CDfF11B25d41c9F2632',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0x8097f0B9f06C27AF9579F75762F971D745bb222F', // Symbiosis (crosschain)
@@ -348,6 +408,11 @@ export const Chains = {
                 claimer: '0x9A18481B8309cEA58c6af247Ae05688A47d519Fe',
                 referral: '0x7b390eB6e05Bd69E4EB24B5D793164935B3dC6b8',
                 cashback: '0x4B70139C0e544C25B6897317d9a93F30e6112dAd',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -379,6 +444,11 @@ export const Chains = {
                 claimer: '0x47E77aA45da7F544b1C19eE4f7f5A28203Ac80E2',
                 referral: '0xE506F095b97e4AE54C24a591D43052367CC2156b',
                 cashback: '0x40c9f627116473C1546A5B72088Ae9eE99f67896',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0xDE1E598b81620773454588B85D6b5D4eEC32573e', // Lifi
@@ -407,6 +477,11 @@ export const Chains = {
                 claimer: '0xebe8f37669a46ae08EE30F15964c05Bcab940480',
                 referral: '0xC55EAd2B60B57C6Aeca7a43840952683F555797D',
                 cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -432,6 +507,11 @@ export const Chains = {
                 claimer: '0xebe8f37669a46ae08EE30F15964c05Bcab940480',
                 referral: '0xC55EAd2B60B57C6Aeca7a43840952683F555797D',
                 cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -456,6 +536,11 @@ export const Chains = {
                 claimer: '0x5c777C408d7ea33ae2f61D7dbC0a69151c393565',
                 referral: '0xa285B2D7B884e549012c3469E519A12621976B48',
                 cashback: '0x8D33C4A98c75cD0F92d91528D97e615B9a1489e7',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0xcE8f24A58D85eD5c5A6824f7be1F8d4711A0eb4C', // Symbiosis (crosschain)
@@ -481,6 +566,11 @@ export const Chains = {
                 claimer: '0x9A18481B8309cEA58c6af247Ae05688A47d519Fe',
                 referral: '0x7b390eB6e05Bd69E4EB24B5D793164935B3dC6b8',
                 cashback: '0x4B70139C0e544C25B6897317d9a93F30e6112dAd',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -506,6 +596,11 @@ export const Chains = {
                 claimer: '0xebe8f37669a46ae08EE30F15964c05Bcab940480',
                 referral: '0xC55EAd2B60B57C6Aeca7a43840952683F555797D',
                 cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0xf85FC807D05d3Ab2309364226970aAc57b4e1ea4', // Symbiosis (crosschain)
@@ -528,6 +623,11 @@ export const Chains = {
                 claimer: '0xf19a952ec29EA2802Ae933478C2acB31D9c4dd87',
                 referral: '0x13FC4179F317E3d7C0eD80653611d2985cab6e46',
                 cashback: '0xeDDC2167CCe5aE260777e62751F43558CF391629',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0x7057ab3fb2bee9c18e0cde4240de4ff7f159e365', // Symbiosis (crosschain)
@@ -550,6 +650,11 @@ export const Chains = {
                 claimer: '0xebe8f37669a46ae08EE30F15964c05Bcab940480',
                 referral: '0xC55EAd2B60B57C6Aeca7a43840952683F555797D',
                 cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0x7057aB3fB2BeE9c18e0cDe4240DE4ff7f159E365', // Symbiosis (crosschain)
@@ -573,6 +678,11 @@ export const Chains = {
                 claimer: '0xebe8f37669a46ae08EE30F15964c05Bcab940480',
                 referral: '0xC55EAd2B60B57C6Aeca7a43840952683F555797D',
                 cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -596,6 +706,11 @@ export const Chains = {
                 claimer: '0x981B9cAe75E9f2Ad0bE53CDfF11B25d41c9F2632',
                 referral: '0xC55EAd2B60B57C6Aeca7a43840952683F555797D',
                 cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -620,6 +735,11 @@ export const Chains = {
                 claimer: '0xebe8f37669a46ae08EE30F15964c05Bcab940480',
                 referral: '0xC55EAd2B60B57C6Aeca7a43840952683F555797D',
                 cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0x77Ed285AD9d1c8C0307eA23DcE68B8a5A6AfB39A', // Symbiosis (crosschain)
@@ -642,6 +762,11 @@ export const Chains = {
                 claimer: '0xebe8f37669a46ae08EE30F15964c05Bcab940480',
                 referral: '0xC55EAd2B60B57C6Aeca7a43840952683F555797D',
                 cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -665,6 +790,11 @@ export const Chains = {
                 claimer: '0xaf7F50d8C86ddFd41C2FdC2e51B2BBbc5aBB75da',
                 referral: '0x9Ec19B9c07484BbAA7aD563d632e882bB6F4ddA5',
                 cashback: '0xb7686c3A1544928632c51a64B55Ad59b47076876',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0xe85b0d89cbc670733d6a40a9450d8788be13da47', // Wanchain
@@ -686,6 +816,11 @@ export const Chains = {
                 claimer: '0xf19a952ec29EA2802Ae933478C2acB31D9c4dd87',
                 referral: '0x13FC4179F317E3d7C0eD80653611d2985cab6e46',
                 cashback: '0xeDDC2167CCe5aE260777e62751F43558CF391629',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0xC626845BF4E6a5802Ef774dA0B3DfC6707F015F7', // Owlto
@@ -707,6 +842,11 @@ export const Chains = {
                 claimer: '0xebe8f37669a46ae08EE30F15964c05Bcab940480',
                 referral: '0xC55EAd2B60B57C6Aeca7a43840952683F555797D',
                 cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0xC626845BF4E6a5802Ef774dA0B3DfC6707F015F7', // Owlto
@@ -728,6 +868,11 @@ export const Chains = {
                 claimer: '0xebe8f37669a46ae08EE30F15964c05Bcab940480',
                 referral: '0xC55EAd2B60B57C6Aeca7a43840952683F555797D',
                 cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0xC626845BF4E6a5802Ef774dA0B3DfC6707F015F7', // Owlto
@@ -749,6 +894,11 @@ export const Chains = {
                 claimer: '0xebe8f37669a46ae08EE30F15964c05Bcab940480',
                 referral: '0xC55EAd2B60B57C6Aeca7a43840952683F555797D',
                 cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0xC626845BF4E6a5802Ef774dA0B3DfC6707F015F7', // Owlto
@@ -770,6 +920,11 @@ export const Chains = {
                 claimer: '0xebe8f37669a46ae08EE30F15964c05Bcab940480',
                 referral: '0xC55EAd2B60B57C6Aeca7a43840952683F555797D',
                 cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [
                 '0xC626845BF4E6a5802Ef774dA0B3DfC6707F015F7', // Owlto
@@ -795,6 +950,11 @@ export const Chains = {
                 claimer: '0xCC5Bc84C3FDbcF262AaDD9F76652D6784293dD9e',
                 referral: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
                 cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [],
             levelNfts: [
@@ -814,6 +974,11 @@ export const Chains = {
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [],
             levelNfts: [],
@@ -827,6 +992,11 @@ export const Chains = {
                 claimer: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 referral: '0x7fd194e54E1eab0e4F5F5809e2FD2026b15468fC',
                 cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
+                farming: {
+                    'beefy': {
+                        'usdt': '0x0000000000000000000000000000000000000000',
+                    }
+                },
             },
             trustAddresses: [],
             levelNfts: [],
@@ -840,6 +1010,11 @@ export const Chains = {
                 claimer: '0x556d3BB875af7e4f4d20C2f02858C6E6Aa8B127f',
                 referral: '0x8A2611542277684c182Dfcd1dccAa0553Cc9bef0',
                 cashback: '0xc69e8A48b607B82A3C0eBC7B2c42634b973C6c70',
+                farming: {
+                    'beefy': {
+                        'ttc': '0x619A40Ce46E01e5a145Cd3D09d0Ba78D1d6403c0',
+                    }
+                },
             },
             trustAddresses: [],
             levelNfts: [

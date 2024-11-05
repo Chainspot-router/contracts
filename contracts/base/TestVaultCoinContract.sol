@@ -3,24 +3,32 @@ pragma solidity ^0.8.23;
 
 import {ERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract TestFarmingCoinContract is ERC20 {
+contract TestVaultCoinContract is ERC20 {
 
-    constructor() ERC20("TestFarmingCoin", "TFC") {}
+    uint public pps;
+
+    constructor() ERC20("TestVaultCoin", "TVC") {
+        pps = 2;
+    }
 
     receive() external payable {}
     fallback() external payable {}
 
-    function _getPricePerFullShare() internal pure returns (uint256) {
-        return 1;
+    function setPricePerFullShare(uint _pps) external {
+        pps = _pps;
     }
 
-    function getPricePerFullShare() external pure returns (uint256) {
+    function _getPricePerFullShare() internal view returns (uint256) {
+        return pps;
+    }
+
+    function getPricePerFullShare() external view returns (uint256) {
         return _getPricePerFullShare();
     }
 
     function _deposit(uint _value) internal {
         require(msg.value >= _value, "ERR901");
-        _mint(msg.sender, _value);
+        _mint(msg.sender, _value / _getPricePerFullShare());
     }
 
     function deposit(uint _value) external payable {

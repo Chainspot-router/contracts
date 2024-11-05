@@ -4,22 +4,28 @@ pragma solidity ^0.8.23;
 import {IVaultToken} from "../interfaces/IVaultToken.sol";
 import {ERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract TestFarmingTokenContract is IVaultToken, ERC20 {
+contract TestVaultTokenContract is IVaultToken, ERC20 {
 
     IERC20 public stakeToken;
+    uint public pps;
 
-    constructor(IERC20 _stakeToken) ERC20("TestFarmingToken", "TFT") {
+    constructor(IERC20 _stakeToken) ERC20("TestVaultToken", "TVT") {
         stakeToken = _stakeToken;
+        pps = 2;
     }
 
     receive() external payable {}
     fallback() external payable {}
 
-    function _getPricePerFullShare() internal pure returns (uint256) {
-        return 1;
+    function setPricePerFullShare(uint _pps) external {
+        pps = _pps;
     }
 
-    function getPricePerFullShare() external pure returns (uint256) {
+    function _getPricePerFullShare() internal view returns (uint256) {
+        return pps;
+    }
+
+    function getPricePerFullShare() external view returns (uint256) {
         return _getPricePerFullShare();
     }
 
@@ -30,7 +36,7 @@ contract TestFarmingTokenContract is IVaultToken, ERC20 {
         uint allowAmount = stakeToken.allowance(fromAddress, selfAddress);
         require(allowAmount >= _value, "ERR901");
         require(stakeToken.transferFrom(fromAddress, selfAddress, _value), "ERR902");
-        _mint(fromAddress, _value * _getPricePerFullShare());
+        _mint(fromAddress, _value / _getPricePerFullShare());
     }
 
     function deposit(uint _value) external {
@@ -46,7 +52,7 @@ contract TestFarmingTokenContract is IVaultToken, ERC20 {
         address selfAddress = address(this);
 
         _burn(fromAddress, _value);
-        require(stakeToken.transferFrom(selfAddress, fromAddress, _value * _getPricePerFullShare()), "ERR903");
+        require(stakeToken.transfer(fromAddress, _value * _getPricePerFullShare()), "ERR903");
     }
 
     function withdraw(uint _value) external {
@@ -62,7 +68,7 @@ contract TestFarmingTokenContract is IVaultToken, ERC20 {
     }
 
     function want() external view returns (IERC20) {
-        return this;
+        return stakeToken;
     }
 
     function upgradeStrat() external pure {

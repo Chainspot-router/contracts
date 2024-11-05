@@ -2,7 +2,7 @@
 pragma solidity ^0.8.23;
 
 import {Ownable2StepUpgradeable} from "@openzeppelin/contracts-upgradeable/access/Ownable2StepUpgradeable.sol";
-import {SafeMath} from "./utils/SafeMath.sol";
+import {SafeMath} from "../utils/SafeMath.sol";
 
 abstract contract ProxyFee is Ownable2StepUpgradeable {
 

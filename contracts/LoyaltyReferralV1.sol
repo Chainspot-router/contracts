@@ -5,7 +5,7 @@ import {ReentrancyGuardUpgradeable} from "@openzeppelin/contracts-upgradeable/ut
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import {ILoyaltyReferral} from "./interfaces/ILoyaltyReferral.sol";
 import {IERC721} from "./interfaces/IERC721.sol";
-import {ProxyWithdrawal} from "./ProxyWithdrawal.sol";
+import {ProxyWithdrawal} from "./base/ProxyWithdrawal.sol";
 
 contract LoyaltyReferralV1 is ILoyaltyReferral, ProxyWithdrawal, UUPSUpgradeable, ReentrancyGuardUpgradeable {
 

@@ -6,7 +6,7 @@ import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/U
 import {ILoyaltyNFTClaimer} from "./interfaces/ILoyaltyNFTClaimer.sol";
 import {IERC721} from "./interfaces/IERC721.sol";
 import {ILoyaltyEnv} from "./interfaces/ILoyaltyEnv.sol";
-import {ProxyWithdrawal} from "./ProxyWithdrawal.sol";
+import {ProxyWithdrawal} from "./base/ProxyWithdrawal.sol";
 
 contract LoyaltyNFTClaimerV1 is ILoyaltyEnv, ILoyaltyNFTClaimer, ProxyWithdrawal, UUPSUpgradeable, ReentrancyGuardUpgradeable {
 

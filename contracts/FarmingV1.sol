@@ -1,122 +1,182 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.23;
 
-// Uncomment this line to use console.log
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {Math} from "@openzeppelin/contracts/utils/math/Math.sol";
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import {ERC20Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import {IVaultToken} from "./interfaces/IVaultToken.sol";
+import {ReentrancyGuardUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {Sender} from "./base/Sender.sol";
 
-contract FarmingV1 is ERC20, Ownable {
 
+contract FarmingV1 is Initializable, ERC20Upgradeable, UUPSUpgradeable, Sender, ReentrancyGuardUpgradeable {
     using Math for uint;
+    using SafeERC20 for IERC20;
 
-    /// Intermediare vault for token transfer (swap)
-    /// keeps custom transaction id with amount of received token (ERC20)
-    // CS_IntermediateVault internal intermediateVault;
+    event DepositEvent(bytes32 indexed key, address indexed user, uint amountInLp, uint amounInToken, uint pps);
+    event WithdrawSuccessEvent(bytes32 indexed key, address indexed user, uint amountInLp, uint amountInToken, uint feeInToken, uint pps);
+    event WithdrawRejectEvent(bytes32 indexed key, address indexed user);
+    event SetWithdrawRequestFeeEvent(uint fee);
+    event AddWithdrawalRequestEvent(bytes32 indexed key, address indexed user, uint amount, uint requestFee);
 
-    /// Beefy vault
-    IVaultToken public beefyVault;
-
-    IERC20 public quoteToken;
-
-    // IERC20 public quoteToken;
-
-    uint8 feeLimit = 5;
-    uint8 fee = 0;
-
-    // uint feeVault = 0;
-
-    uint256 deadline = 20;
-
-    event Deposited(bytes32 indexed key, address indexed buyer, uint256 indexed amount, uint256 pps);
-    event Withdrawn(address indexed buyer, uint256 indexed amount, uint256 pps, uint fee);
-
-    struct Position {
-        // bytes32 key;
-        uint totalAmount;
+    struct PositionStruct {
+        uint totalLpAmount;
         uint avgEntryPrice;
-        // address shareholder;
-        // uint timestamp;
+    }
+    struct KeyStruct {
+        bool exists;
+    }
+    struct WithdrawRequestStruct {
+        bool exists;
+        address userAddress;
+        uint lpAmount;
+        bool successProcessed;
+        bool rejectProcessed;
     }
 
-    mapping (address => Position) private registry;
+    mapping (bytes32 => KeyStruct) private depositKeys;
+    mapping (address => PositionStruct) private registry;
+    mapping (bytes32 => WithdrawRequestStruct) private withdrawRequests;
+    IVaultToken public protocolVault;
+    IERC20 public baseToken;
+    uint8 public fee;
+    address public feeAddress;
+    uint public withdrawRequestFee;
 
-    constructor(IVaultToken _beefyVault, uint8 _fee, address _initialOwner)
-    ERC20("CSLPVault", "CSLP")
-    Ownable(_initialOwner) {
-        // intermediateVault = _intermediateVault;
-        beefyVault = _beefyVault;
-        quoteToken = beefyVault.want();
-        // intermediateVault = new CS_IntermediateVault(quoteToken, address(this));
+    /// Initialization contracts
+    /// @param _protocolVault IVaultToken  Protocol value token
+    /// @param _fee uint8  Internal fee amount
+    /// @param _feeAddress address  Address for transferring fees
+    function initialize(IVaultToken _protocolVault, uint8 _fee, address _feeAddress) initializer public {
+        __Ownable_init(_msgSender());
+        __ReentrancyGuard_init();
+        __UUPSUpgradeable_init();
+        __ERC20_init("CSLPVault", "CSLP");
+
+        protocolVault = _protocolVault;
+        baseToken = protocolVault.want();
         fee = _fee;
-        //   fee = 0.0001 * 10 ** 18;
+        feeAddress = _feeAddress == address(0) ? owner() : _feeAddress;
+        _addSender(owner());
     }
 
-    ///
-    function _deposit(bytes32 _key, address _buyer, uint _amount) internal {
-        // (bytes32 key, address buyer, uint amount) = intermediateVault.releaseRequest(_key);
-        require(_amount > 0, "ERR001");
-        /// Get current position
-        Position memory _position = registry[_buyer];
-        uint _currentPPS = beefyVault.getPricePerFullShare();
-        uint _value = _amount / _currentPPS;
-        ///
-        quoteToken.approve(address(beefyVault), _value);
-        beefyVault.deposit(_value);
-        ///
-        registry[_buyer].totalAmount = _position.totalAmount + _value;
-        if (_position.avgEntryPrice != 0) {
-            registry[_buyer].avgEntryPrice = (_position.avgEntryPrice + _currentPPS) / 2;
-        } else {
-            registry[_buyer].avgEntryPrice = _currentPPS;
+    /// Upgrade implementation address for UUPS logic
+    /// @param _newImplementation address  New implementation address
+    function _authorizeUpgrade(address _newImplementation) internal onlyOwner override {}
+
+    /// Ser withdrawal request fee
+    /// @param _fee uint  Request fee amount
+    function setWithdrawRequestFee(uint _fee) external onlyOwner {
+        withdrawRequestFee = _fee;
+        emit SetWithdrawRequestFeeEvent(_fee);
+    }
+
+    /// Internal deposit method
+    /// @param _key bytes32  Internal transfer key
+    /// @param _user address  User address
+    /// @param _tokenAmount uint  Base token amount for deposit
+    function _deposit(bytes32 _key, address _user, uint _tokenAmount) internal {
+        require(!depositKeys[_key].exists, "ERRF11");
+        require(_tokenAmount > 0, "ERRF12");
+        require(baseToken.balanceOf(address(this)) >= _tokenAmount, "ERRF13");
+
+        PositionStruct memory position = registry[_user];
+        uint currentPPS = protocolVault.getPricePerFullShare();
+        uint lpAmount = _tokenAmount / currentPPS;
+
+        depositKeys[_key].exists = true;
+
+        baseToken.forceApprove(address(protocolVault), _tokenAmount);
+        protocolVault.deposit(_tokenAmount);
+
+        registry[_user].totalLpAmount = position.totalLpAmount + lpAmount;
+        registry[_user].avgEntryPrice = position.avgEntryPrice == 0 ? currentPPS : ((position.avgEntryPrice + currentPPS) / 2);
+
+        _mint(_user, lpAmount);
+
+        emit DepositEvent(_key, _user, lpAmount, _tokenAmount, currentPPS);
+    }
+
+    /// Internal withdraw method
+    /// @param _key bytes32  Request key
+    /// @param _status bool  Request status
+    function _withdraw(bytes32 _key, bool _status) internal {
+        WithdrawRequestStruct memory request = withdrawRequests[_key];
+        require(request.exists, "ERRF21");
+        require(!request.successProcessed && !request.rejectProcessed, "ERRF22");
+        if (!_status) {
+            withdrawRequests[_key].rejectProcessed = true;
+            emit WithdrawRejectEvent(_key, request.userAddress);
+            return;
         }
-        ///
-        emit Deposited(_key, _buyer, _value, _currentPPS);
-    }
 
-    ///
-    function _withdraw(address _buyer, uint _amount) internal {
-        ///
-        Position memory _position = registry[_buyer];
-        require(_position.totalAmount > _amount,  "ERR002");
-        ///
-        uint currentPPS = beefyVault.getPricePerFullShare();
+        PositionStruct memory position = registry[request.userAddress];
+        require(position.totalLpAmount >= request.lpAmount, "ERRF23");
+
+        uint currentPPS = protocolVault.getPricePerFullShare();
+        uint amountInToken = request.lpAmount * currentPPS;
+
         /// Fee
-        uint diff = currentPPS - _position.avgEntryPrice;
-        uint feeAmount = 0;
-        /// Validates fee limit
-        if (diff / 100 >= feeLimit) {
-            feeAmount = ((diff * _amount) / 100) * fee;
+        uint feeInToken = ((currentPPS - position.avgEntryPrice) * request.lpAmount) / 100 * fee;
+
+        _burn(request.userAddress, request.lpAmount);
+        registry[request.userAddress].totalLpAmount = position.totalLpAmount - request.lpAmount;
+
+        uint tokenBalanceBefore = baseToken.balanceOf(address(this));
+        protocolVault.withdraw(request.lpAmount);
+        uint tokenAmount = baseToken.balanceOf(address(this)) - tokenBalanceBefore;
+        require(tokenAmount == amountInToken, "ERRF24");
+
+        baseToken.safeTransfer(feeAddress, feeInToken);
+        baseToken.safeTransfer(request.userAddress, amountInToken - feeInToken);
+
+        withdrawRequests[_key].successProcessed = true;
+
+        emit WithdrawSuccessEvent(
+            _key,
+            request.userAddress,
+            request.lpAmount,
+            amountInToken,
+            feeInToken,
+            currentPPS
+        );
+    }
+
+    /// Deposit base tokens
+    /// @param _key bytes32  Internal transfer key
+    /// @param _user address  User address
+    /// @param _tokenAmount uint  Base token amount for deposit
+    function deposit(bytes32 _key, address _user, uint _tokenAmount) external nonReentrant onlySender {
+        _deposit(_key, _user, _tokenAmount);
+    }
+
+    /// Withdraw base tokens
+    /// @param _key bytes32  Request key
+    /// @param _status bool  Request status
+    function withdraw(bytes32 _key, bool _status) external nonReentrant onlySender {
+        _withdraw(_key, _status);
+    }
+
+    /// Add withdrawal request
+    /// @param _key bytes32  Request unique key
+    /// @param _lpAmount uint  LP amount for withdrawal
+    function addWithdrawalRequest(bytes32 _key, uint _lpAmount) external payable nonReentrant {
+        require(msg.value >= withdrawRequestFee, "ERRF31");
+        require(!withdrawRequests[_key].exists, "ERRF32");
+        require(registry[msg.sender].totalLpAmount >= _lpAmount, "ERRF33");
+        if (msg.value > 0) {
+            (bool successFee, ) = owner().call{value: msg.value}("");
+            require(successFee, "ERRF34");
         }
 
-        uint amountForWithdraw = _amount - feeAmount;
-        ///
-        beefyVault.withdraw(amountForWithdraw);
-        ///
-        registry[_buyer].totalAmount = _position.totalAmount - _amount;
-        ///
-        emit Withdrawn(_buyer, amountForWithdraw, currentPPS, feeAmount);
-    }
+        WithdrawRequestStruct memory request;
+        request.exists = true;
+        request.userAddress = msg.sender;
+        request.lpAmount = _lpAmount;
+        withdrawRequests[_key] = request;
 
-    ///
-    function deposit(bytes32 _key, address _buyer, uint _amount) external onlyOwner {
-        // require(block.number < block.number + deadline);
-        _deposit(_key, _buyer, _amount);
+        emit AddWithdrawalRequestEvent(_key, msg.sender, _lpAmount, msg.value);
     }
-
-    ///
-    function withdraw(address _buyer, uint _amount) external onlyOwner {
-        // require(block.number < block.number + deadline);
-        _withdraw(_buyer, _amount);
-    }
-
-    ///
-    function withdrawAll(address _buyer) external onlyOwner {
-        // require(block.number < block.number + deadline);
-        Position memory _position = registry[_buyer];
-        _withdraw(_buyer, _position.totalAmount);
-    }
-
 }
