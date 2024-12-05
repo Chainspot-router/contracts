@@ -1,25 +1,36 @@
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.23;
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.28;
 
-import {SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import {Math} from "@openzeppelin/contracts/utils/math/Math.sol";
 import {ERC20Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
+import {IMultiChainToken} from "asterizmprotocol/contracts/evm/interfaces/IMultiChainToken.sol";
+import {AsterizmClientUpgradeable, IInitializerSender, UintLib, AsterizmErrors, SafeERC20, IERC20} from "asterizmprotocol/contracts/evm/AsterizmClientUpgradeable.sol";
+import {Math} from "@openzeppelin/contracts/utils/math/Math.sol";
 import {IVaultToken} from "./interfaces/IVaultToken.sol";
-import {ReentrancyGuardUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
-import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {Sender} from "./base/Sender.sol";
 
+contract FarmingV2 is IMultiChainToken, ERC20Upgradeable, AsterizmClientUpgradeable {
 
-contract FarmingV1 is Initializable, ERC20Upgradeable, UUPSUpgradeable, Sender, ReentrancyGuardUpgradeable {
+    using UintLib for uint;
     using Math for uint;
     using SafeERC20 for IERC20;
+
+    event EncodedPayloadRecieved(uint64 srcChainId, address srcAddress, uint nonce, uint _transactionId, bytes payload);
+    event CrossChainTransferReceived(uint id, uint64 destChain, address from, address to, uint amount, uint _transactionId, address target);
+    event CrossChainTransferCompleted(uint id);
 
     event DepositEvent(bytes32 indexed key, address indexed user, uint amountInLp, uint amounInToken, uint pps);
     event WithdrawSuccessEvent(bytes32 indexed key, address indexed user, uint amountInLp, uint amountInToken, uint feeInToken, uint pps);
     event WithdrawRejectEvent(bytes32 indexed key, address indexed user);
     event SetWithdrawRequestFeeEvent(uint fee);
     event AddWithdrawalRequestEvent(bytes32 indexed key, address indexed user, uint amount, uint requestFee);
+
+    struct CrossChainTransfer {
+        bool exists;
+        uint64 destChain;
+        address from;
+        address to;
+        uint amount;
+        address target;
+    }
 
     struct PositionStruct {
         uint totalLpAmount;
@@ -36,6 +47,7 @@ contract FarmingV1 is Initializable, ERC20Upgradeable, UUPSUpgradeable, Sender, 
         bool rejectProcessed;
     }
 
+    mapping (uint => CrossChainTransfer) public crosschainTransfers;
     mapping (bytes32 => KeyStruct) public depositKeys;
     mapping (address => PositionStruct) public registry;
     mapping (bytes32 => WithdrawRequestStruct) public withdrawRequests;
@@ -45,26 +57,25 @@ contract FarmingV1 is Initializable, ERC20Upgradeable, UUPSUpgradeable, Sender, 
     address public feeAddress;
     uint public withdrawRequestFee;
 
-    /// Initialization contracts
-    /// @param _protocolVault IVaultToken  Protocol value token
-    /// @param _fee uint8  Internal fee amount
-    /// @param _feeAddress address  Address for transferring fees
-    function initialize(IVaultToken _protocolVault, uint8 _fee, address _feeAddress) initializer public {
-        __Ownable_init(_msgSender());
-        __ReentrancyGuard_init();
-        __UUPSUpgradeable_init();
-        __ERC20_init("CSLPVault", "CSLP");
+    /// Initializing function for upgradeable contracts (constructor)
+    /// @param _initializerLib IInitializerSender  Initializer library address
+    function initialize(IInitializerSender _initializerLib, IVaultToken _protocolVault, uint8 _fee, address _feeAddress) initializer public {
+        __AsterizmClientUpgradeable_init(_initializerLib, true, false);
+        __ERC20_init("CSLPVault2", "CSLP2");
 
+        refundLogicIsAvailable = true;
         protocolVault = _protocolVault;
         baseToken = protocolVault.want();
         fee = _fee;
         feeAddress = _feeAddress == address(0) ? owner() : _feeAddress;
-        _addSender(owner());
     }
 
-    /// Upgrade implementation address for UUPS logic
-    /// @param _newImplementation address  New implementation address
-    function _authorizeUpgrade(address _newImplementation) internal onlyOwner override {}
+    /// Token decimals
+    /// @dev change it for your token logic
+    /// @return uint8
+    function decimals() public view virtual override returns (uint8) {
+        return 18;
+    }
 
     /// Ser withdrawal request fee
     /// @param _fee uint  Request fee amount
@@ -72,6 +83,63 @@ contract FarmingV1 is Initializable, ERC20Upgradeable, UUPSUpgradeable, Sender, 
         withdrawRequestFee = _fee;
         emit SetWithdrawRequestFeeEvent(_fee);
     }
+
+    /// *****************
+    /// Asterizm logic
+    /// *****************
+
+    /// Cross-chain transfer
+    /// @param _dstChainId uint64  Destination chain ID
+    /// @param _from address  From address
+    /// @param _to uint  To address in uint format
+    function crossChainTransfer(uint64 _dstChainId, address _from, uint _to, uint _amount) public payable {
+        uint amount = _debitFrom(_from, _amount); // amount returned should not have dust
+        require(amount > 0, CustomError(AsterizmErrors.MULTICHAIN__AMOUNT_TOO_SMALL__ERROR));
+        bytes32 transferHash = _initAsterizmTransferEvent(_dstChainId, abi.encode(_to, amount, _getTxId()));
+        _addRefundTransfer(transferHash, _from, amount, address(this));
+    }
+
+    /// Receive non-encoded payload
+    /// @param _dto ClAsterizmReceiveRequestDto  Method DTO
+    function _asterizmReceive(ClAsterizmReceiveRequestDto memory _dto) internal override {
+        (uint dstAddressUint, uint amount, ) = abi.decode(_dto.payload, (uint, uint, uint));
+        _mint(dstAddressUint.toAddress(), amount);
+    }
+
+    /// Build packed payload (abi.encodePacked() result)
+    /// @param _payload bytes  Default payload (abi.encode() result)
+    /// @return bytes  Packed payload (abi.encodePacked() result)
+    function _buildPackedPayload(bytes memory _payload) internal pure override returns(bytes memory) {
+        (uint dstAddressUint, uint amount, uint txId) = abi.decode(_payload, (uint, uint, uint));
+
+        return abi.encodePacked(dstAddressUint, amount, txId);
+    }
+
+    /// Debit logic
+    /// @param _from address  From address
+    /// @param _amount uint  Amount
+    function _debitFrom(address _from, uint _amount) internal virtual returns(uint) {
+        address spender = _msgSender();
+        if (_from != spender) {
+            _spendAllowance(_from, spender, _amount);
+        }
+
+        _burn(_from, _amount);
+
+        return _amount;
+    }
+
+    /// Refund tokens
+    /// @param _targetAddress address  Target address
+    /// @param _amount uint  Coins amount
+    /// @param _tokenAddress address  Token address
+    function _refundTokens(address _targetAddress, uint _amount, address _tokenAddress) internal override onlySenderOrOwner {
+        _mint(_targetAddress, _amount);
+    }
+
+    /// *****************
+    /// Yield logic
+    /// *****************
 
     /// Internal deposit method
     /// @param _key bytes32  Internal transfer key

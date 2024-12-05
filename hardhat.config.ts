@@ -30,7 +30,7 @@ import './tasks/farming_deploytesttokenvault_task';
 
 const config = {
   solidity: {
-    version: "0.8.23",
+    version: "0.8.28",
     settings: {
       optimizer: {
         enabled: true,

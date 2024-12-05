@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.23;
+pragma solidity ^0.8.28;
 
 import {Ownable2StepUpgradeable} from "@openzeppelin/contracts-upgradeable/access/Ownable2StepUpgradeable.sol";
 
@@ -27,29 +27,29 @@ abstract contract Sender is Ownable2StepUpgradeable {
     }
 
     /// Add sender (internal)
-    /// @param _senderAddress address  Sender address
-    function _addSender(address _senderAddress) internal {
-        senders[_senderAddress].exists = true;
-        emit AddSenderEvent(_senderAddress);
+    /// @param _sender address  Sender address
+    function _addSender(address _sender) internal {
+        senders[_sender].exists = true;
+        emit AddSenderEvent(_sender);
     }
 
-    /// Add sender (external)
-    /// @param _senderAddress address  Sender address
-    function addSender(address _senderAddress) external onlyOwner {
-        _addSender(_senderAddress);
+    /// Add sender
+    /// @param _sender address  Sender address
+    function addSender(address _sender) external onlyOwner {
+        _addSender(_sender);
     }
 
     /// Remove sender (internal)
-    /// @param _senderAddress address  Sender address
-    function _removeSender(address _senderAddress) internal {
-        require(senders[_senderAddress].exists, "ERRS03");
-        senders[_senderAddress].exists = false;
-        emit RemoveSenderEvent(_senderAddress);
+    /// @param _sender address  Sender address
+    function _removeSender(address _sender) internal {
+        require(senders[_sender].exists, "ERRS03");
+        senders[_sender].exists = false;
+        emit RemoveSenderEvent(_sender);
     }
 
     /// Remove sender (external)
-    /// @param _senderAddress address  Sender address
-    function removeSender(address _senderAddress) external onlyOwner {
-        _removeSender(_senderAddress);
+    /// @param _sender address  Sender address
+    function removeSender(address _sender) external onlyOwner {
+        _removeSender(_sender);
     }
 }
