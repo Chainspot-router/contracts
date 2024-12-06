@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
-import {IVaultToken} from "../interfaces/IVaultToken.sol";
+import {IBeefyVaultToken} from "../components/farming/interfaces/IBeefyVaultToken.sol";
 import {ERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract TestVaultTokenContract is IVaultToken, ERC20 {
+contract TestVaultTokenContract is IBeefyVaultToken, ERC20 {
 
     IERC20 public stakeToken;
     uint public pps;

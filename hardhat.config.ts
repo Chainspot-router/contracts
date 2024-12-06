@@ -41,6 +41,7 @@ const config = {
   defaultNetwork: "localhost",
   gasReporter: {
     enabled: true,
+    showMethodSig: true,
   },
   networks: {
     // hardhat: {

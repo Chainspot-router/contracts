@@ -4,14 +4,14 @@ pragma solidity ^0.8.23;
 import {SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {Math} from "@openzeppelin/contracts/utils/math/Math.sol";
 import {ERC20Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
-import {IVaultToken} from "./interfaces/IVaultToken.sol";
+import {IBeefyVaultToken} from "./interfaces/IBeefyVaultToken.sol";
 import {ReentrancyGuardUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {Sender} from "./base/Sender.sol";
+import {Sender} from "../../base/Sender.sol";
 
 
-contract FarmingV1 is Initializable, ERC20Upgradeable, UUPSUpgradeable, Sender, ReentrancyGuardUpgradeable {
+contract FarmingBeefyV1 is Initializable, ERC20Upgradeable, UUPSUpgradeable, Sender, ReentrancyGuardUpgradeable {
     using Math for uint;
     using SafeERC20 for IERC20;
 
@@ -39,7 +39,7 @@ contract FarmingV1 is Initializable, ERC20Upgradeable, UUPSUpgradeable, Sender, 
     mapping (bytes32 => KeyStruct) public depositKeys;
     mapping (address => PositionStruct) public registry;
     mapping (bytes32 => WithdrawRequestStruct) public withdrawRequests;
-    IVaultToken public protocolVault;
+    IBeefyVaultToken public protocolVault;
     IERC20 public baseToken;
     uint8 public fee;
     address public feeAddress;
@@ -49,7 +49,7 @@ contract FarmingV1 is Initializable, ERC20Upgradeable, UUPSUpgradeable, Sender, 
     /// @param _protocolVault IVaultToken  Protocol value token
     /// @param _fee uint8  Internal fee amount
     /// @param _feeAddress address  Address for transferring fees
-    function initialize(IVaultToken _protocolVault, uint8 _fee, address _feeAddress) initializer public {
+    function initialize(IBeefyVaultToken _protocolVault, uint8 _fee, address _feeAddress) initializer public {
         __Ownable_init(_msgSender());
         __ReentrancyGuard_init();
         __UUPSUpgradeable_init();

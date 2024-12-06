@@ -4,7 +4,7 @@ import { Chains } from "./base/base_chains";
 
 async function deployBase(hre, implementationVersion, isTestnet) {
     const [owner] = await ethers.getSigners();
-    const Farming = await ethers.getContractFactory("FarmingV" + implementationVersion);
+    const Farming = await ethers.getContractFactory("FarmingBeefyV" + implementationVersion);
 
     const chains = isTestnet == 1 ? Chains.testnet : Chains.mainnet;
 

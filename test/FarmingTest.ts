@@ -4,16 +4,22 @@ import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import bigInt from "big-integer";
 
 
-describe("Proxy test", function () {
+describe("Farming test", function () {
     async function deployContractsFixture() {
         const Token = await ethers.getContractFactory("TestTokenChainspot");
-        const Farming = await ethers.getContractFactory("FarmingV1");
+        const Farming = await ethers.getContractFactory("FarmingBeefyV1");
         const VaultCoin = await ethers.getContractFactory("TestVaultCoinContract");
         const VaultToken = await ethers.getContractFactory("TestVaultTokenContract");
+        const Farming2 = await ethers.getContractFactory("FarmingBeefyV2");
+        const LpToken = await ethers.getContractFactory("LpTokenV1");
+        const ProxyApprover = await ethers.getContractFactory("ProxyApproverV1");
+        const Initializer = await ethers.getContractFactory("TestAsterizmInitializerContract");
 
         const zeroAddress: string = '0x0000000000000000000000000000000000000000';
         const fee: number = 10;
         const [ owner, user1, user2 ] = await ethers.getSigners();
+
+        const localChainId = 1;
 
         const token = await Token.deploy();
         await token.waitForDeployment();
@@ -29,6 +35,32 @@ describe("Proxy test", function () {
             kind: 'uups',
         });
         await farmingToken.waitForDeployment();
+
+        const farmingToken2 = await upgrades.deployProxy(Farming2, [await vaultToken.getAddress(), fee, owner.address], {
+            initialize: 'initialize',
+            kind: 'uups',
+        });
+        await farmingToken2.waitForDeployment();
+
+        const initializer = await upgrades.deployProxy(Initializer, [localChainId], {
+            initialize: 'initialize',
+            kind: 'uups',
+        });
+        await initializer.waitForDeployment();
+
+        const lpToken = await upgrades.deployProxy(LpToken, [await initializer.getAddress(), await farmingToken2.getAddress()], {
+            initialize: 'initialize',
+            kind: 'uups',
+        });
+        await lpToken.waitForDeployment();
+        console.log((await ethers.provider.estimateGas({ data: (await LpToken.getDeployTransaction()).data })).toString());
+
+        const proxyApprover = await upgrades.deployProxy(ProxyApprover, [await initializer.getAddress(), await farmingToken2.getAddress()], {
+            initialize: 'initialize',
+            kind: 'uups',
+        });
+        await proxyApprover.waitForDeployment();
+        console.log((await ethers.provider.estimateGas({ data: (await ProxyApprover.getDeployTransaction()).data })).toString());
 
         return { Token, token, Farming, farmingToken, VaultCoin, vaultCoin, VaultToken, vaultToken, owner, user1, user2, zeroAddress, fee };
     }
