@@ -53,14 +53,13 @@ describe("Farming test", function () {
             kind: 'uups',
         });
         await lpToken.waitForDeployment();
-        console.log((await ethers.provider.estimateGas({ data: (await LpToken.getDeployTransaction()).data })).toString());
 
         const proxyApprover = await upgrades.deployProxy(ProxyApprover, [await initializer.getAddress(), await farmingToken2.getAddress()], {
             initialize: 'initialize',
             kind: 'uups',
         });
         await proxyApprover.waitForDeployment();
-        console.log((await ethers.provider.estimateGas({ data: (await ProxyApprover.getDeployTransaction()).data })).toString());
+        console.log('ProxyApprover gas: ' + (await ethers.provider.estimateGas({ data: (await ProxyApprover.getDeployTransaction()).data })).toString());
 
         return { Token, token, Farming, farmingToken, VaultCoin, vaultCoin, VaultToken, vaultToken, owner, user1, user2, zeroAddress, fee };
     }

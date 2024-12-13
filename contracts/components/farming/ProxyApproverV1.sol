@@ -4,7 +4,7 @@ pragma solidity ^0.8.28;
 import {IProxyApprover} from "./interfaces/IProxyApprover.sol";
 import {IFarmingManipulator} from "./interfaces/IFarmingManipulator.sol";
 import {AsterizmClientUpgradeable, IInitializerSender, AddressLib} from "asterizmprotocol/contracts/evm/AsterizmClientUpgradeable.sol";
-import {FarmingErrors} from "./FarmingErrors.sol";
+import {FarmingErrors} from "./base/FarmingErrors.sol";
 import {SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 contract ProxyApproverV1 is IProxyApprover, AsterizmClientUpgradeable {
@@ -53,7 +53,6 @@ contract ProxyApproverV1 is IProxyApprover, AsterizmClientUpgradeable {
         delete clients[_clientAddress];
         emit RemoveClientEvent(_clientAddress);
     }
-
 
     /// Proxy approve
     /// @param _token IERC20  Src token (address(0) - native)

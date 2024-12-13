@@ -5,8 +5,15 @@ import {ReentrancyGuardUpgradeable} from "@openzeppelin/contracts-upgradeable/ut
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import {IInitializerSender} from "asterizmprotocol/contracts/evm/interfaces/IInitializerSender.sol";
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import {IClientReceiverContract} from "asterizmprotocol/contracts/evm/interfaces/IClientReceiverContract.sol";
+import {AsterizmEnv} from "asterizmprotocol/contracts/evm/base/AsterizmEnv.sol";
+import {AddressLib} from "asterizmprotocol/contracts/evm/libs/AddressLib.sol";
+import {UintLib} from "asterizmprotocol/contracts/evm/libs/UintLib.sol";
 
-contract TestAsterizmInitializerContract is UUPSUpgradeable, ReentrancyGuardUpgradeable, IInitializerSender, OwnableUpgradeable {
+contract TestAsterizmInitializerContract is UUPSUpgradeable, ReentrancyGuardUpgradeable, IInitializerSender, OwnableUpgradeable, AsterizmEnv {
+
+    using AddressLib for address;
+    using UintLib for uint;
 
     uint64 private localChainId;
 
@@ -63,4 +70,23 @@ contract TestAsterizmInitializerContract is UUPSUpgradeable, ReentrancyGuardUpgr
     /// @param _transferHash bytes32  Transfer hash
     /// @param _relay address  Relay address
     function resendTransfer(bytes32 _transferHash, address _relay) external payable {}
+
+    /// Receive payload from translator
+    /// @param _srcChainId uint64  Source chain ID
+    /// @param _srcAddress uint  Source address
+    /// @param _dstChainId uint64  Destination chain ID
+    /// @param _dstAddress uint  Destination address
+    /// @param _txId uint  Transaction ID
+    /// @param _transferHash bytes32  Transfer hash
+    function receivePayload(
+        uint64 _srcChainId, uint _srcAddress, uint64 _dstChainId,
+        uint _dstAddress, uint _txId, bytes32 _transferHash
+    ) external {
+        IzAsterizmReceiveRequestDto memory dto = _buildIzAsterizmReceiveRequestDto(
+            _srcChainId, _srcAddress, _dstChainId,
+            _dstAddress, _txId, _transferHash
+        );
+
+        IClientReceiverContract(_dstAddress.toAddress()).asterizmIzReceive(dto);
+    }
 }

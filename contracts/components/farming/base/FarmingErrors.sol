@@ -3,6 +3,10 @@ pragma solidity ^0.8.28;
 
 library FarmingErrors {
 
+    uint16 constant SENDER__ONLY_SENDER__ERROR = 1101;
+    uint16 constant SENDER__ONLY_OWNER_OR_SENDER__ERROR = 1102;
+    uint16 constant SENDER__SENDER_NOT_EXISTS__ERROR = 1103;
+
     uint16 constant FARMING__AMOUNT_TOO_SMALL__ERROR = 1001;
     uint16 constant FARMING__DEPOSIT_EXISTS_ALREADY__ERROR = 1002;
     uint16 constant FARMING__TOKEN_BALANCE_NOT_ENOUGH__ERROR = 1003;
@@ -28,4 +32,5 @@ library FarmingErrors {
     uint16 constant FARMING__DEPOSIT_APPROVE_NOT_FOUND__ERROR = 1023;
     uint16 constant FARMING__DEPOSIT_APPROVE_EXECUTED_ALREADY__ERROR = 1024;
     uint16 constant FARMING__WRONG_REFUNDING_TOKEN_ADDRESS__ERROR = 1025;
+    uint16 constant FARMING__ONLY_LP_TOKEN__ERROR = 1026;
 }

@@ -10,4 +10,9 @@ interface ILpToken is IMultiChainToken {
     /// @param _userAddress address  User address
     /// @param _amount amount  Token amount
     function farmingDeposit(uint64 _dstChainId, address _userAddress, uint _amount) external;
+
+    /// Farming withdrawal logic
+    /// @param _userAddress address  User address
+    /// @param _amount amount  Token amount
+    function farmingWithdrawal(address _userAddress, uint _amount) external;
 }

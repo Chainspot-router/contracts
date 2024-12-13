@@ -8,8 +8,7 @@ import {IBeefyVaultToken} from "./interfaces/IBeefyVaultToken.sol";
 import {ReentrancyGuardUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {Sender} from "../../base/Sender.sol";
-
+import {Sender} from "./base/Sender.sol";
 
 contract FarmingBeefyV1 is Initializable, ERC20Upgradeable, UUPSUpgradeable, Sender, ReentrancyGuardUpgradeable {
     using Math for uint;

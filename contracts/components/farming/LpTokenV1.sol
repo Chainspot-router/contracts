@@ -5,7 +5,7 @@ import {ERC20Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/
 import {ILpToken} from "./interfaces/ILpToken.sol";
 import {IFarmingManipulator} from "./interfaces/IFarmingManipulator.sol";
 import {AsterizmClientUpgradeable, IInitializerSender, UintLib, AddressLib} from "asterizmprotocol/contracts/evm/AsterizmClientUpgradeable.sol";
-import {FarmingErrors} from "./FarmingErrors.sol";
+import {FarmingErrors} from "./base/FarmingErrors.sol";
 
 contract LpTokenV1 is ILpToken, ERC20Upgradeable, AsterizmClientUpgradeable {
 
@@ -45,24 +45,47 @@ contract LpTokenV1 is ILpToken, ERC20Upgradeable, AsterizmClientUpgradeable {
     function crossChainTransfer(uint64 _dstChainId, address _from, uint _to, uint _amount) public payable {
         uint amount = _debitFrom(_from, _amount); // amount returned should not have dust
         require(amount > 0, CustomError(FarmingErrors.FARMING__AMOUNT_TOO_SMALL__ERROR));
-        bytes32 transferHash = _initAsterizmTransferEvent(_dstChainId, abi.encode(_to, amount));
+        bytes32 transferHash = _initAsterizmTransferEvent(_dstChainId, abi.encode(_to, amount, bytes32(0), false));
+        _addRefundTransfer(transferHash, _from, amount, address(this));
+    }
+
+    /// Cross-chain withdrawal
+    /// @param _dstChainId uint64  Destination chain ID
+    /// @param _from address  From address
+    /// @param _to uint  To address in uint format
+    /// @param _amount amount  Token amount
+    /// @param _key bytes32  Withdrawal key
+    /// @param _mustSendToSrcChain bool  Must send to src chain
+    function crossChainWithdrawal(uint64 _dstChainId, address _from, uint _to, uint _amount, bytes32 _key, bool _mustSendToSrcChain) public payable {
+        uint amount = _debitFrom(_from, _amount); // amount returned should not have dust
+        require(amount > 0, CustomError(FarmingErrors.FARMING__AMOUNT_TOO_SMALL__ERROR));
+        bytes32 transferHash = _initAsterizmTransferEvent(_dstChainId, abi.encode(_to, amount, _key, _mustSendToSrcChain));
         _addRefundTransfer(transferHash, _from, amount, address(this));
     }
 
     /// Receive non-encoded payload
     /// @param _dto ClAsterizmReceiveRequestDto  Method DTO
     function _asterizmReceive(ClAsterizmReceiveRequestDto memory _dto) internal override {
-        (uint dstAddressUint, uint amount) = abi.decode(_dto.payload, (uint, uint));
+        (uint dstAddressUint, uint amount, bytes32 key, bool mustSendToSrcChain) = abi.decode(_dto.payload, (uint, uint, bytes32, bool));
         _mint(dstAddressUint.toAddress(), amount);
+        if (key != bytes32(0)) {
+            address farmingManipulatorAddress = address(farmingManipulator);
+            (bool success, ) = farmingManipulatorAddress.call(
+                abi.encodeWithSignature(
+                    "addWithdrawalRequest(bytes32,address,uint256,bool)",
+                    key, dstAddressUint.toAddress(), amount, mustSendToSrcChain
+                )
+            );
+        }
     }
 
     /// Build packed payload (abi.encodePacked() result)
     /// @param _payload bytes  Default payload (abi.encode() result)
     /// @return bytes  Packed payload (abi.encodePacked() result)
     function _buildPackedPayload(bytes memory _payload) internal pure override returns(bytes memory) {
-        (uint dstAddressUint, uint amount) = abi.decode(_payload, (uint, uint));
+        (uint dstAddressUint, uint amount, bytes32 key, bool mustSendToSrcChain) = abi.decode(_payload, (uint, uint, bytes32, bool));
 
-        return abi.encodePacked(dstAddressUint, amount);
+        return abi.encodePacked(dstAddressUint, amount, key, mustSendToSrcChain);
     }
 
     /// Debit logic
@@ -93,7 +116,14 @@ contract LpTokenV1 is ILpToken, ERC20Upgradeable, AsterizmClientUpgradeable {
     /// @param _userAddress address  User address
     /// @param _amount amount  Token amount
     function farmingDeposit(uint64 _dstChainId, address _userAddress, uint _amount) external onlyFarmingManipulator {
-        bytes32 transferHash = _initAsterizmTransferEvent(_dstChainId, abi.encode(_userAddress.toUint(), _amount));
+        bytes32 transferHash = _initAsterizmTransferEvent(_dstChainId, abi.encode(_userAddress.toUint(), _amount, bytes32(0), false));
         _addRefundTransfer(transferHash, _userAddress, _amount, address(this));
+    }
+
+    /// Farming withdrawal logic
+    /// @param _userAddress address  User address
+    /// @param _amount amount  Token amount
+    function farmingWithdrawal(address _userAddress, uint _amount) external onlyFarmingManipulator {
+        _burn(_userAddress, _amount);
     }
 }

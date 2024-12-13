@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
+import {zero} from "big-integer";
 
 describe("Proxy test", function () {
     async function deployContractsFixture() {
@@ -145,8 +146,8 @@ describe("Proxy test", function () {
         const bridgeValue = ~~(userValue - additionalFee); // userValue - 0.02%
         const baseFee = ~~(rate * baseFeeInUsd); // 100 * 2 = 200
         const value = ~~(userValue); // 100.02% (100020) - user enter this amount, but finally we adding him baseFee, he pay bridgeValue + additionalFee + baseFee = 100220
-        const data = (new ethers.Interface(["function testFunction(address _tokenAddress, uint _value)"]))
-            .encodeFunctionData("testFunction", [zeroAddress, bridgeValue]);
+        const data = (new ethers.Interface(["function testFunction(address _tokenAddress, uint _value, address _targetAddress)"]))
+            .encodeFunctionData("testFunction", [zeroAddress, bridgeValue, zeroAddress]);
 
         await expect(proxy.connect(user1).metaProxy(zeroAddress, value, bridgeValue, await bridge.getAddress(), await bridge.getAddress(), 0, zeroAddress, 0, data, {value: 0}))
             .to.be.rejectedWith("ChainspotProxy: value not enough");
@@ -173,8 +174,8 @@ describe("Proxy test", function () {
         const baseFee = ~~(rate * baseFeeInUsd); // 100 * 2 = 200
         const refValue = ~~(baseFee * 30 / 100); // baseFee - 200, refBonus - 30% (60)
         const value = ~~(userValue); // 100.02% (100020) - user enter this amount, but finally we adding him baseFee, he pay bridgeValue + additionalFee + baseFee = 100220
-        const data = (new ethers.Interface(["function testFunction(address _tokenAddress, uint _value)"]))
-            .encodeFunctionData("testFunction", [zeroAddress, bridgeValue]);
+        const data = (new ethers.Interface(["function testFunction(address _tokenAddress, uint _value, address _targetAddress)"]))
+            .encodeFunctionData("testFunction", [zeroAddress, bridgeValue, zeroAddress]);
 
         await expect(proxy.connect(user1).metaProxy(zeroAddress, value, bridgeValue, await bridge.getAddress(), await bridge.getAddress(), nfts[0].level, user2.address, nfts[0].level, data, {value: 0}))
             .to.be.rejectedWith("ChainspotProxy: value not enough");
@@ -203,8 +204,8 @@ describe("Proxy test", function () {
         const bridgeValue = ~~(userValue - additionalFee); // userValue - 0.02%
         const baseFee = ~~(rate * baseFeeInUsd); // 100 * 2 = 200
         const value = ~~(userValue); // 100.02% (100020) - user enter this amount, but finally we adding him baseFee, he pay bridgeValue + additionalFee + baseFee = 100220
-        const data = (new ethers.Interface(["function testFunction(address _tokenAddress, uint _value)"]))
-            .encodeFunctionData("testFunction", [await token.getAddress(), bridgeValue]);
+        const data = (new ethers.Interface(["function testFunction(address _tokenAddress, uint _value, address _targetAddress)"]))
+            .encodeFunctionData("testFunction", [await token.getAddress(), bridgeValue, zeroAddress]);
 
         const startOwnerTokenBalance = await token.balanceOf(owner.address);
         const txTransfer = await token.transfer(user1.address, value);
@@ -247,8 +248,8 @@ describe("Proxy test", function () {
         const baseFee = ~~(rate * baseFeeInUsd); // 100 * 2 = 200
         const refValue = ~~(baseFee * 30 / 100); // baseFee - 200, refBonus - 30% (60)
         const value = ~~(userValue); // 100.02% (100020) - user enter this amount, but finally we adding him baseFee, he pay bridgeValue + additionalFee + baseFee = 100220
-        const data = (new ethers.Interface(["function testFunction(address _tokenAddress, uint _value)"]))
-            .encodeFunctionData("testFunction", [await token.getAddress(), bridgeValue]);
+        const data = (new ethers.Interface(["function testFunction(address _tokenAddress, uint _value, address _targetAddress)"]))
+            .encodeFunctionData("testFunction", [await token.getAddress(), bridgeValue, zeroAddress]);
 
         const startOwnerTokenBalance = await token.balanceOf(owner.address);
         const txTransfer = await token.transfer(user1.address, value);
@@ -293,8 +294,8 @@ describe("Proxy test", function () {
         const bridgeValue = ~~(userValue - additionalFee); // userValue - 0.02%
         const baseFee = ~~(rate * baseFeeInUsd); // 100 * 2 = 200
         const value = ~~(userValue); // 100.02% (100020) - user enter this amount, but finally we adding him baseFee, he pay bridgeValue + additionalFee + baseFee = 100220
-        const data = (new ethers.Interface(["function testFunction(address _tokenAddress, uint _value)"]))
-            .encodeFunctionData("testFunction", [await token.getAddress(), bridgeValue]);
+        const data = (new ethers.Interface(["function testFunction(address _tokenAddress, uint _value, address _targetAddress)"]))
+            .encodeFunctionData("testFunction", [await token.getAddress(), bridgeValue, zeroAddress]);
 
         const startOwnerTokenBalance = await token.balanceOf(owner.address);
         const txTransfer = await token.transfer(user1.address, value);
@@ -341,8 +342,8 @@ describe("Proxy test", function () {
         const bridgeValue = ~~(userValue - additionalFee); // userValue - 0.01%
         const baseFee = ~~(rate * baseFeeInUsd); // 100 * 2 = 200
         const value = ~~(userValue); // 100 (100000) - user enter this amount, but finally we adding him baseFee, he pay bridgeValue + additionalFee + baseFee = 100220
-        const data = (new ethers.Interface(["function testFunction(address _tokenAddress, uint _value)"]))
-            .encodeFunctionData("testFunction", [zeroAddress, bridgeValue]);
+        const data = (new ethers.Interface(["function testFunction(address _tokenAddress, uint _value, address _targetAddress)"]))
+            .encodeFunctionData("testFunction", [zeroAddress, bridgeValue, zeroAddress]);
 
         await expect(proxy.setFeeParams(10, 2))
             .to.be.rejectedWith("Fee: fee must be less than maximum");
@@ -364,13 +365,6 @@ describe("Proxy test", function () {
 
     it("Should proxy coins with changed base fee", async function () {
         const { Token, token, Bridge, bridge, Proxy, proxy, Claimer, claimer, Referral, referral, Cashback, cashback, stableCoin, Nft, nftLvl1, nftLvl2, nftLvl3, owner, user1, user2, zeroAddress, feeBase, feeMul, rate, nfts, baseFeeInUsd, minClaimValue, minWithdrawValue } = await loadFixture(deployContractsFixture);
-        // const bridgeValue = 100000;
-        // const feeValue = 200;
-        // const feeBaseNew = 1000;
-        // const baseFee = rate * baseFeeInUsd;
-        // const value = bridgeValue + feeValue; //101%
-        // const data = (new ethers.Interface(["function testFunction(address tokenAddress)"]))
-        //     .encodeFunctionData("testFunction", [zeroAddress]);        const feeMulNew = 1;
         const feeBaseNew = 1000;
         const newFee = 0.2;
         const userValue = 100000;
@@ -378,8 +372,8 @@ describe("Proxy test", function () {
         const bridgeValue = ~~(userValue - additionalFee); // userValue - 0.01%
         const baseFee = ~~(rate * baseFeeInUsd); // 100 * 2 = 200
         const value = ~~(userValue); // 100 (100000) - user enter this amount, but finally we adding him baseFee, he pay bridgeValue + additionalFee + baseFee = 100220
-        const data = (new ethers.Interface(["function testFunction(address _tokenAddress, uint _value)"]))
-            .encodeFunctionData("testFunction", [zeroAddress, bridgeValue]);
+        const data = (new ethers.Interface(["function testFunction(address _tokenAddress, uint _value, address _targetAddress)"]))
+            .encodeFunctionData("testFunction", [zeroAddress, bridgeValue, zeroAddress]);
 
         await expect(proxy.setFeeParams(10, 2))
             .to.be.rejectedWith("Fee: fee must be less than maximum");
@@ -522,8 +516,8 @@ describe("Proxy test", function () {
         const baseFee = ~~(rate * baseFeeInUsd); // 100 * 2 = 200
         const refValue = ~~(baseFee * 30 / 100); // baseFee - 200, refBonus - 30% (60)
         const value = ~~(userValue); // 100.02% (100020) - user enter this amount, but finally we adding him baseFee, he pay bridgeValue + additionalFee + baseFee = 100220
-        const data = (new ethers.Interface(["function testFunction(address _tokenAddress, uint _value)"]))
-            .encodeFunctionData("testFunction", [zeroAddress, bridgeValue]);
+        const data = (new ethers.Interface(["function testFunction(address _tokenAddress, uint _value, address _targetAddress)"]))
+            .encodeFunctionData("testFunction", [zeroAddress, bridgeValue, zeroAddress]);
         let tx;
 
         await expect(proxy.connect(user1).metaProxy(zeroAddress, value, bridgeValue, await bridge.getAddress(), await bridge.getAddress(), nfts[0].level, user2.address, nfts[0].level, data, {value: 0}))
@@ -578,8 +572,8 @@ describe("Proxy test", function () {
         const baseFee = ~~(rate * baseFeeInUsd); // 100 * 2 = 200
         const refValue = ~~(baseFee * 30 / 100); // baseFee - 200, refBonus - 30% (60)
         const value = ~~(userValue); // 100.02% (100020) - user enter this amount, but finally we adding him baseFee, he pay bridgeValue + additionalFee + baseFee = 100220
-        const data = (new ethers.Interface(["function testFunction(address _tokenAddress, uint _value)"]))
-            .encodeFunctionData("testFunction", [zeroAddress, bridgeValue]);
+        const data = (new ethers.Interface(["function testFunction(address _tokenAddress, uint _value, address _targetAddress)"]))
+            .encodeFunctionData("testFunction", [zeroAddress, bridgeValue, zeroAddress]);
         let tx;
 
         await expect(proxy.connect(user1).metaProxy(zeroAddress, value, bridgeValue, await bridge.getAddress(), await bridge.getAddress(), nfts[0].level, user2.address, nfts[0].level, data, {value: 0}))
@@ -725,8 +719,8 @@ describe("Proxy test", function () {
         const baseFee = ~~(rate * baseFeeInUsd); // 100 * 2 = 200
         const refValue = ~~(baseFee * 30 / 100); // baseFee - 200, refBonus - 30% (60)
         const value = ~~(userValue); // 100.02% (100020) - user enter this amount, but finally we adding him baseFee, he pay bridgeValue + additionalFee + baseFee = 100220
-        const data = (new ethers.Interface(["function testFunction(address _tokenAddress, uint _value)"]))
-            .encodeFunctionData("testFunction", [zeroAddress, bridgeValue]);
+        const data = (new ethers.Interface(["function testFunction(address _tokenAddress, uint _value, address _targetAddress)"]))
+            .encodeFunctionData("testFunction", [zeroAddress, bridgeValue, zeroAddress]);
 
         await expect(proxy.connect(user1).metaProxy(zeroAddress, value, bridgeValue, await bridge.getAddress(), await bridge.getAddress(), nfts[0].level, user2.address, nfts[0].level, data, {value: 0}))
             .to.be.rejectedWith("ChainspotProxy: value not enough");

@@ -6,27 +6,25 @@ import {IERC20, SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeE
 import {AddressLib} from "asterizmprotocol/contracts/evm/libs/AddressLib.sol";
 import {Math} from "@openzeppelin/contracts/utils/math/Math.sol";
 import {IBeefyVaultToken} from "./interfaces/IBeefyVaultToken.sol";
-import {FarmingErrors} from "./FarmingErrors.sol";
-import {Sender} from "../../base/Sender.sol";
+import {Sender, FarmingErrors} from "./base/Sender.sol";
 import {ReentrancyGuardUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import {ILpToken} from "./interfaces/ILpToken.sol";
 import {IProxyApprover} from "./interfaces/IProxyApprover.sol";
+import {IFarmingManipulator} from "./interfaces/IFarmingManipulator.sol";
+import {ITestBridgeContract} from "../../interfaces/ITestBridgeContract.sol";
 
-contract FarmingBeefyV2 is Initializable, UUPSUpgradeable, Sender, ReentrancyGuardUpgradeable {
+contract FarmingBeefyV2 is IFarmingManipulator, Initializable, UUPSUpgradeable, Sender, ReentrancyGuardUpgradeable {
 
     using Math for uint;
     using SafeERC20 for IERC20;
     using AddressLib for address;
 
-    error CustomError(uint16 _errorCode);
-
     event DepositEvent(bytes32 indexed key, address indexed user, uint amountInLp, uint amounInToken, uint pps);
     event WithdrawSuccessEvent(bytes32 indexed key, address indexed user, uint amountInLp, uint amountInToken, uint feeInToken, uint pps);
     event WithdrawRejectEvent(bytes32 indexed key, address indexed user);
-    event SetWithdrawRequestFeeEvent(uint fee);
-    event AddWithdrawalRequestEvent(bytes32 indexed key, address indexed user, uint amount, uint requestFee);
+    event AddWithdrawalRequestEvent(bytes32 indexed key, address indexed user, uint amount);
     event SetLpTokenEvent(address _lpTokenAddress);
     event SetProxyApproverEvent(address _proxyApproverAddress);
     event ApproveDepositEvent(bytes32 _key, address _user, uint _srcAmount, uint _dstAmount, uint64 _srcChainId);
@@ -39,13 +37,14 @@ contract FarmingBeefyV2 is Initializable, UUPSUpgradeable, Sender, ReentrancyGua
         bool exists;
         bool executed;
         address user;
-        uint amount;
+        uint tokenAmount;
         uint64 srcChainId;
     }
     struct WithdrawRequestStruct {
         bool exists;
         address userAddress;
         uint lpAmount;
+        bool mustSendToSrcChain;
         bool successProcessed;
         bool rejectProcessed;
     }
@@ -59,17 +58,21 @@ contract FarmingBeefyV2 is Initializable, UUPSUpgradeable, Sender, ReentrancyGua
     IERC20 public baseToken;
     uint8 public fee;
     address public feeAddress;
-    uint public withdrawRequestFee;
 
     /// Initializing function for upgradeable contracts (constructor)
     /// @param _protocolVault IVaultToken  Protocol value token
     /// @param _fee uint8  Internal fee amount
     /// @param _feeAddress address  Address for transferring fees
     function initialize(IBeefyVaultToken _protocolVault, uint8 _fee, address _feeAddress) initializer public {
+        __Ownable_init(_msgSender());
+        __ReentrancyGuard_init();
+        __UUPSUpgradeable_init();
+
         protocolVault = _protocolVault;
         baseToken = protocolVault.want();
         fee = _fee;
         feeAddress = _feeAddress == address(0) ? owner() : _feeAddress;
+        _addSender(owner());
     }
 
     /// Upgrade implementation address for UUPS logic
@@ -82,17 +85,16 @@ contract FarmingBeefyV2 is Initializable, UUPSUpgradeable, Sender, ReentrancyGua
         _;
     }
 
+    /// Only lpToken modifier
+    modifier onlyLpToken {
+        require(address(lpToken) == msg.sender, CustomError(FarmingErrors.FARMING__ONLY_LP_TOKEN__ERROR));
+        _;
+    }
+
     /// Only proxy approver modifier
     modifier onlyProxyApprover {
         require(address(proxyApprover) == msg.sender, CustomError(FarmingErrors.FARMING__ONLY_PROXY_APPROVER__ERROR));
         _;
-    }
-
-    /// Ser withdrawal request fee
-    /// @param _fee uint  Request fee amount
-    function setWithdrawRequestFee(uint _fee) external onlyOwner {
-        withdrawRequestFee = _fee;
-        emit SetWithdrawRequestFeeEvent(_fee);
     }
 
     /// Set LP token
@@ -130,8 +132,9 @@ contract FarmingBeefyV2 is Initializable, UUPSUpgradeable, Sender, ReentrancyGua
     function approveDeposit(bytes32 _key, address _user, uint _srcAmount, uint _dstAmount, uint64 _srcChainId) external onlyProxyApprover {
         require(!depositApproves[_key].exists, CustomError(FarmingErrors.FARMING__DEPOSIT_APPROVE_EXISTS_ALREADY__ERROR));
 
+        depositApproves[_key].exists = true;
         depositApproves[_key].user = _user;
-        depositApproves[_key].amount = _dstAmount;
+        depositApproves[_key].tokenAmount = _dstAmount;
         depositApproves[_key].srcChainId = _srcChainId;
 
         emit ApproveDepositEvent(_key, _user, _srcAmount, _dstAmount, _srcChainId);
@@ -167,7 +170,10 @@ contract FarmingBeefyV2 is Initializable, UUPSUpgradeable, Sender, ReentrancyGua
     /// Internal withdraw method
     /// @param _key bytes32  Request key
     /// @param _status bool  Request status
-    function _withdraw(bytes32 _key, bool _status) internal {
+    /// @param _approveTo address  Approve client address
+    /// @param _callDataTo address  Calling client address
+    /// @param _data bytes  Transfer calldata
+    function _withdraw(bytes32 _key, bool _status, address _approveTo, address _callDataTo, bytes calldata _data) internal {
         WithdrawRequestStruct memory request = withdrawRequests[_key];
         require(request.exists, CustomError(FarmingErrors.FARMING__REQUEST_NOT_EXISTS__ERROR));
         require(!request.successProcessed && !request.rejectProcessed, CustomError(FarmingErrors.FARMING__REQUEST_EXECUTED_ALREADY__ERROR));
@@ -184,20 +190,29 @@ contract FarmingBeefyV2 is Initializable, UUPSUpgradeable, Sender, ReentrancyGua
         uint amountInToken = request.lpAmount * currentPPS;
 
         /// Fee
-        uint feeInToken = ((currentPPS - position.avgEntryPrice) * request.lpAmount) / 100 * fee;
+        uint feeInToken = ((currentPPS - position.avgEntryPrice) * request.lpAmount) * fee / 100;
 
-//        _burn(request.userAddress, request.lpAmount); // TODO: updated withdrawal logic
         registry[request.userAddress].totalLpAmount = position.totalLpAmount - request.lpAmount;
-
-        uint tokenBalanceBefore = baseToken.balanceOf(address(this));
-        protocolVault.withdraw(request.lpAmount);
-        uint tokenAmount = baseToken.balanceOf(address(this)) - tokenBalanceBefore;
-        require(tokenAmount == amountInToken, CustomError(FarmingErrors.FARMING__TOKEN_AMOUNTS_NOT_EQUALS__ERROR));
-
-        baseToken.safeTransfer(feeAddress, feeInToken);
-        baseToken.safeTransfer(request.userAddress, amountInToken - feeInToken);
+        lpToken.farmingWithdrawal(request.userAddress, request.lpAmount);
 
         withdrawRequests[_key].successProcessed = true;
+
+        {
+            uint tokenBalanceBefore = baseToken.balanceOf(address(this));
+            protocolVault.withdraw(request.lpAmount);
+            uint tokenAmount = baseToken.balanceOf(address(this)) - tokenBalanceBefore;
+            require(tokenAmount == amountInToken, CustomError(FarmingErrors.FARMING__TOKEN_AMOUNTS_NOT_EQUALS__ERROR));
+
+            baseToken.safeTransfer(feeAddress, feeInToken);
+            uint userAmount = amountInToken - feeInToken;
+            if (request.mustSendToSrcChain) {
+                baseToken.forceApprove(_approveTo, userAmount);
+                (bool success, ) = _callDataTo.call{value: msg.value}(_data);
+                require(success, CustomError(FarmingErrors.FARMING__CALLDATA__ERROR));
+            } else {
+                baseToken.safeTransfer(request.userAddress, userAmount);
+            }
+        }
 
         emit WithdrawSuccessEvent(
             _key,
@@ -219,28 +234,29 @@ contract FarmingBeefyV2 is Initializable, UUPSUpgradeable, Sender, ReentrancyGua
     /// Withdraw base tokens
     /// @param _key bytes32  Request key
     /// @param _status bool  Request status
-    function withdraw(bytes32 _key, bool _status) external nonReentrant onlySender onlyWithLpToken {
-        _withdraw(_key, _status);
+    /// @param _approveTo address  Approve client address
+    /// @param _callDataTo address  Calling client address
+    /// @param _data bytes  Transfer calldata
+    function withdraw(bytes32 _key, bool _status, address _approveTo, address _callDataTo, bytes calldata _data) external nonReentrant onlySender onlyWithLpToken {
+        _withdraw(_key, _status, _approveTo, _callDataTo, _data);
     }
 
     /// Add withdrawal request
     /// @param _key bytes32  Request unique key
+    /// @param _user address  User address
     /// @param _lpAmount uint  LP amount for withdrawal
-    function addWithdrawalRequest(bytes32 _key, uint _lpAmount) external payable nonReentrant onlyWithLpToken {
-        require(msg.value >= withdrawRequestFee, CustomError(FarmingErrors.FARMING__VALUE_NOT_ENOUGH__ERROR));
+    /// @param _mustSendToSrcChain bool  Must send to src chain
+    function addWithdrawalRequest(bytes32 _key, address _user, uint _lpAmount, bool _mustSendToSrcChain) external nonReentrant onlyWithLpToken onlyLpToken {
         require(!withdrawRequests[_key].exists, CustomError(FarmingErrors.FARMING__REQUEST_EXISTS_ALREADY__ERROR));
-        require(registry[msg.sender].totalLpAmount >= _lpAmount, CustomError(FarmingErrors.FARMING__LP_AMOUNT_TOO_DIG__ERROR));
-        if (msg.value > 0) {
-            (bool successFee, ) = owner().call{value: msg.value}("");
-            require(successFee, CustomError(FarmingErrors.FARMING__TRANSFER_REQUEST__ERROR));
-        }
+        require(registry[_user].totalLpAmount >= _lpAmount, CustomError(FarmingErrors.FARMING__LP_AMOUNT_TOO_DIG__ERROR));
 
         WithdrawRequestStruct memory request;
         request.exists = true;
-        request.userAddress = msg.sender;
+        request.userAddress = _user;
         request.lpAmount = _lpAmount;
+        request.mustSendToSrcChain = _mustSendToSrcChain;
         withdrawRequests[_key] = request;
 
-        emit AddWithdrawalRequestEvent(_key, msg.sender, _lpAmount, msg.value);
+        emit AddWithdrawalRequestEvent(_key, _user, _lpAmount);
     }
 }

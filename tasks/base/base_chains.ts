@@ -548,6 +548,7 @@ export const Chains = {
                 '0x6352a56caadC4F1E25CD6c75970Fa768A3304e64', // RocketX (openocean)
                 '0x69460570c93f9DE5E2edbC3052bf10125f0Ca22d', // RocketX (rango)
                 '0x55b5b0562FB3Da3b4108145Cd30e6d3b6E16c69C', // WowMax
+                '0xF103b5B479d2A629F422C42bb35E7eEceE1ad55E', // XyFinance
             ],
             levelNfts: [
                 {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeiaenlmhafvrfnvzfxkik53i7yv2iksfqsivs5qkaa2vj7afn5hcwi.ipfs.w3s.link/lvl0.png"},
@@ -657,6 +658,7 @@ export const Chains = {
                 },
             },
             trustAddresses: [
+                '0x3A9A5dBa8FE1C4Da98187cE4755701BCA182f63b', // Lifi
                 '0x7057aB3fB2BeE9c18e0cDe4240DE4ff7f159E365', // Symbiosis (crosschain)
                 '0x2b7Aa8bDc40B6d3d19d0dE7480c4db8d5B6495e2', // Symbiosis (single chain)
                 '0x73Ce60416035B8D7019f6399778c14ccf5C9c7A1', // XYFinance
