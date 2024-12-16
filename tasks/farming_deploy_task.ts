@@ -4,7 +4,7 @@ import { Chains } from "./base/base_chains";
 
 async function deployBase(hre: any, isTestnet: any) {
     const [owner] = await ethers.getSigners();
-    const Farming = await ethers.getContractFactory("FarmingBeefyV1");
+    const Farming = await ethers.getContractFactory("FarmingBeefyV2");
 
     const chains = isTestnet == 1 ? Chains.testnet : Chains.mainnet;
 
@@ -26,7 +26,7 @@ async function deployBase(hre: any, isTestnet: any) {
 
 task("farming:deploy", "Deploy farming contract")
     .addPositionalParam("vault", "Vault contract address")
-    .addPositionalParam("fee", "Farming success fee", '10')
+    .addPositionalParam("fee", "Farming success fee (in percent)", '10')
     .addPositionalParam("feeAddress", "Address for sending fee", '0x0000000000000000000000000000000000000000')
     .addPositionalParam("isTestnet", "Is testnet flag (1 - testnet, 0 - mainnet)", '0')
     .addPositionalParam("pauseInSeconds", "Pause script running in seconds", '2')

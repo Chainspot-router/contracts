@@ -25,8 +25,11 @@ import './tasks/proxy_updatetrustedaddress_task';
 import './tasks/owner_update';
 import './tasks/farming_deploy_task';
 import './tasks/farming_update_task';
+import './tasks/farming_fulldeploy_task';
 import './tasks/farming_deploytesttoken_task';
 import './tasks/farming_deploytesttokenvault_task';
+import './tasks/farming_updatetrustedaddress_task';
+import './tasks/farming_clienttrustedaddresses_task';
 
 const config = {
   solidity: {
@@ -238,8 +241,10 @@ const config = {
   etherscan: {
     apiKey: {
       ethereumMainnet: process.env.ETHERSCAN_API_KEY,
+      ethereumSepolia: process.env.ETHERSCAN_API_KEY,
       polygonMainnet: process.env.POLYGONSCAN_API_KEY,
       bscMainnet: process.env.BSCSCAN_API_KEY,
+      bscTestnet: process.env.BSCSCAN_API_KEY,
       avalancheMainnet: process.env.AVALANCHESCAN_API_KEY,
       optimismMainnet: process.env.OPTIMISMSCAN_API_KEY,
       arbitrumMainnet: process.env.ARBIRTUMSCAN_API_KEY,
@@ -267,6 +272,14 @@ const config = {
         }
       },
       {
+        network: "ethereumSepolia",
+        chainId: 11155111,
+        urls: {
+          apiURL: "https://api-sepolia.etherscan.io/api",
+          browserURL: "https://sepolia.etherscan.io"
+        }
+      },
+      {
         network: "polygonMainnet",
         chainId: 137,
         urls: {
@@ -280,6 +293,14 @@ const config = {
         urls: {
           apiURL: "https://api.bscscan.com/api",
           browserURL: "https://bscscan.com"
+        }
+      },
+      {
+        network: "bscTestnet",
+        chainId: 97,
+        urls: {
+          apiURL: "https://api-testnet.bscscan.com/api",
+          browserURL: "https://testnet.bscscan.com"
         }
       },
       {

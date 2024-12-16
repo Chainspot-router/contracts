@@ -12,9 +12,17 @@ export const Chains = {
                 cashback: '0x0000000000000000000000000000000000000000',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -50,9 +58,17 @@ export const Chains = {
                 cashback: '0xaEA8E61B40498b5EC42b3824A3aA4DB86c82daFB',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -86,9 +102,17 @@ export const Chains = {
                 cashback: '0x5db0558fffcc858f80fbaA714C7F3a6e094e18b3',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -123,9 +147,17 @@ export const Chains = {
                 cashback: '0x4B70139C0e544C25B6897317d9a93F30e6112dAd',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -160,9 +192,17 @@ export const Chains = {
                 cashback: '0x4B70139C0e544C25B6897317d9a93F30e6112dAd',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -197,9 +237,17 @@ export const Chains = {
                 cashback: '0xc23f51Ff00dC08e9B736087D12C53B9ca3992622',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -232,9 +280,17 @@ export const Chains = {
                 cashback: '0x4B70139C0e544C25B6897317d9a93F30e6112dAd',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -269,9 +325,17 @@ export const Chains = {
                 cashback: '0x0000000000000000000000000000000000000000',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -298,9 +362,17 @@ export const Chains = {
                 cashback: '0x2AE991C66cE9D9Fd4318e67B0b94E2B4170faa5D',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -325,9 +397,17 @@ export const Chains = {
                 cashback: '0x0000000000000000000000000000000000000000',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0xca506793A420E901BbCa8066be5661E3C52c84c2', // Symbiosis (crosschain)
@@ -352,9 +432,17 @@ export const Chains = {
                 cashback: '0x0000000000000000000000000000000000000000',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -381,9 +469,17 @@ export const Chains = {
                 cashback: '0x981B9cAe75E9f2Ad0bE53CDfF11B25d41c9F2632',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0x8097f0B9f06C27AF9579F75762F971D745bb222F', // Symbiosis (crosschain)
@@ -410,9 +506,17 @@ export const Chains = {
                 cashback: '0x4B70139C0e544C25B6897317d9a93F30e6112dAd',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -446,9 +550,17 @@ export const Chains = {
                 cashback: '0x40c9f627116473C1546A5B72088Ae9eE99f67896',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0xDE1E598b81620773454588B85D6b5D4eEC32573e', // Lifi
@@ -479,9 +591,17 @@ export const Chains = {
                 cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -509,9 +629,17 @@ export const Chains = {
                 cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -538,9 +666,17 @@ export const Chains = {
                 cashback: '0x8D33C4A98c75cD0F92d91528D97e615B9a1489e7',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0xcE8f24A58D85eD5c5A6824f7be1F8d4711A0eb4C', // Symbiosis (crosschain)
@@ -569,9 +705,17 @@ export const Chains = {
                 cashback: '0x4B70139C0e544C25B6897317d9a93F30e6112dAd',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -599,9 +743,17 @@ export const Chains = {
                 cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0xf85FC807D05d3Ab2309364226970aAc57b4e1ea4', // Symbiosis (crosschain)
@@ -626,9 +778,17 @@ export const Chains = {
                 cashback: '0xeDDC2167CCe5aE260777e62751F43558CF391629',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0x7057ab3fb2bee9c18e0cde4240de4ff7f159e365', // Symbiosis (crosschain)
@@ -653,9 +813,17 @@ export const Chains = {
                 cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0x3A9A5dBa8FE1C4Da98187cE4755701BCA182f63b', // Lifi
@@ -682,9 +850,17 @@ export const Chains = {
                 cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -710,9 +886,17 @@ export const Chains = {
                 cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -739,9 +923,17 @@ export const Chains = {
                 cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0x77Ed285AD9d1c8C0307eA23DcE68B8a5A6AfB39A', // Symbiosis (crosschain)
@@ -766,9 +958,17 @@ export const Chains = {
                 cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', // Lifi
@@ -794,9 +994,17 @@ export const Chains = {
                 cashback: '0xb7686c3A1544928632c51a64B55Ad59b47076876',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0xe85b0d89cbc670733d6a40a9450d8788be13da47', // Wanchain
@@ -820,9 +1028,17 @@ export const Chains = {
                 cashback: '0xeDDC2167CCe5aE260777e62751F43558CF391629',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0xC626845BF4E6a5802Ef774dA0B3DfC6707F015F7', // Owlto
@@ -846,9 +1062,17 @@ export const Chains = {
                 cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0xC626845BF4E6a5802Ef774dA0B3DfC6707F015F7', // Owlto
@@ -872,9 +1096,17 @@ export const Chains = {
                 cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0xC626845BF4E6a5802Ef774dA0B3DfC6707F015F7', // Owlto
@@ -898,9 +1130,17 @@ export const Chains = {
                 cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0xC626845BF4E6a5802Ef774dA0B3DfC6707F015F7', // Owlto
@@ -924,9 +1164,17 @@ export const Chains = {
                 cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [
                 '0xC626845BF4E6a5802Ef774dA0B3DfC6707F015F7', // Owlto
@@ -954,9 +1202,17 @@ export const Chains = {
                 cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
             },
             trustAddresses: [],
             levelNfts: [
@@ -978,9 +1234,17 @@ export const Chains = {
                 cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'ttc': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x9fb7BcC8FF11555df4766f5cd3d62eB19A634bea',
+                            approver: '0x81c8Ba00D645B470e5A028EaFcdBB8D3a479816D',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0xa84b4464989e76b193d33fD65807F80BBD004A8a',
             },
             trustAddresses: [],
             levelNfts: [],
@@ -996,9 +1260,17 @@ export const Chains = {
                 cashback: '0x0dEe24C99e8dF7f0E058F4F48f228CC07DB704Fc',
                 farming: {
                     'beefy': {
-                        'usdt': '0x0000000000000000000000000000000000000000',
-                    }
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0x3EeF3BD23e5a843916EE53A2016aad108Fb20649',
             },
             trustAddresses: [],
             levelNfts: [],
@@ -1014,9 +1286,17 @@ export const Chains = {
                 cashback: '0xc69e8A48b607B82A3C0eBC7B2c42634b973C6c70',
                 farming: {
                     'beefy': {
-                        'ttc': '0x619A40Ce46E01e5a145Cd3D09d0Ba78D1d6403c0',
-                    }
+                        'ttc': {
+                            farming: '0xe0B92a13c8F73b8172B383c101d1811fE034e1cb',
+                            lpToken: '0x4AC97445397A998094A2945F9A936Aef144B41B5',
+                            approver: '0xf34997E7DC7792891F16029501C731d65167106a',
+                            baseToken: '0x7DaCa618cA0f6fD4F4942438a25CC1320D5F98F6',
+                            vaultToken: '0x9f5e11e4530c0Ff24C8d50996B93E7AEF348A3f9',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
                 },
+                asterizmInitializer: '0xE412121479211c3e9c50EC940F50596f293c08F0',
             },
             trustAddresses: [],
             levelNfts: [
