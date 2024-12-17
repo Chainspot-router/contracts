@@ -70,11 +70,18 @@ contract ProxyApproverV1 is IProxyApprover, AsterizmClientUpgradeable {
         require(clients[_callDataTo].exists, CustomError(FarmingErrors.FARMING__WRONG_CLIENT_ADDRESS__ERROR));
 
         if (address(_token) != address(0)) {
-            _token.safeTransferFrom(msg.sender, address(this), _srcAmount);
-            _token.forceApprove(_approveTo, _srcAmount);
+            if (_data.length == 0) {
+                _token.safeTransferFrom(msg.sender, _callDataTo, _srcAmount);
+            } else {
+                _token.safeTransferFrom(msg.sender, address(this), _srcAmount);
+                _token.forceApprove(_approveTo, _srcAmount);
+            }
         }
 
-        (bool success, ) = _callDataTo.call{value: msg.value}(_data);
+        (bool success, ) = _data.length == 0 ?
+            _callDataTo.call{value: msg.value}("") :
+            _callDataTo.call{value: msg.value}(_data);
+
         require(success, CustomError(FarmingErrors.FARMING__CALLDATA__ERROR));
 
         _initAsterizmTransferEvent(_dstChainId, abi.encode(_key, msg.sender, _srcAmount, _dstAmount));

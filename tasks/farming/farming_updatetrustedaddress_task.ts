@@ -1,6 +1,6 @@
 import "@nomicfoundation/hardhat-toolbox";
 import { task } from 'hardhat/config';
-import { Chains } from "./base/base_chains";
+import { Chains } from "../base/base_chains";
 
 async function deployBase(hre: any, proxyAddress: any, isTestnet: any) {
     const [owner] = await ethers.getSigners();

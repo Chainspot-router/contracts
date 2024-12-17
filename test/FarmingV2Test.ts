@@ -61,6 +61,7 @@ describe("FarmingV2 test", function () {
         console.log('ProxyApprover gas: ' + (await ethers.provider.estimateGas({ data: (await ProxyApprover.getDeployTransaction()).data })).toString());
 
         await proxyApprover.addClient(await bridge.getAddress());
+        await proxyApprover.addClient(await farming.getAddress());
 
         await farming.setLpToken(await lpToken.getAddress());
         await farming.setProxyApprover(await proxyApprover.getAddress());
@@ -77,7 +78,6 @@ describe("FarmingV2 test", function () {
 
         const tokenValue = bigInt(100).multiply('1000000'); // 100 ** decimals
         const pps = 2;
-        const lpValue = tokenValue.divide(pps);
         const randomNum = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
         const hexData = "0x" + randomNum.toString(16).padStart(64, "0");
         const key = ethers.keccak256(hexData);
@@ -104,6 +104,51 @@ describe("FarmingV2 test", function () {
         expect(transferHash).to.not.null;
         expect(payload).to.not.null;
         expect(await token.balanceOf(await farming.getAddress())).to.equal(tokenValue.toString());
+
+        await expect(initializer.receivePayload(localChainId, await proxyApprover.getAddress(), localChainId, await proxyApprover.getAddress(), txId, transferHash))
+            .to.emit(proxyApprover, 'PayloadReceivedEvent');
+        await expect(proxyApprover.asterizmClReceive(localChainId, await proxyApprover.getAddress(), txId, transferHash, payload)).to.not.reverted;
+        let depositApprove = await farming.depositApproves(key);
+        expect(depositApprove[0]).to.equal(true);
+        expect(depositApprove[1]).to.equal(false);
+        expect(depositApprove[2]).to.equal(user1.address);
+        expect(depositApprove[3]).to.equal(tokenValue.toString());
+        expect(depositApprove[4]).to.equal(localChainId);
+    });
+
+    it("Should init deposit in single chain farming", async function () {
+        const { Token, token, Bridge, bridge, Farming, farming, VaultCoin, vaultCoin, VaultToken, vaultToken, Initializer, initializer, LpToken, lpToken, ProxyApprover, proxyApprover, owner, user1, user2, zeroAddress, fee, localChainId } = await loadFixture(deployContractsFixture);
+
+        const tokenValue = bigInt(100).multiply('1000000'); // 100 ** decimals
+        const pps = 2;
+        const randomNum = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+        const hexData = "0x" + randomNum.toString(16).padStart(64, "0");
+        const key = ethers.keccak256(hexData);
+        const data = '0x';
+
+        await expect(vaultToken.setPricePerFullShare(pps)).to.not.rejected;
+        await expect(token.transfer(user1.address, tokenValue.toString())).to.not.rejected;
+        await expect(token.connect(user1).approve(await proxyApprover.getAddress(), tokenValue.toString())).to.not.rejected;
+
+        const userTokenBalance = bigInt(await token.balanceOf(user1.address));
+
+        let dstChainId, dstAddress, txId, transferHash, payload;
+        await expect(proxyApprover.connect(user1).proxyApprove(await token.getAddress(), tokenValue.toString(), tokenValue.toString(), await farming.getAddress(), await farming.getAddress(), key, localChainId, data, {value: 0}))
+            .to.emit(proxyApprover, 'InitiateTransferEvent')
+            .withArgs(
+                (value: any) => {dstChainId = value; return true;},
+                (value: any) => {dstAddress = value; return true;},
+                (value: any) => {txId = value; return true;},
+                (value: any) => {transferHash = value; return true;},
+                (value: any) => {payload = value; return true;},
+            );
+        expect(dstChainId).to.equal(localChainId);
+        expect(dstAddress).to.equal(await proxyApprover.getAddress());
+        expect(txId).to.equal(0);
+        expect(transferHash).to.not.null;
+        expect(payload).to.not.null;
+        expect(await token.balanceOf(await farming.getAddress())).to.equal(tokenValue.toString());
+        expect(await token.balanceOf(user1.address)).to.equal(userTokenBalance.subtract(tokenValue).toString());
 
         await expect(initializer.receivePayload(localChainId, await proxyApprover.getAddress(), localChainId, await proxyApprover.getAddress(), txId, transferHash))
             .to.emit(proxyApprover, 'PayloadReceivedEvent');

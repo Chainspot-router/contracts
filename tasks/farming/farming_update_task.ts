@@ -1,6 +1,6 @@
 import "@nomicfoundation/hardhat-toolbox";
 import { task } from 'hardhat/config';
-import { Chains } from "./base/base_chains";
+import { Chains } from "../base/base_chains";
 
 async function deployBase(hre, implementationVersion, isTestnet) {
     const [owner] = await ethers.getSigners();
@@ -35,7 +35,7 @@ task("farming:update", "Update farming implementation contract")
 
         console.log("Upgrading farming implementation...");
 
-        const farming = await upgrades.upgradeProxy(currentChain.contractAddresses.farming[taskArgs.vault][taskArgs.vaultToken], Farming);
+        const farming = await upgrades.upgradeProxy(currentChain.contractAddresses.farming[taskArgs.vault][taskArgs.vaultToken]['farming'], Farming);
         gasLimit += await ethers.provider.estimateGas({
             data: (await Farming.getDeployTransaction()).data
         });
@@ -43,6 +43,6 @@ task("farming:update", "Update farming implementation contract")
         console.log("\nUpdating was done\n");
         console.log("Total gas limit: %s", gasLimit.toString());
         console.log("Owner address: %s", owner.address);
-        console.log("Referral address: %s", await farming.getAddress());
+        console.log("Farming address: %s", await farming.getAddress());
         console.log("Transaction hash: %s\n", farming.deployTransaction.hash);
     });

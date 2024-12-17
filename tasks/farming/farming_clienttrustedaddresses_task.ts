@@ -1,8 +1,8 @@
 import "@nomicfoundation/hardhat-toolbox";
 import { task } from 'hardhat/config';
 const bigInt = require("big-integer");
-import { Chains } from './base/base_chains';
-import { addressToUint } from './base/address_lib';
+import { Chains } from '../base/base_chains';
+import { addressToUint } from '../base/address_lib';
 
 async function deployBase(hre: any, isTestnet: any, contractType: any, vault: any, vaultToken: any) {
     const LpToken = await ethers.getContractFactory("LpTokenV1");

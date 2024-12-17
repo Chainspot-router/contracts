@@ -75,6 +75,9 @@ contract FarmingBeefyV2 is IFarmingManipulator, Initializable, UUPSUpgradeable, 
         _addSender(owner());
     }
 
+    receive() external payable {}
+    fallback() external payable {}
+
     /// Upgrade implementation address for UUPS logic
     /// @param _newImplementation address  New implementation address
     function _authorizeUpgrade(address _newImplementation) internal onlyOwner override {}

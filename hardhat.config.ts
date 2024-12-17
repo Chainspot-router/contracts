@@ -23,13 +23,15 @@ import './tasks/cashback_update_task';
 import './tasks/cashback_addstable_task';
 import './tasks/proxy_updatetrustedaddress_task';
 import './tasks/owner_update';
-import './tasks/farming_deploy_task';
-import './tasks/farming_update_task';
-import './tasks/farming_fulldeploy_task';
-import './tasks/farming_deploytesttoken_task';
-import './tasks/farming_deploytesttokenvault_task';
-import './tasks/farming_updatetrustedaddress_task';
-import './tasks/farming_clienttrustedaddresses_task';
+import './tasks/farming/farming_deploy_task';
+import './tasks/farming/farming_update_task';
+import './tasks/farming/farming_fulldeploy_task';
+import './tasks/farming/farming_deploytesttoken_task';
+import './tasks/farming/farming_deploytesttokenvault_task';
+import './tasks/farming/farming_updatetrustedaddress_task';
+import './tasks/farming/farming_clienttrustedaddresses_task';
+import './tasks/farming/farming_updateproxy_task';
+import './tasks/farming/farming_updatelp_task';
 
 const config = {
   solidity: {
