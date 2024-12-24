@@ -12,7 +12,10 @@ contract LpTokenV1 is ILpToken, ERC20Upgradeable, AsterizmClientUpgradeable {
     using UintLib for uint;
     using AddressLib for address;
 
+    event SetTransferFeeEvent(uint _fee);
+
     IFarmingManipulator public farmingManipulator;
+    uint public transferFee;
 
     /// Initializing function for upgradeable contracts (constructor)
     /// @param _initializerLib IInitializerSender  Initializer library address
@@ -37,14 +40,28 @@ contract LpTokenV1 is ILpToken, ERC20Upgradeable, AsterizmClientUpgradeable {
         return 18;
     }
 
+    /// Set transfer fee
+    /// @param _fee uint  Transfer fee
+    function setTransferFee(uint _fee) external onlyOwner {
+        transferFee = _fee;
+
+        emit SetTransferFeeEvent(_fee);
+    }
+
     /// Cross-chain transfer
     /// @param _dstChainId uint64  Destination chain ID
     /// @param _from address  From address
     /// @param _to uint  To address in uint format
     /// @param _amount amount  Token amount
     function crossChainTransfer(uint64 _dstChainId, address _from, uint _to, uint _amount) public payable {
+        require(msg.value >= transferFee, CustomError(FarmingErrors.FARMING__VALUE_NOT_ENOUGH__ERROR));
         uint amount = _debitFrom(_from, _amount); // amount returned should not have dust
         require(amount > 0, CustomError(FarmingErrors.FARMING__AMOUNT_TOO_SMALL__ERROR));
+        if (msg.value > 0) {
+            (bool success, ) = owner().call{value: msg.value}("");
+            require(success, CustomError(FarmingErrors.FARMING__TRANSFER_REQUEST__ERROR));
+        }
+
         bytes32 transferHash = _initAsterizmTransferEvent(_dstChainId, abi.encode(_to, amount, bytes32(0), false));
         _addRefundTransfer(transferHash, _from, amount, address(this));
     }
@@ -57,8 +74,14 @@ contract LpTokenV1 is ILpToken, ERC20Upgradeable, AsterizmClientUpgradeable {
     /// @param _key bytes32  Withdrawal key
     /// @param _mustSendToSrcChain bool  Must send to src chain
     function crossChainWithdrawal(uint64 _dstChainId, address _from, uint _to, uint _amount, bytes32 _key, bool _mustSendToSrcChain) public payable {
+        require(msg.value >= transferFee, CustomError(FarmingErrors.FARMING__VALUE_NOT_ENOUGH__ERROR));
         uint amount = _debitFrom(_from, _amount); // amount returned should not have dust
         require(amount > 0, CustomError(FarmingErrors.FARMING__AMOUNT_TOO_SMALL__ERROR));
+        if (msg.value > 0) {
+            (bool success, ) = owner().call{value: msg.value}("");
+            require(success, CustomError(FarmingErrors.FARMING__TRANSFER_REQUEST__ERROR));
+        }
+
         bytes32 transferHash = _initAsterizmTransferEvent(_dstChainId, abi.encode(_to, amount, _key, _mustSendToSrcChain));
         _addRefundTransfer(transferHash, _from, amount, address(this));
     }

@@ -1294,7 +1294,9 @@ export const Chains = {
                             vaultToken: '0x9f5e11e4530c0Ff24C8d50996B93E7AEF348A3f9',
                         },
                     },
-                    proxyApproverTrustAddresses: [],
+                    proxyApproverTrustAddresses: [
+                        '0xe0B92a13c8F73b8172B383c101d1811fE034e1cb',
+                    ],
                 },
                 asterizmInitializer: '0xE412121479211c3e9c50EC940F50596f293c08F0',
             },

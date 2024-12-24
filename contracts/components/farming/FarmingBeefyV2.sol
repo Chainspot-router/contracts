@@ -122,6 +122,12 @@ contract FarmingBeefyV2 is IFarmingManipulator, Initializable, UUPSUpgradeable, 
         emit SetProxyApproverEvent(proxyApproverAddress);
     }
 
+    /// Return vault rate
+    /// @return uint  Vault rate
+    function getVaultRate() external view returns(uint) {
+        return protocolVault.getPricePerFullShare();
+    }
+
     /// *****************
     /// Yield logic
     /// *****************

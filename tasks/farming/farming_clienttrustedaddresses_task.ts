@@ -4,7 +4,7 @@ const bigInt = require("big-integer");
 import { Chains } from '../base/base_chains';
 import { addressToUint } from '../base/address_lib';
 
-async function deployBase(hre: any, isTestnet: any, contractType: any, vault: any, vaultToken: any) {
+async function deployBase(hre: any, isTestnet: any, vault: any, vaultToken: any) {
     const LpToken = await ethers.getContractFactory("LpTokenV1");
     const ProxyApprover = await ethers.getContractFactory("ProxyApproverV1");
 
@@ -44,7 +44,7 @@ task("farming:clientTrustedAddresses", "Adding trusted addresses to Asterizm cli
     .addPositionalParam("isTestnet", "Is testnet flag (1 - testnet, 0 - mainnet)", '0')
     .addPositionalParam("gasPrice", "Gas price (for some networks)", '0')
     .setAction(async (taskArgs, hre) => {
-        let {ProxyApprover, proxyApprover, LpToken, lpToken, gasLimit, chainIds, lpTrustedAddresses, approverTrustedAddresses} = await deployBase(hre, taskArgs.isTestnet, taskArgs.contractType, taskArgs.vault, taskArgs.vaultToken);
+        let {ProxyApprover, proxyApprover, LpToken, lpToken, gasLimit, chainIds, lpTrustedAddresses, approverTrustedAddresses} = await deployBase(hre, taskArgs.isTestnet, taskArgs.vault, taskArgs.vaultToken);
 
         let tx = null;
         const gasPrice = parseInt(taskArgs.gasPrice);

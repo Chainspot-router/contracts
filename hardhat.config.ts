@@ -32,6 +32,7 @@ import './tasks/farming/farming_updatetrustedaddress_task';
 import './tasks/farming/farming_clienttrustedaddresses_task';
 import './tasks/farming/farming_updateproxy_task';
 import './tasks/farming/farming_updatelp_task';
+import './tasks/farming/farming_setlpfee_task';
 
 const config = {
   solidity: {

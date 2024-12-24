@@ -53,6 +53,6 @@ task("farming:trustedAddress", "Update proxy approver trusted addresses")
         console.log("\nUpdating was done\n");
         console.log("Total gas limit: %s", gasLimit.toString());
         console.log("Owner address: %s", owner.address);
-        console.log("Proxy address: %s", await proxy.getAddress());
+        console.log("Proxy approver address: %s", await proxyApprover.getAddress());
         console.log("Transaction hash: %s\n", tx.hash);
     });
