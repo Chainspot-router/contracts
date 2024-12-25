@@ -1187,6 +1187,42 @@ export const Chains = {
                 {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeihtwrb5dbfgdrzsviadssey5skok4ury7zc3wj46xhlwoudy2qkky.ipfs.w3s.link/lvltop.png"},
             ]
         },
+        {
+            id: 169,
+            title: "MNX", // Manta
+            networkName: "mantaMainnet",
+            contractAddresses: {
+                proxy: '0x3f96aF2AF6f644D5Fd1FC2d5A016CcE991198103',
+                claimer: '0xebe8f37669a46ae08EE30F15964c05Bcab940480',
+                referral: '0xC55EAd2B60B57C6Aeca7a43840952683F555797D',
+                cashback: '0x87FEe2b0D79D5E6ab63ee815D01335F9Fbca0420',
+                farming: {
+                    'beefy': {
+                        'usdt': {
+                            farming: '0x0000000000000000000000000000000000000000',
+                            lpToken: '0x0000000000000000000000000000000000000000',
+                            approver: '0x0000000000000000000000000000000000000000',
+                            baseToken: '0x0000000000000000000000000000000000000000',
+                            vaultToken: '0x0000000000000000000000000000000000000000',
+                        },
+                    },
+                    proxyApproverTrustAddresses: [],
+                },
+                asterizmInitializer: '0x0000000000000000000000000000000000000000',
+            },
+            trustAddresses: [
+                '0x318C2B9a03C37702742C3d40C72e4056e430135A', // Symbiosis (crosschain)
+                '0xf85FC807D05d3Ab2309364226970aAc57b4e1ea4', // Symbiosis (single chain)
+                '0x6977c769391BBf0C45286F78B056Ff3B54830270', // Owlto
+            ],
+            levelNfts: [
+                {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeiaenlmhafvrfnvzfxkik53i7yv2iksfqsivs5qkaa2vj7afn5hcwi.ipfs.w3s.link/lvl0.png"},
+                {title: 'ChainspotLoyaltyLevelNFT2', symbol: 'CLN2', refProfit: 35, cashback: 15, level: 2, prevLevel: 1, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeign74i2lkuph53gbaabgrjts4ilyu664uf4lgszx4s2gou26aqxii.ipfs.w3s.link/lvl1.png"},
+                {title: 'ChainspotLoyaltyLevelNFT3', symbol: 'CLN3', refProfit: 40, cashback: 15, level: 3, prevLevel: 2, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeifnz4wm63pysa6xbrknay6hs6tjphnf647xrrshuccskevhr5bdli.ipfs.w3s.link/lvl2.png"},
+                {title: 'ChainspotLoyaltyLevelNFT4', symbol: 'CLN4', refProfit: 50, cashback: 20, level: 4, prevLevel: 3, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeibyot3kzcsqgxu6ulzzqdf45lrrb3ylkzcrio35bdkorftkfqarby.ipfs.w3s.link/lvl3.png"},
+                {title: 'ChainspotLoyaltyLevelNFTTOP', symbol: 'CLNTOP', refProfit: 50, cashback: 20, level: 5, prevLevel: 4, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeihtwrb5dbfgdrzsviadssey5skok4ury7zc3wj46xhlwoudy2qkky.ipfs.w3s.link/lvltop.png"},
+            ]
+        },
     ],
 
     // TESTNET CHAINS

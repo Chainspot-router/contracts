@@ -240,6 +240,11 @@ const config = {
       accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
       chainId: 223
     },
+    mantaMainnet: {
+      url: process.env.NETWORK_HOST_MANTA,
+      accounts: [process.env.OWNER_PK_CHAINSPOT_2, process.env.OWNER_PK_CHAINSPOT],
+      chainId: 169
+    },
   },
   etherscan: {
     apiKey: {
@@ -464,6 +469,14 @@ const config = {
         urls: {
           apiURL: "https://api-explorer.bsquared.network/api",
           browserURL: "https://explorer.bsquared.network"
+        }
+      },
+      {
+        network: "mantaMainnet",
+        chainId: 169,
+        urls: {
+          apiURL: "https://api-manta.socialscan.io/api",
+          browserURL: "https://manta.socialscan.io"
         }
       },
     ],
