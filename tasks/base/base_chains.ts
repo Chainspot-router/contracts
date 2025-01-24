@@ -1214,6 +1214,7 @@ export const Chains = {
                 '0x318C2B9a03C37702742C3d40C72e4056e430135A', // Symbiosis (crosschain)
                 '0xf85FC807D05d3Ab2309364226970aAc57b4e1ea4', // Symbiosis (single chain)
                 '0x6977c769391BBf0C45286F78B056Ff3B54830270', // Owlto
+                '0x936223fa057a7c852d5e7462e7e77dbdb137bff8', // ???
             ],
             levelNfts: [
                 {title: 'ChainspotLoyaltyLevelNFT1', symbol: 'CLN1', refProfit: 30, cashback: 10, level: 1, prevLevel: 0, maxUserLevelForRefProfit: 3, nftAddress: '0x0000000000000000000000000000000000000000', nftUrl: "https://bafybeiaenlmhafvrfnvzfxkik53i7yv2iksfqsivs5qkaa2vj7afn5hcwi.ipfs.w3s.link/lvl0.png"},
