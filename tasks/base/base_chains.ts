@@ -6,10 +6,10 @@ export const Chains = {
             title: "ETH",
             networkName: "ethereumMainnet",
             contractAddresses: {
-                proxy: '0x0000000000000000000000000000000000000000',
-                claimer: '0x0000000000000000000000000000000000000000',
-                referral: '0x0000000000000000000000000000000000000000',
-                cashback: '0x0000000000000000000000000000000000000000',
+                proxy: '0xf4C656a44FE7c6bDAc1E92A50d10F099c36D74f0',
+                claimer: '0x6Ab79576aa81DaE505783c8F9794fD16855cC14C',
+                referral: '0xC18A672a5BA6950D9aA4894DC72B4942b907d1D5',
+                cashback: '0x95C125667c069645ee0ada5ea1E79009c7CC2ffe',
                 farming: {
                     'beefy': {
                         'usdt': {
